@@ -2,11 +2,14 @@
 
 ## Group Members:
         - Bridget Kegelman bk2427@nyu.edu
-
-
+        - Carolina Martin cm5685@nyu.edu
 
 
 ## Goals and Objectives:
+        - Create a working API server.
+        - Successfully implement CRUD operations on a related set of data stored in a database.
+        - Be able to deploy the project to the cloud using CI/CD.
+        - Have a dozen or more endpoints.
 
 
 ## Projected Timeline:

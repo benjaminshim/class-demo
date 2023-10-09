@@ -45,3 +45,13 @@ Restaurant owners can manage their restaurant information and menu.
  - **Read:** reading restaurant listings, reviews, user profiles, and bookmarks
  - **Update:** updating user profiles
  - **Delete:** deleting accounts, bookmarks, issue reports
+
+## Endpoint Completion Priority:
+User Registration and Authentication
+User Profile
+Restaurant Listings
+Restaurant Owners
+Search and Filters
+Bookmark and Favorites
+Restaurant Reviews and Ratings
+Reporting Issues

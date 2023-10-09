@@ -23,3 +23,9 @@ To create the env for a new developer, run `make dev_env`.
 - [ ] Apply filters (e.g., cuisine type, price range) to specify search results
 - [ ] Bookmark favorite restaurants for later reference.
 - [ ] Manage restaurant information and menu (For Restaurant Owners Only)
+
+## CRUD Operations
+ - **Create:** creating new user accounts, bookmarks, and issue reports
+ - **Read:** reading restaurant listings, reviews, user profiles, and bookmarks
+ - **Update:** updating user profiles
+ - **Delete:** deleting accounts, bookmarks, issue reports

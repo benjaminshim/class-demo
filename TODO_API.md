@@ -13,3 +13,11 @@ User will be able to:
 - Update ToDo list items
 - Delete ToDO list items
 
+## URL Paths
+| Funstionality  | Method  | Path |
+| :------------: |:-------:| :---:|
+| Create todo list | POST | /todo |
+| Read todo list | GET | /todo{id} |
+| Update todo list | PUT | /todo{id} |
+| Delete todo list | DELETE | /todo{id} |
+

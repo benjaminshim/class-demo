@@ -40,12 +40,16 @@ To create the env for a new developer, run `make dev_env`.
 
  - [ ] **Bookmark and Favorites**
  - Bookmark favorite restaurants for later reference.
+ - Be notified if any changes were made to the menu of operating hours of the restaurant.
 
  - [ ] **Reservations**
  - View, modify, or create existing reservations.
 
  - [ ] **Restaurant Owners**
  - Restaurant owners can manage their restaurant information and menu.
+
+ - [] **Follow Other Users**
+ - Follow other users and see what they recomend or recomend resturants to them.
 
 ## CRUD Operations
 #### Create
@@ -60,24 +64,30 @@ To create the env for a new developer, run `make dev_env`.
 - user profiles
 - and bookmarks
 - reservations
+- other users
 
 #### Update
 - user profiles
 - user location
 - updating reservations
+- users to follow
 
 #### Delete
 - deleting accounts
 - bookmarks
 - issue reports
 - deleting reservations
+- users to follow
 
 ### Endpoint Completion Priority:
 - User Registration and Authentication
 - User Profile
 - Restaurant Listings
+- Location-Based Services
 - Restaurant Owners
 - Search and Filters
 - Bookmark and Favorites
+- Reservations
 - Restaurant Reviews and Ratings
 - Reporting Issues
+- Follow other users

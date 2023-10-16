@@ -1,0 +1,15 @@
+# TODO List
+Team Members: Benjamin Shim, Andy Quintuna, Bridget Kegelman, Carolina Martin
+
+## Project Description
+This API server will allow users to have a ToDo list. This will have a simple UI that is easy to use for the everyday
+person. The user will be able to see their todo list items as well as add new ones and delete the ones that they have 
+finished.
+
+## CRUD Operations
+User will be able to:
+- Create ToDo list items
+- Read ToDo list items
+- Update ToDo list items
+- Delete ToDO list items
+

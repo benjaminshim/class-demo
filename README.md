@@ -10,43 +10,69 @@ To build production, type `make prod`.
 
 To create the env for a new developer, run `make dev_env`.
 
-## Planned Endpoints:
+## Planned Endpoints
 
-## User Registration and Authentication:
-User registration.
-User login for personalized restaurant recommendations.
+ - [ ] **User Registration and Authentication:**
+ - User registration.
+ - User login for personalized restaurant recommendations.
 
-## Restaurant Listings:
-List restaurants in the area.
-Get details about a specific restaurant.
+ - [ ] **Location-Based Services**
+ - Allow manual input of location details.
+ - Find nearby restaurants based on the user's location.
 
-## Restaurant Reviews and Ratings:
-Get reviews and ratings for a specific restaurant.
-Submit user reviews for restaurants.
+ - [ ] **Restaurant Listings:**
+ - List restaurants in the area.
+ - Get details about a specific restaurant.
 
-## Reporting Issues:
-Report issues or problems related to specific restaurants.
+ - [ ] **Restaurant Reviews and Ratings:**
+ - Get reviews and ratings for a specific restaurant.
+ - Submit user reviews for restaurants.
 
-## Search and Filters:
-Search for restaurants by name, cuisine, or other criteria.
-Apply filters (e.g., cuisine type, price range) to refine restaurant search results.
+ - [ ] **Reporting Issues:**
+ - Report issues or problems related to specific restaurants.
 
-## User Profile:
-View and update user profiles.
+ - [ ] **Search and Filters:**
+ - Search for restaurants by name, cuisine, or other criteria.
+ - Apply filters (e.g., cuisine type, price range) to refine restaurant search results.
 
-## Bookmark and Favorites:
-Bookmark favorite restaurants for later reference.
+ - [ ] **User Profile:**
+ - View and update user profiles.
 
-## Restaurant Owners:
-Restaurant owners can manage their restaurant information and menu.
+ - [ ] **Bookmark and Favorites:**
+ - Bookmark favorite restaurants for later reference.
+
+ - [ ] **Reservations**
+ - View, modify, or create existing reservations.
+
+ - [ ] **Restaurant Owners:**
+ - Restaurant owners can manage their restaurant information and menu.
 
 ## CRUD Operations
- - **Create:** creating new user accounts, bookmarks, and issue reports
- - **Read:** reading restaurant listings, reviews, user profiles, and bookmarks
- - **Update:** updating user profiles
- - **Delete:** deleting accounts, bookmarks, issue reports
+#### Create
+- user accounts
+- bookmarks
+- new issue reports
+- new reservations
 
-## Endpoint Completion Priority:
+#### Read
+- restaurant listings
+- reviews
+- user profiles
+- and bookmarks
+- reservations
+
+#### Update
+- user profiles
+- user location
+- updating reservations
+
+#### Delete
+- deleting accounts
+- bookmarks
+- issue reports
+- deleting reservations
+
+### Endpoint Completion Priority:
 User Registration and Authentication
 User Profile
 Restaurant Listings

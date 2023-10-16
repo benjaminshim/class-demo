@@ -18,7 +18,7 @@ User will be able to:
 - Delete ToDO list items
 
 ## URL Paths
-| Funstionality  | Method  | Path |
+| Functionality  | Method  | Path |
 | :------------: |:-------:| :---:|
 | Create todo list | POST | /todo |
 | Read todo list | GET | /todo{id} |

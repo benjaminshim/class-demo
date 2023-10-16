@@ -18,7 +18,13 @@ https://images.squarespace-cdn.com/content/v1/5ce43e6dc4101600018c629b/156373982
 
 ##Implimentation of an API Server:
 
+This Project would use an application of a weather api server 
 
 
 ##CRUD Operations
 
+Create- Create an account with a race date and calculated goal pace
+      - Create weekly training plans
+Read- read the adjusted plans according to the weather and have training advice 
+Update- can update their weekly plans and also race date / pace 
+Delete- Delete any data from plans, whole weeks at a time and also account settings

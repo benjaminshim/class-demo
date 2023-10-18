@@ -14,8 +14,8 @@ on:
 
 # /home/runner/work/demo-repo4/demo-repo4/
 env:
-  DEMO_HOME: .
-  PYTHONPATH: .
+  DEMO_HOME: /home/runner/work/demo-repo4/demo-repo4/
+  PYTHONPATH: /home/runner/work/demo-repo4/demo-repo4/
   
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:

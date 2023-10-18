@@ -12,7 +12,6 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# /home/runner/work/demo-repo4/demo-repo4/
 env:
   DEMO_HOME: /home/runner/work/databases_plus_one/databases_plus_one
   PYTHONPATH: /home/runner/work/databases_plus_one/databases_plus_one
@@ -48,7 +47,7 @@ jobs:
         run: make dev_env
 
       - name: Run Python tests.
-        run: make all_tests
+        run: make tests
         
           # - name: Deploy to PythonAnywhere
           # run: ./deploy.sh

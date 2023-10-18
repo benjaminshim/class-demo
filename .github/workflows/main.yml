@@ -43,6 +43,9 @@ jobs:
         # - name: Install MongoDB
         # uses: supercharge/mongodb-github-action@1.8.0
 
+      - name: Set PYTHONPATH
+        run: export PYTHONPATH=$(pwd)
+
       - name: Install Python packages.
         run: make dev_env
 

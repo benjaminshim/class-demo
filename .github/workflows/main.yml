@@ -44,6 +44,10 @@ jobs:
         # - name: Install MongoDB
         # uses: supercharge/mongodb-github-action@1.8.0
 
+      - name: Display Repository Path
+        run: |
+          echo "Current Repository Path: $(pwd)"
+
       - name: Install Python packages.
         run: make dev_env
 

@@ -14,8 +14,8 @@ on:
 
 # /home/runner/work/demo-repo4/demo-repo4/
 env:
-  DEMO_HOME: /home/runner/work/demo-repo4/demo-repo4/
-  PYTHONPATH: /home/runner/work/demo-repo4/demo-repo4/
+  DEMO_HOME: /home/runner/work/databases_plus_one/databases_plus_one
+  PYTHONPATH: /home/runner/work/databases_plus_one/databases_plus_one
   
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -43,10 +43,6 @@ jobs:
 
         # - name: Install MongoDB
         # uses: supercharge/mongodb-github-action@1.8.0
-
-      - name: Display Repository Path
-        run: |
-          echo "Current Repository Path: $(pwd)"
 
       - name: Install Python packages.
         run: make dev_env

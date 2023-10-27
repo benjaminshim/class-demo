@@ -1,4 +1,4 @@
-LINTER = flake8
+include common.mk
 API_DIR = server
 DB_DIR = db
 REQ_DIR = .

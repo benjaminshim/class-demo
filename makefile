@@ -3,6 +3,7 @@ API_DIR = server
 DB_DIR = db
 REQ_DIR = .
 
+PKG = $(API_DIR)
 PYTESTFLAGS = -vv --verbose --cov-branch --cov-report term-missing --tb=short -W ignore::FutureWarning
 
 FORCE:
@@ -15,6 +16,7 @@ github: FORCE
 
 all_tests: FORCE
 	cd $(API_DIR); make tests
+	cd $(DB_DIR); make tests
 
 
 dev_env: FORCE

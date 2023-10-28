@@ -17,6 +17,36 @@
           <a href="/">Ratings</a>
         </nav>
       </header>
+
+      <form class="ratings" action="/ratings" method="POST">
+        <h3>Give a Rating</h3>
+        <!-- Change restaurant names -->
+        <datalist id="restaurant">
+          <option value="x-restaurant">X restaurant</option>
+          <option value="y-restaurant">Y restaurant</option>
+          <option value="z-restaurant">Z restaurant</option>
+        </datalist>
+
+        <p>Rating (1-5):
+          <input
+            type="number"
+            name="ratings"
+            placeholder="Rating"
+            required
+          />
+        </p>
+        <label for="comment">Tell us about your experience: </label>
+        <br/>
+        <textarea
+          id="comment"
+          name="comment"
+          rows="4"
+          cols="50"
+          required
+        ></textarea>
+
+        <input class="submit_button" type="submit" value="Submit Rating" />
+      </form>
     </div>
   </body>
 </html>

@@ -5,12 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="templates_static/style.css" />
-    <title>Airline Login</title>
+    <title>Restaurant Finder Login</title>
   </head>
   <body>
     <header class="extra-header">
       <nav>
         <a href="/" class="extra-nav">Home</a>
+        <a href="/register" class="extra-nav">Register</a>
+        <a href="/ratings" class="extra-nav">Ratings</a>
       </nav>
     </header>
 
@@ -35,11 +37,11 @@
             Not registered? <a href="/register">Create an account</a>
           </p>
 
-          {% if error %}
+          <!-- {% if error %}
           <p class="error">
             <strong class="error-message">Error:</strong> {{error}}
           </p>
-          {% endif %}
+          {% endif %} -->
         </form>
       </div>
     </div>

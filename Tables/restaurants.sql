@@ -28,13 +28,15 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `one_star_michelin_restaurants` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(51) DEFAULT NULL,
   `Year` varchar(4) DEFAULT NULL,
   `City` varchar(30) DEFAULT NULL,
   `Region` varchar(14) DEFAULT NULL,
   `Zip` varchar(8) DEFAULT NULL,
   `Cuisine` varchar(21) DEFAULT NULL,
-  `Price` varchar(5) DEFAULT NULL
+  `Price` varchar(5) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --

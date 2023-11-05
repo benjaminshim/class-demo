@@ -82,17 +82,17 @@ class Customers(Resource):
                         {
                             "joined": '12/17/2022'
                         },
-                    "Benjamin":
+                        "Benjamin":
                         {
                             "joined": '04/30/2022'
                         },
-                    "Carolina":
+                        "Carolina":
                         {
                             "joined": '11/05/2022'
                         },
-                    "Bridget":
+                        "Bridget":
                         {
                             "joined": '03/12/2022'
                         }
-                    }
+                     }
                 }

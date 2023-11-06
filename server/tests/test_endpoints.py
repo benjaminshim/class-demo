@@ -25,3 +25,7 @@ def test_list_restaurants():
 def test_get_restuarants():
     assert rst.get_restuarants()
 
+ADD_NAME = 'NEW RESTAURANT'
+def test_restaurant_add():
+    rst.add_restaurant(ADD_NAME,0)
+    assert ADD_NAME in rst.get_restuarants()

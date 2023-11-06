@@ -1,4 +1,5 @@
 import server.endpoints as ep
+import data.db as rst
 
 TEST_CLIENT = ep.app.test_client()
 
@@ -20,3 +21,7 @@ def test_list_restaurants():
     resp = TEST_CLIENT.get(ep.RESTAURANTS_EP)
     resp_json = resp.get_json()
     assert isinstance(resp_json, dict)
+
+def test_get_restuarants():
+    assert rst.get_restuarants()
+

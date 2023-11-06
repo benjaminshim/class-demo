@@ -6,6 +6,7 @@ The endpoint called `endpoints` will return all available endpoints.
 from flask import Flask
 from flask_restx import Resource, Api
 # import db.db as db
+import data.customers as cstmrs
 
 app = Flask(__name__)
 api = Api(app)
@@ -16,6 +17,7 @@ HELLO_EP = '/hello'
 HELLO_RESP = 'hello'
 CUSTOMERS_EP = '/customers'
 CUSTOMERS = 'customers'
+CUSTOMER_MENU_NM = "Costumer Menu"
 RESTAURANTS_EP = '/restaurants'
 RESTAURANTS = 'restaurants'
 TYPE = 'Type'
@@ -79,24 +81,9 @@ class Customers(Resource):
     def get(self):
         return {TYPE: DATA,
                 TITLE: 'Current Customers',
-                DATA:
-                    {"Andy":
-                        {
-                            "joined": '12/17/2022'
-                        },
-                        "Benjamin":
-                        {
-                            "joined": '04/30/2022'
-                        },
-                        "Carolina":
-                        {
-                            "joined": '11/05/2022'
-                        },
-                        "Bridget":
-                        {
-                            "joined": '03/12/2022'
-                        }
-                     }
+                DATA: cstmrs.get_customers(),
+                MENU: CUSTOMER_MENU_EP,
+                RETURN: MAIN_MENU_EP,
                 }
 
 

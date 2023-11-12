@@ -16,8 +16,6 @@ HELLO_EP = '/hello'
 HELLO_RESP = 'hello'
 CUSTOMERS_EP = '/customers'
 CUSTOMERS = 'customers'
-RESTAURANTS_EP = '/restaurants'
-RESTAURANTS = 'restaurants'
 TYPE = 'Type'
 DATA = 'DATA'
 TITLE = 'Title'
@@ -95,34 +93,6 @@ class Customers(Resource):
                         "Bridget":
                         {
                             "joined": '03/12/2022'
-                        }
-                     }
-                }
-
-
-@api.route(f'{RESTAURANTS_EP}')
-class Restaurants(Resource):
-    def get(self):
-        return {TYPE: DATA,
-                TITLE: 'Current Restaurants',
-                DATA:
-                    {"Wakuriya":
-                        {
-                            "city": 'San Francisco',
-                            "state": 'California',
-                            "price": '$$$$'
-                        },
-                        "Nico":
-                        {
-                            "city": 'San Francisco',
-                            "state": 'California',
-                            "price": '$$$'
-                        },
-                        "Huge Thai":
-                        {
-                            "city": 'New York',
-                            "state": 'New York',
-                            "price": '$$'
                         }
                      }
                 }

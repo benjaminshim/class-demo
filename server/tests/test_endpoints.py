@@ -11,7 +11,7 @@ def test_hello():
     assert ep.HELLO_RESP in resp_json
 
 
-def test_list_customers():
+def test_list_users():
     resp = TEST_CLIENT.get(ep.CUSTOMERS_EP)
     resp_json = resp.get_json()
     assert isinstance(resp_json, dict)

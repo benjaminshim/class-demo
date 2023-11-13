@@ -6,7 +6,7 @@ The endpoint called `endpoints` will return all available endpoints.
 from flask import Flask
 from flask_restx import Resource, Api
 # import db.db as db
-import data.customers as cstmrs
+# import data.customers as cstmrs
 
 app = Flask(__name__)
 api = Api(app)

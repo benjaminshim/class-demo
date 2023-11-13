@@ -6,7 +6,7 @@ USERNAME = 'testuser1234'
 MIN_CUST_NAME_LEN = 1
 
 
-def get_user():
+def get_users():
     users = {
         "Jason": {
             USERNAME: 'jl1002',

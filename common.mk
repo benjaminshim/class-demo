@@ -18,7 +18,6 @@ lint: $(patsubst %.py,%.pylint,$(PYTHONFILES))
 
 pytests: FORCE
 	export TEST_DB=1; pytest $(PYTESTFLAGS) --cov=$(PKG)
-	export TEST_DB=1; pytest $(PYTESTFLAGS) --cov=$(PKG2)
 
 # test a python file:
 %.py: FORCE

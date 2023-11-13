@@ -2,7 +2,7 @@
 This module interfaces to our customer data
 """
 
-USERNAME = 'Username'
+USERNAME = 'andy123'
 MIN_CUST_NAME_LEN = 2
 
 

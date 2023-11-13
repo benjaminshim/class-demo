@@ -20,20 +20,24 @@ restaurants = {
     },
 }
 
+
 def fetch_pets():
     """
     A function to return all pets in the data store.
     """
     return {"tigers": 2, "lions": 3, "zebras": 1}
 
+
 def get_restuarants() -> dict:
     return restaurants
+
 
 def _gen_id() -> str:
     _id = random.randint(0, BIG_NUM)
     _id = str(_id)
     _id = _id.rjust(ID_LEN, '0')
     return _id
+
 
 def add_restaurant(name: str, rating: int) -> str:
     if name in restaurants:
@@ -42,4 +46,3 @@ def add_restaurant(name: str, rating: int) -> str:
         raise ValueError('Game name may not be blank')
     restaurants[name] = {RATING: rating}
     return _gen_id()
-

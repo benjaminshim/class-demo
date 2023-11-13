@@ -2,10 +2,14 @@
 This is the file containing all of the endpoints for our flask app.
 The endpoint called `endpoints` will return all available endpoints.
 """
+from http import HTTPStatus
 
-from flask import Flask
-from flask_restx import Resource, Api
-# import db.db as db
+from flask import Flask, request
+from flask_restx import Resource, Api, fields
+
+import werkzeug.exceptions as wz
+
+import data.db as db
 # import data.customers as cstmrs
 
 app = Flask(__name__)
@@ -18,8 +22,9 @@ HELLO_RESP = 'hello'
 CUSTOMERS_EP = '/customers'
 CUSTOMERS = 'customers'
 CUSTOMER_MENU_NM = "Costumer Menu"
-RESTAURANTS_EP = '/restaurants'
+RESTAURANTS_EP = '/db'
 RESTAURANTS = 'restaurants'
+RESTAURANT_ID = "ID"
 TYPE = 'Type'
 DATA = 'DATA'
 TITLE = 'Title'
@@ -102,29 +107,33 @@ class Customers(Resource):
                 }
 
 
+restaurant_fields = api.model('NewRestaurant', {
+    db.TEST_RESTAURANT_NAME: fields.String,
+    db.RATING: fields.Integer,
+})
+
+
 @api.route(f'{RESTAURANTS_EP}')
 class Restaurants(Resource):
     def get(self):
         return {TYPE: DATA,
                 TITLE: 'Current Restaurants',
-                DATA:
-                    {"Wakuriya":
-                        {
-                            "city": 'San Francisco',
-                            "state": 'California',
-                            "price": '$$$$'
-                        },
-                        "Nico":
-                        {
-                            "city": 'San Francisco',
-                            "state": 'California',
-                            "price": '$$$'
-                        },
-                        "Huge Thai":
-                        {
-                            "city": 'New York',
-                            "state": 'New York',
-                            "price": '$$'
-                        }
-                     }
+                DATA: db.get_restaurants(),
                 }
+
+    @api.expect(restaurant_fields)
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    def post(self):
+        """
+        Add a game.
+        """
+        name = request.json[db.TEST_RESTAURANT_NAME]
+        rating = request.json[db.RATING]
+        try:
+            new_id = db.add_restaurant(name, rating)
+            if new_id is None:
+                raise wz.ServiceUnavailable('We have a technical problem.')
+            return {RESTAURANT_ID: new_id}
+        except ValueError as e:
+            raise wz.NotAcceptable(f'{str(e)}')

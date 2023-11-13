@@ -7,9 +7,15 @@ import random
 
 BIG_NUM = 10000000000000
 ID_LEN = 24
+MOCK_ID = '0' * ID_LEN
 
 RATING = 'rating'
 TEST_RESTAURANT_NAME = 'Dominos'
+
+TEST_RESTAURANT_FLDS = {
+    TEST_RESTAURANT_NAME: 'Test name',
+    RATING: 0,
+}
 
 restaurants = {
     'Papa Johns': {
@@ -19,6 +25,19 @@ restaurants = {
         RATING: 5,
     },
 }
+
+
+def _get_test_name():
+    name = 'test'
+    rand_part = random.randint(0, BIG_NUM)
+    return name + str(rand_part)
+
+
+def get_test_restaurant():
+    test_rest = {}
+    test_rest[TEST_RESTAURANT_NAME] = _get_test_name()
+    test_rest[RATING] = 0
+    return test_rest
 
 
 def fetch_pets():

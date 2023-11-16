@@ -10,4 +10,4 @@ def test_get_users():
         assert isinstance(key, str)
         assert len(key) >= MIN_USER_NAME_LEN
         user = users[key]
-        assert isinstance(user, dict)
+        assert isinstance(user, dict) 

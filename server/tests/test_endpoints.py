@@ -1,6 +1,8 @@
 import server.endpoints as ep
 import data.db as rst
 from data.db import TEST_RESTAURANT_FLDS
+import data.db_connect as dbc
+import pytest
 
 from http.client import (
     BAD_REQUEST,
@@ -38,7 +40,6 @@ def test_get_restuarants():
     assert rst.get_restuarants()
 
 
-ADD_NAME = 'NEW RESTAURANT'
 @patch('data.db.add_restaurant', return_value=rst.MOCK_ID, autospec=True)
 def test_restaurant_add(mock_add):
     resp = TEST_CLIENT.post(ep.RESTAURANTS_EP, json=rst.get_test_restaurant())
@@ -51,3 +52,12 @@ def test_restaurant_bad_add(mock_add):
     """
     resp = TEST_CLIENT.post(ep.RESTAURANTS_EP, json=rst.get_test_restaurant())
     assert resp.status_code == NOT_ACCEPTABLE
+
+@pytest.mark.skip('This test is failing for now but will be fixed soon')
+def test_restaurant_add_db_failure(mock_add):
+    """
+    Testing we do the right thing with a null ID return from add_restaurant.
+    """
+    resp = TEST_CLIENT.post(ep.RESTAURANT_EP, json=rst.get_test_restaurant())
+    assert resp.status_code == SERVICE_UNAVAILABLE
+

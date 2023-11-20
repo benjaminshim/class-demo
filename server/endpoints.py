@@ -124,6 +124,8 @@ class Restaurants(Resource):
     @api.expect(restaurant_fields)
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
+                  'We have a technical problem.')
     def post(self):
         """
         Add a game.

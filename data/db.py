@@ -96,11 +96,11 @@ def add_user(name: str, id: int) -> bool:
     return _gen_id()
 
 
-def del_restaurant(name: str):
-    if exists(name):
-        del restaurants[name]
-    else:
-        raise ValueError(f'Delete failure: {name} not in database.')
+# def del_restaurant(name: str):
+#     if exists(name):
+#         del restaurants[name]
+#     else:
+#         raise ValueError(f'Delete failure: {name} not in database.')
     
 def add_user(name: str, id: int) -> bool:
     if id in users:

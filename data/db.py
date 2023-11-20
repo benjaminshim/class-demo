@@ -49,6 +49,8 @@ users = {
         NAME: "Jessie"
     },
 }
+
+
 def _get_test_name():
     name = 'test'
     rand_part = random.randint(0, BIG_NUM)
@@ -105,4 +107,3 @@ def del_restaurant(name: str):
         del restaurants[name]
     else:
         raise ValueError(f'Delete failure: {name} not in database.')
-

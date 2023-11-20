@@ -17,6 +17,16 @@ from unittest.mock import patch
 
 TEST_CLIENT = ep.app.test_client()
 
+
+@pytest.fixture(scope='function')
+def temp_restaurant():
+    name = rst._get_test_name()
+    ret = rst.add_restaurant(name, 0)
+    yield name
+    if rst.exists(name):
+        rst.del_restaurant(name)
+
+
 def test_hello():
     resp = TEST_CLIENT.get(ep.HELLO_EP)
     print(f'{resp=}')
@@ -61,3 +71,14 @@ def test_restaurant_add_db_failure(mock_add):
     resp = TEST_CLIENT.post(ep.RESTAURANT_EP, json=rst.get_test_restaurant())
     assert resp.status_code == SERVICE_UNAVAILABLE
 
+
+def test_del_restaurant(temp_restaurant):
+    name = temp_restaurant
+    rst.del_restaurant(name)
+    assert not rst.exists(name)
+
+
+def test_del_restaurant_not_there():
+    name = rst._get_test_name()
+    with pytest.raises(ValueError):
+        rst.del_restaurant(name)

@@ -4,7 +4,6 @@ At first, it will just contain stubs that return fake data.
 Gradually, we will fill in actual calls to our datastore.
 """
 import random
-from tokenize import Name
 
 import data.db_connect as dbc
 
@@ -34,8 +33,10 @@ restaurants = {
     },
 }
 
+
 def exists(name: str) -> bool:
     return name in get_restuarants()
+
 
 def _get_test_name():
     name = 'test'

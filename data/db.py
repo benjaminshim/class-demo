@@ -107,7 +107,7 @@ def del_restaurant(name: str):
         del restaurants[name]
     else:
         raise ValueError(f'Delete failure: {name} not in database.')
-        
+
 
 def del_user(id: int):
     if exists(id):

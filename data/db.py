@@ -5,6 +5,9 @@ Gradually, we will fill in actual calls to our datastore.
 """
 import random
 
+import data.db_connect as dbc
+
+
 BIG_NUM = 10000000000000
 ID_LEN = 24
 MOCK_ID = '0' * ID_LEN
@@ -16,6 +19,7 @@ TEST_RESTAURANT_FLDS = {
     TEST_RESTAURANT_NAME: 'Test name',
     RATING: 0,
 }
+
 
 restaurants = {
     'Papa Johns': {
@@ -58,10 +62,11 @@ def _gen_id() -> str:
     return _id
 
 
-def add_restaurant(name: str, rating: int) -> str:
+def add_restaurant(name: str, rating: int) -> bool:
     if name in restaurants:
-        raise ValueError(f'Duplicate game name: {name=}')
+        raise ValueError(f'Duplicate restaurant name: {name=}')
     if not name:
-        raise ValueError('Game name may not be blank')
+        raise ValueError('Restaurant name may not be blank')
     restaurants[name] = {RATING: rating}
+    dbc.connect_db()
     return _gen_id()

@@ -6,16 +6,16 @@ name: Demo CI/CD
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 env:
   DEMO_HOME: /home/runner/work/databases_plus_one/databases_plus_one
   PYTHONPATH: /home/runner/work/databases_plus_one/databases_plus_one
-  
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -30,9 +30,9 @@ jobs:
         uses: actions/setup-python@v4
         with:
           # Semantic version range syntax or exact version of a Python version
-          python-version: '3.9'
+          python-version: "3.9"
           # Optional - x64 or x86 architecture, defaults to x64
-          architecture: 'x64'
+          architecture: "x64"
       # You can test your matrix by printing the current Python version
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
@@ -40,15 +40,16 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-        # - name: Install MongoDB
-        # uses: supercharge/mongodb-github-action@1.8.0
+      - name: Install MongoDB
+        uses: supercharge/mongodb-github-action@1.8.0
 
       - name: Install Python packages.
         run: make dev_env
 
       - name: Run Python tests.
-        run: make all_tests
-        
+        run:
+          make all_tests
+
           # - name: Deploy to PythonAnywhere
           # run: ./deploy.sh
           # env:

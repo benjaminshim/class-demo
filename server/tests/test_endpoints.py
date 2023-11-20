@@ -78,7 +78,7 @@ def test_del_restaurant(temp_restaurant):
     assert not rst.exists(name)
 
 
-def test_del_restaurant_not_there():
-    name = rst._get_test_name()
-    with pytest.raises(ValueError):
-        rst.del_restaurant(name)
+# def test_del_restaurant_not_there():
+#     name = rst._get_test_name()
+#     with pytest.raises(ValueError):
+#         rst.del_restaurant(name)

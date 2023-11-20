@@ -29,7 +29,7 @@ def connect_db():
                 raise ValueError('You must set your password '
                                  + 'to use Mongo in the cloud.')
             print("Connecting to Mongo in the cloud.")
-            client = pm.MongoClient(f'mongodb+srv://cm5685:<{password}>'
+            client = pm.MongoClient(f'mongodb+srv://cm5685:{password}'
                                     + '@cluster0.2d5iksq.mongodb.net/'
                                     + '?retryWrites=true&w=majority')
             # PA recommends these settings:

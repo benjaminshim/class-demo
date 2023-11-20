@@ -34,7 +34,16 @@ restaurants = {
     },
 }
 
+NAME = 'name'
 
+users = {
+    10000: {
+        NAME: "James"
+    },
+    10001: {
+        NAME: "Jessie"
+    },
+}
 def _get_test_name():
     name = 'test'
     rand_part = random.randint(0, BIG_NUM)
@@ -90,3 +99,12 @@ def del_restaurant(name: str):
         del restaurants[name]
     else:
         raise ValueError(f'Delete failure: {name} not in database.')
+    
+def add_user(name: str, id: int) -> bool:
+    if id in users:
+        raise ValueError(f'Duplicate user id: {id=}')
+    if not id:
+        raise ValueError('Users are not allowed to be entered without ids')
+    users[id] = {NAME: name}
+    dbc.connect_db()
+    return _gen_id()

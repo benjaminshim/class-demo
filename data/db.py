@@ -4,6 +4,7 @@ At first, it will just contain stubs that return fake data.
 Gradually, we will fill in actual calls to our datastore.
 """
 import random
+from tokenize import Name
 
 import data.db_connect as dbc
 
@@ -14,6 +15,9 @@ MOCK_ID = '0' * ID_LEN
 
 RATING = 'rating'
 TEST_RESTAURANT_NAME = 'Dominos'
+
+NAME = 'name'
+RESTAURANT_COLLECT = 'restaurants'
 
 TEST_RESTAURANT_FLDS = {
     TEST_RESTAURANT_NAME: 'Test name',
@@ -30,15 +34,6 @@ restaurants = {
     },
 }
 
-NAME = 'name'
-users = {
-    10000: {
-        NAME: "Jack"
-    },
-    10001: {
-        NAME: "Jill"
-    },
-}
 
 def _get_test_name():
     name = 'test'
@@ -88,3 +83,10 @@ def add_user(name: str, id: int) -> bool:
     users[id] = {NAME: name}
     dbc.connect_db()
     return _gen_id()
+
+
+def del_restaurant(name: str):
+    if exists(name):
+        del restaurants[name]
+    else:
+        raise ValueError(f'Delete failure: {name} not in database.')

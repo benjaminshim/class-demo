@@ -30,6 +30,15 @@ restaurants = {
     },
 }
 
+NAME = 'name'
+users = {
+    10000: {
+        NAME: "Jack"
+    },
+    10001: {
+        NAME: "Jill"
+    },
+}
 
 def _get_test_name():
     name = 'test'
@@ -68,5 +77,14 @@ def add_restaurant(name: str, rating: int) -> bool:
     if not name:
         raise ValueError('Restaurant name may not be blank')
     restaurants[name] = {RATING: rating}
+    dbc.connect_db()
+    return _gen_id()
+
+def add_user(name: str, id: int) -> bool:
+    if id in users:
+        raise ValueError(f'Duplicate user id: {id=}')
+    if not id:
+        raise ValueError('Users are not allowed to be entered without ids')
+    users[id] = {NAME: name}
     dbc.connect_db()
     return _gen_id()

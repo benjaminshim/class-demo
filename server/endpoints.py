@@ -23,15 +23,15 @@ MENU = 'menu'
 HELLO_EP = '/hello'
 HELLO_RESP = 'hello'
 USERS_EP = '/users'
-USERS_MENU_NM = "User Menu"
-USERS_MENU_EP = '/user_menu'
+# USERS_MENU_NM = "User Menu"
+# USERS_MENU_EP = '/user_menu'
 RESTAURANTS_EP = '/db'
 RESTAURANTS = 'restaurants'
 RESTAURANT_ID = "ID"
 TYPE = 'Type'
 DATA = 'DATA'
 TITLE = 'Title'
-RETURN = 'Return'
+# RETURN = 'Return'
 
 
 @api.route(HELLO_EP)

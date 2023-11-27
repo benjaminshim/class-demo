@@ -132,9 +132,7 @@ class Users(Resource):
                         {
                             "joined": '03/12/2022'
                         }
-                     },
-                MENU: USERS_MENU_EP,
-                RETURN: MAIN_MENU_EP
+                     }
                 }
 
 

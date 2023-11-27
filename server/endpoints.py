@@ -10,6 +10,7 @@ from flask_restx import Resource, Api, fields
 import werkzeug.exceptions as wz
 
 import data.db as db
+import data.users as usrs
 # import data.customers as cstmrs
 
 app = Flask(__name__)
@@ -17,17 +18,20 @@ api = Api(app)
 
 MAIN_MENU = 'MainMenu'
 MAIN_MENU_NM = "Welcome to Text Game!"
+MAIN_MENU_EP = '/MainMenu'
+MENU = 'menu'
 HELLO_EP = '/hello'
 HELLO_RESP = 'hello'
-CUSTOMERS_EP = '/customers'
-CUSTOMERS = 'customers'
-CUSTOMER_MENU_NM = "Costumer Menu"
+USERS_EP = '/users'
+USERS_MENU_NM = "User Menu"
+USERS_MENU_EP = '/user_menu'
 RESTAURANTS_EP = '/db'
 RESTAURANTS = 'restaurants'
 RESTAURANT_ID = "ID"
 TYPE = 'Type'
 DATA = 'DATA'
 TITLE = 'Title'
+RETURN = 'Return'
 
 
 @api.route(HELLO_EP)
@@ -58,7 +62,7 @@ class Endpoints(Resource):
         return {"Available endpoints": endpoints}
 
 
-@api.route(f'/{MAIN_MENU}')
+@api.route(f'/{MAIN_MENU_EP}')
 # @api.route('/')
 class MainMenu(Resource):
     """
@@ -75,35 +79,45 @@ class MainMenu(Resource):
                           'text': 'List Available Characters'},
                     '2': {'url': '/',
                           'method': 'get', 'text': 'List Active Games'},
-                    '3': {'url': f'{CUSTOMERS_EP}',
+                    '3': {'url': f'{USERS_EP}',
                           'method': 'get', 'text': 'List Users'},
                     'X': {'text': 'Exit'},
                 }}
 
 
-@api.route(f'{CUSTOMERS_EP}')
-class Customers(Resource):
+@api.route(f'{USERS_MENU_EP}')
+class UserMenu(Resource):
+    """
+    This will deliver our user menu.
+    """
+    def get(self):
+        """
+        Gets the user menu.
+        """
+        return {
+                   TITLE: USERS_MENU_NM,
+                   'Default': '0',
+                   'Choices': {
+                       '1': {
+                            'url': '/',
+                            'method': 'get',
+                            'text': 'Get User Details',
+                       },
+                       '0': {
+                            'text': 'Return',
+                       },
+                   },
+               }
+
+
+@api.route(f'{USERS_EP}')
+class Users(Resource):
     def get(self):
         return {TYPE: DATA,
                 TITLE: 'Current Customers',
-                DATA:
-                    {"Andy":
-                        {
-                            "joined": '12/17/2022'
-                        },
-                        "Benjamin":
-                        {
-                            "joined": '04/30/2022'
-                        },
-                        "Carolina":
-                        {
-                            "joined": '11/05/2022'
-                        },
-                        "Bridget":
-                        {
-                            "joined": '03/12/2022'
-                        }
-                     }
+                DATA: usrs.get_users(),
+                MENU: USERS_MENU_EP,
+                RETURN: MAIN_MENU_EP
                 }
 
 

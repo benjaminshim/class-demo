@@ -16,6 +16,7 @@ import data.db as db
 app = Flask(__name__)
 api = Api(app)
 
+DELETE = 'delete'
 MAIN_MENU = 'MainMenu'
 MAIN_MENU_NM = "Welcome to Text Game!"
 MAIN_MENU_EP = '/MainMenu'
@@ -31,6 +32,7 @@ RESTAURANT_ID = "ID"
 TYPE = 'Type'
 DATA = 'DATA'
 TITLE = 'Title'
+DEL_RESAURANT_EP = f'{RESTAURANTS_EP}/{DELETE}'
 # RETURN = 'Return'
 
 
@@ -140,6 +142,24 @@ restaurant_fields = api.model('NewRestaurant', {
     db.TEST_RESTAURANT_NAME: fields.String,
     db.RATING: fields.Integer,
 })
+
+
+@api.route(f'{DEL_RESAURANT_EP}/<name>')
+class DelRestaurant(Resource):
+    """
+    Deletes a restaurant by name.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
+    def delete(self, name):
+        """
+        Deletes a restaurant by name.
+        """
+        try:
+            db.del_restaurant(name)
+            return {name: 'Deleted'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
 
 
 @api.route(f'{RESTAURANTS_EP}')

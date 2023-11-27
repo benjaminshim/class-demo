@@ -85,31 +85,6 @@ class MainMenu(Resource):
                 }}
 
 
-@api.route(f'{USERS_MENU_EP}')
-class UserMenu(Resource):
-    """
-    This will deliver our user menu.
-    """
-    def get(self):
-        """
-        Gets the user menu.
-        """
-        return {
-                   TITLE: USERS_MENU_NM,
-                   'Default': '0',
-                   'Choices': {
-                       '1': {
-                            'url': '/',
-                            'method': 'get',
-                            'text': 'Get User Details',
-                       },
-                       '0': {
-                            'text': 'Return',
-                       },
-                   },
-               }
-
-
 @api.route(f'{USERS_EP}')
 class Users(Resource):
     def get(self):

@@ -13,7 +13,7 @@ ID_LEN = 24
 MOCK_ID = '0' * ID_LEN
 
 RATING = 'rating'
-TEST_RESTAURANT_NAME = 'Dominos'
+TEST_RESTAURANT_NAME = 'Restaurant'
 
 NAME = 'name'
 RESTAURANT_COLLECT = 'restaurants'
@@ -83,13 +83,17 @@ def _gen_id() -> str:
 
 
 def add_restaurant(name: str, rating: int) -> bool:
-    if name in restaurants:
+    restaurants = {}
+    if exists(name):
         raise ValueError(f'Duplicate restaurant name: {name=}')
     if not name:
         raise ValueError('Restaurant name may not be blank')
-    restaurants[name] = {RATING: rating}
+    restaurants[NAME] = name
+    restaurants[RATING] = rating
     dbc.connect_db()
-    return _gen_id()
+    _id = dbc.insert_one(RESTAURANT_COLLECT, restaurants)
+    # restaurants[name] = {RATING: rating}
+    return _id is not None
 
 
 def add_user(name: str, id: int) -> bool:
@@ -114,3 +118,7 @@ def del_user(id: int):
         del users[id]
     else:
         raise ValueError(f'Delete failure: {id} is not in users.')
+
+def exists(name: str) -> bool:
+    dbc.connect_db()
+    return dbc.fetch_one(RESTAURANT_COLLECT, {NAME: name})

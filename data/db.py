@@ -115,6 +115,7 @@ def del_user(id: int):
     else:
         raise ValueError(f'Delete failure: {id} is not in users.')
 
+
 def exists(name: str) -> bool:
     dbc.connect_db()
     return dbc.fetch_one(RESTAURANT_COLLECT, {NAME: name})

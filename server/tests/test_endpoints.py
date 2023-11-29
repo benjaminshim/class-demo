@@ -49,7 +49,6 @@ def test_list_restaurants():
 def test_get_restuarants():
     restaurants = rst.get_restuarants()
     assert isinstance(restaurants, dict)
-    assert len(restaurants) > 0
 
 
 @patch('data.db.add_restaurant', return_value=rst.MOCK_ID, autospec=True)

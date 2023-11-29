@@ -177,7 +177,7 @@ class Restaurants(Resource):
                   'We have a technical problem.')
     def post(self):
         """
-        Add a game.
+        Add a restaurant.
         """
         name = request.json[db.TEST_RESTAURANT_NAME]
         rating = request.json[db.RATING]

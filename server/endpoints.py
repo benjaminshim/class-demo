@@ -167,7 +167,7 @@ class Restaurants(Resource):
     def get(self):
         return {TYPE: DATA,
                 TITLE: 'Current Restaurants',
-                DATA: db.get_restaurants(),
+                DATA: db.get_restuarants(),
                 }
 
     @api.expect(restaurant_fields)

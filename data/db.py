@@ -34,10 +34,6 @@ restaurants = {
 }
 
 
-def exists(name: str) -> bool:
-    return name in get_restuarants()
-
-
 NAME = 'name'
 
 

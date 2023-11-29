@@ -108,7 +108,7 @@ def add_user(name: str, id: int) -> bool:
 
 def del_restaurant(name: str):
     if exists(name):
-        del dbc.del_one(RESTAURANT_COLLECT, {NAME: name})
+        return dbc.del_one(RESTAURANT_COLLECT, {NAME: name})
     else:
         raise ValueError(f'Delete failure: {name} not in database.')
 

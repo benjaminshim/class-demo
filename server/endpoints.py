@@ -28,12 +28,13 @@ USERS_MENU_NM = "User Menu"
 USERS_MENU_EP = '/user_menu'
 RESTAURANTS_EP = '/db'
 RESTAURANTS = 'restaurants'
+RESTAURANTS_MENU_NM = 'Restaurant Menu'
 RESTAURANT_ID = "ID"
 TYPE = 'Type'
 DATA = 'DATA'
 TITLE = 'Title'
+RETURN = 'Return'
 DEL_RESAURANT_EP = f'{RESTAURANTS_EP}/{DELETE}'
-# RETURN = 'Return'
 
 
 @api.route(HELLO_EP)
@@ -168,6 +169,8 @@ class Restaurants(Resource):
         return {TYPE: DATA,
                 TITLE: 'Current Restaurants',
                 DATA: db.get_restuarants(),
+                MENU: RESTAURANTS_MENU_NM,
+                RETURN: MAIN_MENU_EP,
                 }
 
     @api.expect(restaurant_fields)

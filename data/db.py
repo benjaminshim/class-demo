@@ -69,7 +69,7 @@ def fetch_pets():
 
 def get_restuarants() -> dict:
     dbc.connect_db()
-    return dbc.fetch_all(RESTAURANT_COLLECT)
+    return dbc.fetch_all_as_dict(NAME, RESTAURANT_COLLECT)
 
 
 def _gen_id() -> str:

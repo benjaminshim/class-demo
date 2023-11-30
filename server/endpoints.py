@@ -165,6 +165,10 @@ class DelRestaurant(Resource):
 
 @api.route(f'{RESTAURANTS_EP}')
 class Restaurants(Resource):
+    """
+    This class supports various operations on restaurants, such as
+    listing them, adding a game, and deleting a game
+    """
     def get(self):
         return {TYPE: DATA,
                 TITLE: 'Current Restaurants',

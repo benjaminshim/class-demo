@@ -10,7 +10,7 @@ from flask_restx import Resource, Api, fields
 import werkzeug.exceptions as wz
 
 import data.db as db
-# import data.users as usrs
+import data.users as usrs
 # import data.customers as cstmrs
 
 app = Flask(__name__)
@@ -116,27 +116,11 @@ class UserMenu(Resource):
 @api.route(f'{USERS_EP}')
 class Users(Resource):
     def get(self):
-        return {TYPE: DATA,
-                TITLE: 'Current Customers',
-                DATA:
-                    {"Andy":
-                        {
-                            "joined": '12/17/2022'
-                        },
-                        "Benjamin":
-                        {
-                            "joined": '04/30/2022'
-                        },
-                        "Carolina":
-                        {
-                            "joined": '11/05/2022'
-                        },
-                        "Bridget":
-                        {
-                            "joined": '03/12/2022'
-                        }
-                     }
-                }
+        return usrs.get_users()
+        # return {TYPE: DATA,
+        #         TITLE: 'Current Customers',
+        #         DATA: usrs.get_users(),
+        #         }
 
 
 restaurant_fields = api.model('NewRestaurant', {

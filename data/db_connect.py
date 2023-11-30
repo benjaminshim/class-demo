@@ -5,7 +5,7 @@ import pymongo as pm
 LOCAL = "0"
 CLOUD = "1"
 
-RESTAURANT_DB = 'restaurantDB'
+USERS_DB = 'databasesplusoneDB'
 
 client = None
 
@@ -24,14 +24,14 @@ def connect_db():
     if client is None:  # not connected yet!
         print("Setting client because it is None.")
         if os.environ.get("CLOUD_MONGO", LOCAL) == CLOUD:
-            password = os.environ.get("RESTAURANT_MONGO_PW")
+            password = os.environ.get("MONGODB_PASSWORD")
             if not password:
                 raise ValueError('You must set your password '
                                  + 'to use Mongo in the cloud.')
             print("Connecting to Mongo in the cloud.")
             client = pm.MongoClient(f'mongodb+srv://cm5685:{password}'
-                                    + '@cluster0.2d5iksq.mongodb.net/'
-                                    + '?retryWrites=true&w=majority')
+                                    + '@databasesplusone.zrimlpx.mongodb.net'
+                                    + '/?retryWrites=true&w=majority')
             # PA recommends these settings:
             # + 'connectTimeoutMS=30000&'
             # + 'socketTimeoutMS=None
@@ -43,7 +43,7 @@ def connect_db():
             client = pm.MongoClient()
 
 
-def insert_one(collection, doc, db=RESTAURANT_DB):
+def insert_one(collection, doc, db=USERS_DB):
     """
     Insert a single doc into collection.
     """
@@ -51,7 +51,7 @@ def insert_one(collection, doc, db=RESTAURANT_DB):
     return client[db][collection].insert_one(doc)
 
 
-def fetch_one(collection, filt, db=RESTAURANT_DB):
+def fetch_one(collection, filt, db=USERS_DB):
     """
     Find with a filter and return on the first doc found.
     """
@@ -62,21 +62,21 @@ def fetch_one(collection, filt, db=RESTAURANT_DB):
         return doc
 
 
-def del_one(collection, filt, db=RESTAURANT_DB):
+def del_one(collection, filt, db=USERS_DB):
     """
     Find with a filter and return on the first doc found.
     """
     client[db][collection].delete_one(filt)
 
 
-def fetch_all(collection, db=RESTAURANT_DB):
+def fetch_all(collection, db=USERS_DB):
     ret = []
     for doc in client[db][collection].find():
         ret.append(doc)
     return ret
 
 
-def fetch_all_as_dict(key, collection, db=RESTAURANT_DB):
+def fetch_all_as_dict(key, collection, db=USERS_DB):
     ret = {}
     for doc in client[db][collection].find():
         del doc[MONGO_ID]

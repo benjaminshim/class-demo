@@ -154,6 +154,9 @@ class Restaurants(Resource):
     listing them, adding a game, and deleting a game
     """
     def get(self):
+        """
+        Get list of restaurants and their ratings
+        """
         return {TYPE: DATA,
                 TITLE: 'Current Restaurants',
                 DATA: db.get_restuarants(),

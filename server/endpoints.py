@@ -123,6 +123,9 @@ users_fields = api.model('NewUser', {
 @api.route(f'{USERS_EP}')
 class Users(Resource):
     def get(self):
+        """
+        Get list of all users
+        """
         return {
             TYPE: DATA,
             TITLE: 'Current Users',
@@ -140,8 +143,8 @@ class Users(Resource):
         """
         Add a user.
         """
-        name = request.json[db.Name]
-        rating = request.json[db.TEST_USERNAME]
+        name = request.json[db.NAME]
+        rating = request.json[db.USER_ID]
         try:
             new_id = db.add_user(name, rating)
             if new_id is None:

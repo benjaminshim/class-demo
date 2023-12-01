@@ -18,6 +18,9 @@ TEST_RESTAURANT_NAME = 'Restaurant'
 NAME = 'name'
 RESTAURANT_COLLECT = 'restaurants'
 
+USER_NAME = "User"
+USER_ID = "ID"
+
 TEST_RESTAURANT_FLDS = {
     TEST_RESTAURANT_NAME: 'Test name',
     RATING: 0,

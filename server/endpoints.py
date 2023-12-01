@@ -26,6 +26,7 @@ HELLO_RESP = 'hello'
 USERS_EP = '/users'
 USERS_MENU_NM = "User Menu"
 USERS_MENU_EP = '/user_menu'
+USER_ID = "ID"
 RESTAURANTS_EP = '/db'
 RESTAURANTS = 'restaurants'
 RESTAURANTS_MENU_NM = 'Restaurant Menu'
@@ -113,14 +114,41 @@ class UserMenu(Resource):
                }
 
 
+users_fields = api.model('NewUser', {
+    db.NAME: fields.String,
+    db.USER_ID: fields.Integer,
+})
+
+
 @api.route(f'{USERS_EP}')
 class Users(Resource):
     def get(self):
-        return usrs.get_users()
-        # return {TYPE: DATA,
-        #         TITLE: 'Current Customers',
-        #         DATA: usrs.get_users(),
-        #         }
+        return {
+            TYPE: DATA,
+            TITLE: 'Current Users',
+            DATA: usrs.get_users(),
+            MENU: USERS_MENU_NM,
+            RETURN: MAIN_MENU_EP,
+        }
+
+    @api.expect(users_fields)
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
+                  'We have a technical problem.')
+    def post(self):
+        """
+        Add a user.
+        """
+        name = request.json[db.Name]
+        rating = request.json[db.TEST_USERNAME]
+        try:
+            new_id = db.add_user(name, rating)
+            if new_id is None:
+                raise wz.ServiceUnavailable('We have a technical problem.')
+            return {USER_ID: new_id}
+        except ValueError as e:
+            raise wz.NotAcceptable(f'{str(e)}')
 
 
 restaurant_fields = api.model('NewRestaurant', {

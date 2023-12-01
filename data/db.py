@@ -6,6 +6,7 @@ Gradually, we will fill in actual calls to our datastore.
 import random
 
 import data.db_connect as dbc
+import data.users as usrs
 
 
 BIG_NUM = 10000000000000
@@ -19,7 +20,7 @@ NAME = 'name'
 RESTAURANT_COLLECT = 'restaurants'
 
 USER_NAME = "User"
-USER_ID = "ID"
+USER_ID = "_id"
 
 TEST_RESTAURANT_FLDS = {
     TEST_RESTAURANT_NAME: 'Test name',
@@ -98,13 +99,16 @@ def add_restaurant(name: str, rating: int) -> bool:
 
 
 def add_user(name: str, id: int) -> bool:
+    users = {}
     if id in users:
         raise ValueError(f'Duplicate user id: {id=}')
     if not id:
         raise ValueError('Users are not allowed to be entered without ids')
-    users[id] = {NAME: name}
+    users[USER_ID] = _gen_id()
+    users[USER_NAME] = name
     dbc.connect_db()
-    return _gen_id()
+    _id = dbc.insert_one(usrs.USERS_COLLECT, users)
+    return _id is not None
 
 
 def del_restaurant(name: str):

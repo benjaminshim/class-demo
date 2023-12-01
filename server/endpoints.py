@@ -26,7 +26,7 @@ HELLO_RESP = 'hello'
 USERS_EP = '/users'
 USERS_MENU_NM = "User Menu"
 USERS_MENU_EP = '/user_menu'
-USER_ID = "ID"
+USER_ID = "_id"
 RESTAURANTS_EP = '/db'
 RESTAURANTS = 'restaurants'
 RESTAURANTS_MENU_NM = 'Restaurant Menu'
@@ -116,7 +116,6 @@ class UserMenu(Resource):
 
 users_fields = api.model('NewUser', {
     db.NAME: fields.String,
-    db.USER_ID: fields.Integer,
 })
 
 
@@ -143,10 +142,9 @@ class Users(Resource):
         """
         Add a user.
         """
-        name = request.json[db.NAME]
-        rating = request.json[db.USER_ID]
+        username = request.json[db.NAME]
         try:
-            new_id = db.add_user(name, rating)
+            new_id = db.add_user(username, id)
             if new_id is None:
                 raise wz.ServiceUnavailable('We have a technical problem.')
             return {USER_ID: new_id}

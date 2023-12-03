@@ -56,6 +56,7 @@ def test_restaurant_add(mock_add):
     resp = TEST_CLIENT.post(ep.RESTAURANTS_EP, json=rst.get_test_restaurant())
     assert resp.status_code == OK
 
+
 @patch('data.db.add_restaurant', side_effect=ValueError(), autospec=True)
 def test_restaurant_bad_add(mock_add):
     """
@@ -64,7 +65,8 @@ def test_restaurant_bad_add(mock_add):
     resp = TEST_CLIENT.post(ep.RESTAURANTS_EP, json=rst.get_test_restaurant())
     assert resp.status_code == NOT_ACCEPTABLE
 
-@pytest.mark.skip('This test is failing for now but will be fixed soon')
+
+@patch('data.db.add_restaurant', return_value=None)
 def test_restaurant_add_db_failure(mock_add):
     """
     Testing we do the right thing with a null ID return from add_restaurant.

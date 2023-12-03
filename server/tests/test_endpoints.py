@@ -71,7 +71,7 @@ def test_restaurant_add_db_failure(mock_add):
     """
     Testing we do the right thing with a null ID return from add_restaurant.
     """
-    resp = TEST_CLIENT.post(ep.RESTAURANT_EP, json=rst.get_test_restaurant())
+    resp = TEST_CLIENT.post(ep.RESTAURANTS_EP, json=rst.get_test_restaurant())
     assert resp.status_code == SERVICE_UNAVAILABLE
 
 

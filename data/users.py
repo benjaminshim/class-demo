@@ -1,7 +1,7 @@
+import random
 """
 This module interfaces to our user data
 """
-import random
 
 import data.db_connect as dbc
 import data.users as usrs
@@ -15,8 +15,6 @@ NAME = 'name'
 
 USER_NAME = "User"
 USER_ID = "_id"
-
-import data.db_connect as dbc
 
 USERNAME = 'User'
 MIN_CUST_NAME_LEN = 1

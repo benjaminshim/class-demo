@@ -18,7 +18,7 @@ api = Api(app)
 
 DELETE = 'delete'
 MAIN_MENU = 'MainMenu'
-MAIN_MENU_NM = "Welcome to Text Game!"
+MAIN_MENU_NM = "Welcome to YumYard!"
 MAIN_MENU_EP = '/MainMenu'
 MENU = 'menu'
 HELLO_EP = '/hello'
@@ -74,15 +74,15 @@ class MainMenu(Resource):
     """
     def get(self):
         """
-        Gets the main game menu.
+        Gets the main YumYard menu.
         """
         return {TITLE: MAIN_MENU_NM,
                 'Default': 2,
                 'Choices': {
                     '1': {'url': '/', 'method': 'get',
-                          'text': 'List Available Characters'},
+                          'text': 'List Restaurants'},
                     '2': {'url': '/',
-                          'method': 'get', 'text': 'List Active Games'},
+                          'method': 'get', 'text': 'List Reviews'},
                     '3': {'url': f'{USERS_EP}',
                           'method': 'get', 'text': 'List Users'},
                     'X': {'text': 'Exit'},

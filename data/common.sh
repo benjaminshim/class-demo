@@ -20,4 +20,4 @@ then
     exit 1
 fi
 
-declare -a UsersCollections=("restaurants" "users")
+declare -a UsersCollections=("restaurants" "users" "reviews")

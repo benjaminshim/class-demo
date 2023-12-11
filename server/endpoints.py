@@ -11,14 +11,14 @@ import werkzeug.exceptions as wz
 
 import data.db as db
 import data.users as usrs
-# import data.customers as cstmrs
+import data.reviews as rvws
 
 app = Flask(__name__)
 api = Api(app)
 
 DELETE = 'delete'
 MAIN_MENU = 'MainMenu'
-MAIN_MENU_NM = "Welcome to Text Game!"
+MAIN_MENU_NM = "Welcome to YumYard!"
 MAIN_MENU_EP = '/MainMenu'
 MENU = 'menu'
 HELLO_EP = '/hello'
@@ -31,6 +31,10 @@ RESTAURANTS_EP = '/db'
 RESTAURANTS = 'restaurants'
 RESTAURANTS_MENU_NM = 'Restaurant Menu'
 RESTAURANT_ID = "ID"
+REVIEWS_EP = '/reviews'
+REVIEWS = 'reviews'
+REVIEWS_MENU_NM = 'Reviews Menu'
+REVIEWS_ID = 'id'
 TYPE = 'Type'
 DATA = 'DATA'
 TITLE = 'Title'
@@ -74,15 +78,15 @@ class MainMenu(Resource):
     """
     def get(self):
         """
-        Gets the main game menu.
+        Gets the main YumYard menu.
         """
         return {TITLE: MAIN_MENU_NM,
                 'Default': 2,
                 'Choices': {
                     '1': {'url': '/', 'method': 'get',
-                          'text': 'List Available Characters'},
+                          'text': 'List Restaurants'},
                     '2': {'url': '/',
-                          'method': 'get', 'text': 'List Active Games'},
+                          'method': 'get', 'text': 'List Reviews'},
                     '3': {'url': f'{USERS_EP}',
                           'method': 'get', 'text': 'List Users'},
                     'X': {'text': 'Exit'},
@@ -209,5 +213,43 @@ class Restaurants(Resource):
             if new_id is None:
                 raise wz.ServiceUnavailable('We have a technical problem.')
             return {RESTAURANT_ID: new_id}
+        except ValueError as e:
+            raise wz.NotAcceptable(f'{str(e)}')
+
+
+review_fields = api.model('NewReview', {
+    rvws.REVIEW_SENTENCE: fields.String,
+})
+
+
+@api.route(f'{REVIEWS_EP}')
+class Reviews(Resource):
+    def get(self):
+        """
+        Get list of all reviews
+        """
+        return {
+            TYPE: DATA,
+            TITLE: 'All reviews',
+            DATA: rvws.get_reviews(),
+            MENU: REVIEWS_MENU_NM,
+            RETURN: MAIN_MENU_EP,
+        }
+
+    @api.expect(review_fields)
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
+                  'We have a technical problem.')
+    def post(self):
+        """
+        Add a review.
+        """
+        review = request.json[rvws.REVIEW_SENTENCE]
+        try:
+            new_id = rvws.add_review(review)
+            if new_id is None:
+                raise wz.ServiceUnavailable('We have a technical problem.')
+            return {REVIEWS_ID: new_id}
         except ValueError as e:
             raise wz.NotAcceptable(f'{str(e)}')

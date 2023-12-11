@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="templates_static/style.css" />
+  <title>Resturant Register</title>
+  <style>
+    .center {
+        margin: auto;
+        width: 60%;
+        padding: 10px;
+        }
+  </style>
+</head>
+<body>
+  
+  <header>
+    <nav>
+      <!-- Coonect to index page which will be the main page -->
+      <a href="home.html">Back to Home</a>
+    </nav>
+  </header>
+
+  <div>
+    <div 
+      <div class="center">
+        <div>
+          <h2>Report</h2>
+          <p>Please provide the information below to report an issue:</p>
+        </div>
+      </div>
+      <form class="center" class="login-form" action="/registerAuth" method="POST">
+        <input 
+          type="text"
+          name="first_name"
+          placeholder="First Name"
+          required
+        />
+        <input 
+          type="text"
+          name="last_name"
+          placeholder="Last Name"
+          required
+        />
+        <input type="text" name="email" placeholder="Email" required />
+        <p>Describe the issue so that we can provide assistance:</p>
+        <input style = "width: 400px; height:100px;"
+          type="description"
+          name="description"
+          placeholder="description"
+          required
+        ></input>
+
+        <input class="submit_button" type="submit" value="Submit" />
+      </form>
+    </div>
+  </div>
+</body>
+</html>

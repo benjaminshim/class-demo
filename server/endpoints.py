@@ -169,6 +169,8 @@ class DelRestaurant(Resource):
     """
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
+    @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
+                  'We have a technical problem.')
     def delete(self, name):
         """
         Deletes a restaurant by name.

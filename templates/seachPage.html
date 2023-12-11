@@ -29,7 +29,7 @@
         .map-img{
             width: 605px;
             height: 534px;
-            margin-top: 191px;
+            margin-top: 150px;
             margin-left: 72px;
             position: absolute;
         }
@@ -37,7 +37,7 @@
             width: 319px;
             height: 61px;
             position: absolute;
-            top: 164px;
+            top: 200px;
             left: 783px;
             border: 1px solid #000000;
             background: #FFF;
@@ -45,7 +45,7 @@
         }
         .searchButton{
             position: absolute;
-            top: 164px;
+            top: 200px;
             left: 1102px;
             width: 131px;
             height: 61px;
@@ -68,12 +68,19 @@
   </head>
   <body style="margin:0%;">
     <div class="homeButton">
-        <a class="homeText" href="templates/home.html" target="_blank">Home</a> 
+        <a class="homeText" href="home.html" >Home</a> 
     </div>
     <div>
         <img class ="map-img" src="img/map.png" alt="decor">
     </div>
-    <div class="searchBox"></div>
+    <div class="searchBox">
+        <input style ="height: 90%; width:100%; text-size-adjust: 24px;"
+        type="restaurant"
+        name="restaurant"
+        placeholder="restaurant"
+        required
+      />
+    </div>
     <div class="searchButton">
         <p class="seachText">Search</p>
     </div>

@@ -1,4 +1,3 @@
-# Import all lines from 2-30
 import random
 """
 This module interfaces to our user data

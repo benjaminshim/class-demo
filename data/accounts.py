@@ -46,3 +46,4 @@ def add_review(account_str: str) -> bool:
     dbc.connect_db()
     _id = dbc.insert_one(accs.ACCOUNTS_COLLECT, accounts_in)
     return _id is not None
+

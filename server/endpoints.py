@@ -12,6 +12,7 @@ import werkzeug.exceptions as wz
 import data.db as db
 import data.users as usrs
 import data.reviews as rvws
+import data.accounts as accs
 
 app = Flask(__name__)
 api = Api(app)
@@ -35,6 +36,10 @@ REVIEWS_EP = '/reviews'
 REVIEWS = 'reviews'
 REVIEWS_MENU_NM = 'Reviews Menu'
 REVIEWS_ID = 'id'
+ACCOUNTS_EP = '/accounts'
+ACCOUNTS = 'accounts'
+ACCOUNTS_MENU_NM = 'Accounts Menu'
+ACCOUNTS_ID = '_ID'
 TYPE = 'Type'
 DATA = 'DATA'
 TITLE = 'Title'
@@ -219,15 +224,12 @@ class Restaurants(Resource):
         except ValueError as e:
             raise wz.NotAcceptable(f'{str(e)}')
 
-# Step 2
-# Instead of 'NewReview', put 'NewLogin' or someething
-# basically change anything that says 'review'
+
 review_fields = api.model('NewReview', {
     rvws.REVIEW_SENTENCE: fields.String,
 })
 
-# Step 3
-# Probably just copy paste this
+
 @api.route(f'{REVIEWS_EP}')
 class Reviews(Resource):
     def get(self):
@@ -237,22 +239,19 @@ class Reviews(Resource):
         return {
             TYPE: DATA,
             TITLE: 'All reviews',
-            DATA: rvws.get_reviews(), # change this
+            DATA: rvws.get_reviews(),
             MENU: REVIEWS_MENU_NM,
             RETURN: MAIN_MENU_EP,
         }
 
-    # Copy paste this
-    # Instead of review fields, it's login fields or something
     @api.expect(review_fields)
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
                   'We have a technical problem.')
     def post(self):
-        # Account***
         """
-        Add a review. 
+        Add a review.
         """
         review = request.json[rvws.REVIEW_SENTENCE]
         try:
@@ -260,5 +259,43 @@ class Reviews(Resource):
             if new_id is None:
                 raise wz.ServiceUnavailable('We have a technical problem.')
             return {REVIEWS_ID: new_id}
+        except ValueError as e:
+            raise wz.NotAcceptable(f'{str(e)}')
+
+
+account_fields = api.model('NewAccount', {
+    accs.ACCOUNT_SENTENCE: fields.String,
+})
+
+
+@api.route(f'{ACCOUNTS_EP}')
+class Accounts(Resource):
+    def get(self):
+        """
+        Get list of all accounts
+        """
+        return {
+            TYPE: DATA,
+            TITLE: 'All accounts',
+            DATA: accs.get_accounts(),
+            MENU: REVIEWS_MENU_NM,
+            RETURN: MAIN_MENU_EP,
+        }
+
+    @api.expect(account_fields)
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
+                  'We have a technical problem.')
+    def post(self):
+        """
+        Add an account
+        """
+        account = request.json[accs.ACCOUNT_SENTENCE]
+        try:
+            new_id = accs.add_account(account)
+            if new_id is None:
+                raise wz.ServiceUnavailable('We have a technical problem.')
+            return {ACCOUNTS_ID: new_id}
         except ValueError as e:
             raise wz.NotAcceptable(f'{str(e)}')

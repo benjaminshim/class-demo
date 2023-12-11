@@ -1,3 +1,5 @@
+# Copy-paste and just change names
+
 import server.endpoints as ep
 import pytest
 import data.reviews as rvws

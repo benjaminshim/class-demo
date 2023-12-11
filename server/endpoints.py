@@ -206,6 +206,7 @@ class Restaurants(Resource):
         """
         Add a restaurant.
         """
+        # doing requests here, field names should be changed
         name = request.json[db.TEST_RESTAURANT_NAME]
         rating = request.json[db.RATING]
         try:
@@ -216,12 +217,15 @@ class Restaurants(Resource):
         except ValueError as e:
             raise wz.NotAcceptable(f'{str(e)}')
 
-
+# Step 2
+# Instead of 'NewReview', put 'NewLogin' or someething
+# basically change anything that says 'review'
 review_fields = api.model('NewReview', {
     rvws.REVIEW_SENTENCE: fields.String,
 })
 
-
+# Step 3
+# Probably just copy paste this
 @api.route(f'{REVIEWS_EP}')
 class Reviews(Resource):
     def get(self):
@@ -231,19 +235,22 @@ class Reviews(Resource):
         return {
             TYPE: DATA,
             TITLE: 'All reviews',
-            DATA: rvws.get_reviews(),
+            DATA: rvws.get_reviews(), # change this
             MENU: REVIEWS_MENU_NM,
             RETURN: MAIN_MENU_EP,
         }
 
+    # Copy paste this
+    # Instead of review fields, it's login fields or something
     @api.expect(review_fields)
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
                   'We have a technical problem.')
     def post(self):
+        # Account***
         """
-        Add a review.
+        Add a review. 
         """
         review = request.json[rvws.REVIEW_SENTENCE]
         try:

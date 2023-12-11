@@ -38,9 +38,6 @@ restaurants = {
 }
 
 
-NAME = 'name'
-
-
 users = {
     10000: {
         NAME: "James"

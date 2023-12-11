@@ -90,4 +90,4 @@ def test_del_restaurant_not_there(mock_add):
     Testing we do the right thing with a value error from del_restaurant.
     """
     resp = TEST_CLIENT.delete(f'{ep.RESTAURANTS_EP}/AnyName')
-    assert resp.status_code == OK
+    assert resp.status_code == NOT_FOUND

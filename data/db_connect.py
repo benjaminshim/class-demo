@@ -31,7 +31,7 @@ def connect_db():
             print("Connecting to Mongo in the cloud.")
             client = pm.MongoClient(f'mongodb+srv://cm5685:{password}'
                                     + '@databasesplusone.zrimlpx.mongodb.net'
-                                    + '/?retryWrites=true&w=majority')
+                                    + '/?retryWrites=true&w=majority', tls=False)
             # PA recommends these settings:
             # + 'connectTimeoutMS=30000&'
             # + 'socketTimeoutMS=None

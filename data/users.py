@@ -47,7 +47,7 @@ def add_user(name: str, id: int) -> bool:
     return _id is not None
 
 
-def del_user(name:str): 
+def del_user(name: str):
     if exists(name):
         dbc.del_one(USERS_COLLECT, {NAME: name})
     else:

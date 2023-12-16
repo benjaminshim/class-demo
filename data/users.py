@@ -1,3 +1,4 @@
+from genericpath import exists
 import random
 """
 This module interfaces to our user data
@@ -44,3 +45,10 @@ def add_user(name: str, id: int) -> bool:
     dbc.connect_db()
     _id = dbc.insert_one(usrs.USERS_COLLECT, users)
     return _id is not None
+
+
+def del_user(name:str): 
+    if exists(name):
+        dbc.del_one(USERS_COLLECT, {NAME: name})
+    else:
+        raise ValueError(f'Delete failure: {name} is not in users.')

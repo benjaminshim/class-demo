@@ -45,6 +45,7 @@ DATA = 'DATA'
 TITLE = 'Title'
 RETURN = 'Return'
 DEL_RESAURANT_EP = f'{RESTAURANTS_EP}/{DELETE}'
+DEL_USER_EP = f'{USERS_EP}/{DELETE}'
 
 
 @api.route(HELLO_EP)
@@ -159,6 +160,26 @@ class Users(Resource):
             return {USER_ID: new_id}
         except ValueError as e:
             raise wz.NotAcceptable(f'{str(e)}')
+
+
+@api.route(f'{DEL_USER_EP}/<name>')
+class DelUser(Resource):
+    """
+    Deletes a restaurant by name.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
+    @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
+                  'We have a technical problem.')
+    def delete(self, name):
+        """
+        Deletes a user.
+        """
+        try:
+            usrs.del_user(name)
+            return {name: 'Deleted'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
 
 
 restaurant_fields = api.model('NewRestaurant', {

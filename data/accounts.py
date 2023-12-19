@@ -36,7 +36,7 @@ def get_accounts() -> dict:
     return dbc.fetch_all_as_dict(ACCOUNT_SENTENCE, ACCOUNTS_COLLECT)
 
 
-def add_review(account_str: str) -> bool:
+def add_account(account_str: str) -> bool:
     accounts_in = {}
     if id in accounts_in:
         raise ValueError(f'Duplicate user id: {id=}')

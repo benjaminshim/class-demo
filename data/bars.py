@@ -42,7 +42,7 @@ def add_bar(name: str, rating: int) -> bool:
     if not name:
         raise ValueError('bar name may not be blank')
     bars[BAR] = name
-    bars[BAR] = rating
+    bars[BAR_RATING] = rating
     dbc.connect_db()
     _id = dbc.insert_one(BAR_COLLECT, bars)
     return _id is not None

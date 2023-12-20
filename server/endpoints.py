@@ -13,6 +13,7 @@ import data.db as db
 import data.users as usrs
 import data.reviews as rvws
 import data.accounts as accs
+import data.bars as brs
 
 app = Flask(__name__)
 api = Api(app)
@@ -44,6 +45,9 @@ TYPE = 'Type'
 DATA = 'DATA'
 TITLE = 'Title'
 RETURN = 'Return'
+BAR_EP = '/bars'
+BARS_MENU_NM = 'Bar Menu'
+BAR_ID = '_ID'
 DEL_RESAURANT_EP = f'{RESTAURANTS_EP}/{DELETE}'
 DEL_USER_EP = f'{USERS_EP}/{DELETE}'
 
@@ -212,7 +216,7 @@ class DelRestaurant(Resource):
 class Restaurants(Resource):
     """
     This class supports various operations on restaurants, such as
-    listing them, adding a game, and deleting a game
+    listing them, adding a restaurant, and deleting a restaurant
     """
     def get(self):
         """
@@ -318,5 +322,49 @@ class Accounts(Resource):
             if new_id is None:
                 raise wz.ServiceUnavailable('We have a technical problem.')
             return {ACCOUNTS_ID: new_id}
+        except ValueError as e:
+            raise wz.NotAcceptable(f'{str(e)}')
+
+
+bar_fields = api.model('NewBar', {
+    brs.BAR: fields.String,
+    brs.BAR_RATING: fields.Integer,
+})
+
+
+@api.route(f'{BAR_EP}')
+class Bars(Resource):
+    """
+    This class supports various operations on bar, such as
+    listing them, adding a bar, and deleting a bar
+    """
+    def get(self):
+        """
+        Get list of bars and their ratings
+        """
+        return {TYPE: DATA,
+                TITLE: 'Current Bars',
+                DATA: brs.get_bars(),
+                MENU: BARS_MENU_NM,
+                RETURN: MAIN_MENU_EP,
+                }
+
+    @api.expect(bar_fields)
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
+                  'We have a technical problem.')
+    def post(self):
+        """
+        Add a bar.
+        """
+        # doing requests here, field names should be changed
+        name = request.json[brs.BAR]
+        rating = request.json[brs.BAR_RATING]
+        try:
+            new_id = brs.add_bar(name, rating)
+            if new_id is None:
+                raise wz.ServiceUnavailable('We have a technical problem.')
+            return {BAR_ID: new_id}
         except ValueError as e:
             raise wz.NotAcceptable(f'{str(e)}')

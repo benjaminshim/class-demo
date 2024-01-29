@@ -10,6 +10,9 @@ To build production, type `make prod`.
 
 To create the env for a new developer, run `make dev_env`.
 
+## Progress and Goals
+To see our progress and goals, click [here](ProgressAndGoals.md)
+
 ## Planned Endpoints
 
  - [ ] **User Registration and Authentication**

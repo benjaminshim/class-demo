@@ -8,6 +8,6 @@
   - This will be met by adding an 'update user' endpoint and by having a user menu that interacts with the API
 
 
-
+### This will be deleted after .md file is completed
 1. Detail what you have already completed in your project. What requirements were met in completing these bits?
 2. Set out your goals for this semester. Please detail what the requirement is that each goals will meet, and how you expect to meet it.

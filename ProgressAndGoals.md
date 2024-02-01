@@ -10,6 +10,9 @@
 - Complete two more endpoints to fulfill the 12 endpoint requirement.
   - This will be met by adding an 'update user' endpoint and by having a user menu that interacts with the API
 - Create functional tests for the remaining two endpoints to fulfill the testing requirement
+- Improve the current layout of our key pages
+  - This will probably be done by editing our current HTML files, or by improving styling through CSS/REACT
+- Complete the Auto-Deploy Server Assignment (Due Feb. 3rd)
 
 
 ### This will be deleted after .md file is completed

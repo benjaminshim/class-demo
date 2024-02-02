@@ -32,7 +32,7 @@ def connect_db():
             client = pm.MongoClient(f'mongodb+srv://cm5685:{password}'
                                     + '@databasesplusone.zrimlpx.mongodb.net'
                                     + '/?retryWrites=true&w='
-                                    + 'majority', tls=False)
+                                    + 'majority')
             # PA recommends these settings:
             # + 'connectTimeoutMS=30000&'
             # + 'socketTimeoutMS=None

@@ -1,6 +1,7 @@
 #!/bin/bash
 # This runs on PythonAnywhere servers: fetches new code,
 # installs needed packages, and restarts the server.
+#PA_PWD added in secrets
 
 touch rebuild
 echo "Rebuilding $PA_DOMAIN"

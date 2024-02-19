@@ -91,3 +91,21 @@ def test_del_restaurant_not_there(mock_add):
     """
     resp = TEST_CLIENT.delete(f'{ep.RESTAURANTS_EP}/AnyName')
     assert resp.status_code == NOT_FOUND
+
+
+@patch('data.db.update_rating', side_effect=ValueError(), autospec=True)
+def test_bad_update_rating(mock_update):
+    """
+    Testing we do the right thing with a call to update_rating that fails.
+    """
+    resp = TEST_CLIENT.put(f'{ep.RESTAURANTS_EP}/AnyName/100')
+    assert resp.status_code == NOT_FOUND
+
+
+@patch('data.db.update_rating', autospec=True)
+def test_update_rating(mock_update):
+    """
+    Testing we do the right thing with a call to update_rating that succeeds.
+    """
+    resp = TEST_CLIENT.put(f'{ep.RESTAURANTS_EP}/AnyName/100')
+    assert resp.status_code == OK

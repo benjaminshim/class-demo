@@ -373,7 +373,7 @@ class Bars(Resource):
 @api.route(f'{RESTAURANTS_EP}/<name>/<rating>')
 class Rating(Resource):
     """
-    Updates the number of players in a game.
+    Updates the rating of a restaurant.
     """
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')

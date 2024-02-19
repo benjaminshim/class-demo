@@ -368,3 +368,21 @@ class Bars(Resource):
             return {BAR_ID: new_id}
         except ValueError as e:
             raise wz.NotAcceptable(f'{str(e)}')
+
+
+@api.route(f'{RESTAURANTS_EP}/<name>/<rating>')
+class Rating(Resource):
+    """
+    Updates the number of players in a game.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    def put(self, name, rating):
+        """
+        Update the rating of a restaurant.
+        """
+        try:
+            db.update_rating(name, rating)
+            return {name: 'Updated'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')

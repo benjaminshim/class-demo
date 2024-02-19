@@ -125,3 +125,12 @@ def del_user(id: int):
 def exists(name: str) -> bool:
     dbc.connect_db()
     return dbc.fetch_one(RESTAURANT_COLLECT, {NAME: name})
+
+
+def update_num_players(name: str, rating: int) -> bool:
+    if not exists(name):
+        raise ValueError(f'Update failure: {name} not in database.')
+    else:
+        dbc.connect_db()
+        return dbc.update_doc(RESTAURANT_COLLECT, {NAME: name},
+                              {RATING: rating})

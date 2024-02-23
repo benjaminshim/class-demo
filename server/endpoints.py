@@ -6,6 +6,7 @@ from http import HTTPStatus
 
 from flask import Flask, request
 from flask_restx import Resource, Api, fields
+from flask_cors import CORS
 
 import werkzeug.exceptions as wz
 
@@ -16,6 +17,7 @@ import data.accounts as accs
 import data.bars as brs
 
 app = Flask(__name__)
+CORS(app)
 api = Api(app)
 
 DELETE = 'delete'

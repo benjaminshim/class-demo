@@ -46,3 +46,12 @@ def add_bar(name: str, rating: int) -> bool:
     dbc.connect_db()
     _id = dbc.insert_one(BAR_COLLECT, bars)
     return _id is not None
+
+
+def update_bar_rating(name: str, rating: int) -> bool:
+    if not exists(name):
+        raise ValueError(f'Update failure: {name} not in database.')
+    else:
+        dbc.connect_db()
+        return dbc.update_doc(BAR_COLLECT, {BAR: name},
+                              {BAR_RATING: rating})

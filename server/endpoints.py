@@ -372,6 +372,24 @@ class Bars(Resource):
             raise wz.NotAcceptable(f'{str(e)}')
 
 
+@api.route(f'{BAR_EP}/<name>/<rating>')
+class Bar_Rating(Resource):
+    """
+    Updates the rating of a bar.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    def put(self, name, rating):
+        """
+        Update the rating of a bar.
+        """
+        try:
+            brs.update_bar_rating(name, rating)
+            return {name: 'Updated'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
+
+
 @api.route(f'{RESTAURANTS_EP}/<name>/<rating>')
 class Rating(Resource):
     """

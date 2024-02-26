@@ -39,3 +39,21 @@ def test_bar_add_db_failure(mock_add):
     """
     resp = TEST_CLIENT.post(ep.BAR_EP, json=brs.get_test_bar())
     assert resp.status_code == SERVICE_UNAVAILABLE
+
+
+@patch('data.bars.update_bar_rating', side_effect=ValueError(), autospec=True)
+def test_bad_update_bar_rating(mock_update):
+    """
+    Testing we do the right thing with a call to update_bar_rating that fails.
+    """
+    resp = TEST_CLIENT.put(f'{ep.BAR_EP}/AnyName/100')
+    assert resp.status_code == NOT_FOUND
+
+
+@patch('data.bars.update_rating', autospec=True)
+def test_update_rating(mock_update):
+    """
+    Testing we do the right thing with a call to update_bar_rating that succeeds.
+    """
+    resp = TEST_CLIENT.put(f'{ep.BAR_EP}/AnyName/100')
+    assert resp.status_code == OK

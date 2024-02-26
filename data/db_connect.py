@@ -32,12 +32,11 @@ def connect_db():
             client = pm.MongoClient(f'mongodb+srv://cm5685:{password}'
                                     + '@databasesplusone.zrimlpx.mongodb.net'
                                     + '/?retryWrites=true&w='
-                                    + 'majority', 
+                                    + 'majority',
                                     + 'connectTimeoutMS=30000&',
                                     + 'socketTimeoutMS=None',
                                     + '&connect=false',
                                     + 'maxPoolsize=1')
-            # but they don't seem necessary
         else:
             print("Connecting to Mongo locally.")
             client = pm.MongoClient()

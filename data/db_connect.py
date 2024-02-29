@@ -33,7 +33,7 @@ def connect_db():
                                     + '@databasesplusone.zrimlpx.mongodb.net'
                                     + '/?retryWrites=true&w='
                                     + 'majority', connectTimeoutMS=30000,
-                                    socketTimeoutMS=None, connect=False, 
+                                    socketTimeoutMS=None, connect=False,
                                     maxPoolsize=1)
         else:
             print("Connecting to Mongo locally.")

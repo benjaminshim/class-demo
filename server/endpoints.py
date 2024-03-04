@@ -188,6 +188,24 @@ class DelUser(Resource):
             raise wz.NotFound(f'{str(e)}')
 
 
+@api.route(f'{USERS_EP}/<user_id>/<new_username>')
+class Update_Username(Resource):
+    """
+    Updates the rating of a restaurant.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    def put(self, user_id, new_username):
+        """
+        Update the username of an account.
+        """
+        try:
+            usrs.update_username(user_id, new_username)
+            return {user_id: 'Updated'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
+
+
 restaurant_fields = api.model('NewRestaurant', {
     db.TEST_RESTAURANT_NAME: fields.String,
     db.RATING: fields.Integer,

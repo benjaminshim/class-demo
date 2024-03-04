@@ -34,6 +34,11 @@ def _gen_id() -> str:
     return _id
 
 
+def exists(user_id: int) -> bool:
+    dbc.connect_db()
+    return dbc.fetch_one(USER_ID, {USER_ID: user_id})
+
+
 def add_user(name: str, id: int) -> bool:
     users = {}
     if id in users:
@@ -52,3 +57,12 @@ def del_user(name: str):
         dbc.del_one(USERS_COLLECT, {NAME: name})
     else:
         raise ValueError(f'Delete failure: {name} is not in users.')
+
+
+def update_username(user_id: int, new_username: str) -> bool:
+    if not exists(id):
+        raise ValueError(f'Update failure: {user_id} not in database.')
+    else:
+        dbc.connect_db()
+        return dbc.update_doc(USERS_COLLECT, {USER_ID: user_id}, {USER_NAME: new_username})
+        

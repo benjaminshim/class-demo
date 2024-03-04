@@ -1,4 +1,3 @@
-from genericpath import exists
 import random
 """
 This module interfaces to our user data
@@ -64,5 +63,5 @@ def update_username(user_id: int, new_username: str) -> bool:
         raise ValueError(f'Update failure: {user_id} not in database.')
     else:
         dbc.connect_db()
-        return dbc.update_doc(USERS_COLLECT, {USER_ID: user_id}, {USER_NAME: new_username})
-        
+        return dbc.update_doc(USERS_COLLECT, {USER_ID: user_id},
+                              {USER_NAME: new_username})

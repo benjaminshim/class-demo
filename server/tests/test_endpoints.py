@@ -3,6 +3,7 @@ import data.restaurants as rst
 from data.restaurants import TEST_RESTAURANT_FLDS
 import data.db_connect as dbc
 import pytest
+import unittest
 
 from http.client import (
     BAD_REQUEST,
@@ -18,6 +19,7 @@ from unittest.mock import patch
 TEST_CLIENT = ep.app.test_client()
 
 
+# TESTS
 @pytest.fixture(scope='function')
 def temp_restaurant():
     name = rst._get_test_name()
@@ -25,7 +27,7 @@ def temp_restaurant():
     yield name
     if rst.exists(name):
         rst.del_restaurant(name)
-        
+
 
 def test_list_users():
     resp = TEST_CLIENT.get(ep.USERS_EP)
@@ -34,15 +36,23 @@ def test_list_users():
 
 
 def test_list_restaurants():
+    # resp = TEST_CLIENT.get(ep.RESTAURANTS_EP)
+    # resp_json = resp.get_json()
+    # assert isinstance(resp_json, dict)
     resp = TEST_CLIENT.get(ep.RESTAURANTS_EP)
+    assert resp.status_code == OK
     resp_json = resp.get_json()
-    assert isinstance(resp_json, dict)
+    assert isinstance(resp_json, dict)  # Confirm the response is a dictionary
+    assert 'Title' in resp_json  # Confirm 'Title' is part of the response
+    assert 'DATA' in resp_json  # Confirm 'DATA' is part of the response, assuming DATA holds the restaurants list
+    assert isinstance(resp_json['DATA'], list)  # Confirm that DATA is a list (of restaurants)
 
 def test_get_restaurants():
     restaurants = rst.get_restaurants()
     assert isinstance(restaurants, dict)
 
 
+# PATCHES
 @patch('data.restaurants.add_restaurant', return_value=rst.MOCK_ID, autospec=True)
 def test_restaurant_add(mock_add):
     resp = TEST_CLIENT.post(ep.RESTAURANTS_EP, json=rst.get_test_restaurant())

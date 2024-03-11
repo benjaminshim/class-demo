@@ -69,9 +69,15 @@ def fetch_pets():
 
 
 def get_restaurants() -> dict:
-    # return restaurants
+    # dbc.connect_db()
+    # return dbc.fetch_all_as_dict(NAME, RESTAURANT_COLLECT)
     dbc.connect_db()
-    return dbc.fetch_all_as_dict(NAME, RESTAURANT_COLLECT)
+    try:
+        restaurants_dict = dbc.fetch_all_as_dict(NAME, RESTAURANT_COLLECT)
+        return restaurants_dict
+    except Exception as e:  # Consider a more specific exception based on your db_connect module
+        print(f"Error fetching restaurants: {e}")
+        return {}  # Or handle the error as appropriate
 
 
 def _gen_id() -> str:

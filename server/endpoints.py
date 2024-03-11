@@ -210,12 +210,24 @@ class Restaurants(Resource):
         """
         Get list of restaurants and their ratings
         """
-        return {TYPE: DATA,
+        # return {TYPE: DATA,
+        #         TITLE: 'Current Restaurants',
+        #         DATA: restaurants.get_restaurants(),
+        #         RETURN: MAIN_MENU_EP,
+        #         }
+    
+        try:
+            restaurants_list = restaurants.get_restaurants()
+            return {
+                TYPE: DATA,
                 TITLE: 'Current Restaurants',
-                DATA: restaurants.get_restaurants(),
+                DATA: restaurants_list,
                 RETURN: MAIN_MENU_EP,
-                }
+            }, HTTPStatus.OK
+        except Exception as e:
+            return {"message": str(e)}, HTTPStatus.INTERNAL_SERVER_ERROR
 
+    # WHAT IS THIS??
     @api.expect(restaurant_fields)
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')

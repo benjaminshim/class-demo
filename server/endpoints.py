@@ -226,56 +226,72 @@ class Restaurants(Resource):
         except Exception as e:
             return {"message": str(e)}, HTTPStatus.INTERNAL_SERVER_ERROR
 
-    @api.expect(restaurant_fields)
-    @api.response(HTTPStatus.OK, 'Success')
-    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
-    @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
-                  'We have a technical problem.')
-    def post(self):
-        """
-        Add a restaurant.
-        """
-        # doing requests here, field names should be changed
-        name = request.json[restaurants.TEST_RESTAURANT_NAME]
-        rating = request.json[restaurants.RATING]
-        try:
-            new_id = restaurants.add_restaurant(name, rating)
-            if new_id is None:
-                raise wz.ServiceUnavailable('We have a technical problem.')
-            return {RESTAURANT_ID: new_id}
-        except ValueError as e:
-            raise wz.NotAcceptable(f'{str(e)}')
-
     # @api.expect(restaurant_fields)
     # @api.response(HTTPStatus.OK, 'Success')
-    # @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Input data validation failed')
+    # @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     # @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
-    #    'Service unavailable due to a technical problem')
+    #               'We have a technical problem.')
     # def post(self):
     #     """
-    #     Add a new restaurant.
+    #     Add a restaurant.
     #     """
-    #     data = request.json
-    #     name = data['name']
-    #     description = data['description']
-    #     owner_id = data['owner_id']
-    #     state = data['state']
-    #     city = data['city']
-    #     address = data['address']
-    #     zip_code = data['zip_code']
-
+    #     # doing requests here, field names should be changed
+    #     name = request.json[restaurants.TEST_RESTAURANT_NAME]
+    #     rating = request.json[restaurants.RATING]
     #     try:
-    #         success = restaurants.add_restaurant(name, description,
-    #    owner_id, state, city, address, zip_code)
-    #         if not success:
+    #         new_id = restaurants.add_restaurant(name, rating)
+    #         if new_id is None:
     #             raise wz.ServiceUnavailable('We have a technical problem.')
-
-    #         return {"message": "Restaurant added successfully"},
-    #    HTTPStatus.OK
+    #         return {RESTAURANT_ID: new_id}
     #     except ValueError as e:
-    #         api.abort(HTTPStatus.NOT_ACCEPTABLE, str(e))
-    #     except Exception as e:
-    #         api.abort(HTTPStatus.SERVICE_UNAVAILABLE, str(e))
+    #         raise wz.NotAcceptable(f'{str(e)}')
+
+    @api.expect(restaurant_fields)
+    @api.response(HTTPStatus.CREATED, 'Restaurant added successfully')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Input data validation failed')
+    @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
+                  'Service unavailable due to a technical problem')
+    def post(self):
+        """
+        Add a new restaurant.
+        """
+        data = request.json
+
+        name = data.get('name')
+        description = data.get('description')
+        owner_id = data.get('owner_id')
+        state = data.get('state')
+        city = data.get('city')
+        address = data.get('address')
+        zip_code = data.get('zip_code')
+
+        try:
+            success = restaurants.add_restaurant(name, description,
+                                                 owner_id, state,
+                                                 city, address, zip_code)
+            if not success:
+                api.abort(
+                    HTTPStatus.NOT_ACCEPTABLE,
+                    "Failed to add the restaurant due to validation errors."
+                    )
+
+            return {"message":
+                    "Restaurant added successfully"}, HTTPStatus.CREATED
+
+        except ValueError as e:
+            api.abort(HTTPStatus.NOT_ACCEPTABLE, str(e))
+        except Exception as e:
+            api.abort(HTTPStatus.SERVICE_UNAVAILABLE, str(e))
+
+    restaurant_fields = api.model('Restaurant', {
+        'name': fields.String(required=True),
+        'description': fields.String(required=True),
+        'owner_id': fields.Integer(required=True),
+        'state': fields.String(required=True),
+        'city': fields.String(required=True),
+        'address': fields.String(required=True),
+        'zip_code': fields.String(required=True)
+    })
 
 
 review_fields = api.model('NewReview', {

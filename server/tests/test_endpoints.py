@@ -52,11 +52,29 @@ def test_get_restaurants():
 
 
 # PATCHES
+# @patch('data.restaurants.add_restaurant',
+#        return_value=rst.MOCK_ID, autospec=True)
+# def test_restaurant_add(mock_add):
+#     resp = TEST_CLIENT.post(ep.RESTAURANTS_EP,
+#       json=rst.get_test_restaurant())
+#     assert resp.status_code == OK
 @patch('data.restaurants.add_restaurant',
        return_value=rst.MOCK_ID, autospec=True)
 def test_restaurant_add(mock_add):
-    resp = TEST_CLIENT.post(ep.RESTAURANTS_EP, json=rst.get_test_restaurant())
+    test_restaurant_data = {
+        "name": "Test Restaurant",
+        "description": "A place for testing",
+        "owner_id": "test_owner",
+        "state": "TestState",
+        "city": "TestCity",
+        "address": "123 Test St",
+        "zip_code": "12345"
+    }
+    resp = TEST_CLIENT.post(ep.RESTAURANTS_EP, json=test_restaurant_data)
     assert resp.status_code == OK
+    mock_add.assert_called_once_with("Test Restaurant", "A place for testing",
+                                     "test_owner", "TestState", "TestCity",
+                                     "123 Test St", "12345")
 
 
 @patch('data.restaurants.add_restaurant',

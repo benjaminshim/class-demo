@@ -5,6 +5,7 @@ import pytest
 # from data.restaurants import TEST_RESTAURANT_FLDS
 # import data.db_connect as dbc
 
+from http import HTTPStatus
 from http.client import (
     NOT_ACCEPTABLE,
     NOT_FOUND,
@@ -71,7 +72,7 @@ def test_restaurant_add(mock_add):
         "zip_code": "12345"
     }
     resp = TEST_CLIENT.post(ep.RESTAURANTS_EP, json=test_restaurant_data)
-    assert resp.status_code == OK
+    assert resp.status_code == HTTPStatus.CREATED
     mock_add.assert_called_once_with("Test Restaurant", "A place for testing",
                                      "test_owner", "TestState", "TestCity",
                                      "123 Test St", "12345")

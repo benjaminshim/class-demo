@@ -12,7 +12,7 @@ ID_LEN = 24
 MOCK_ID = '0' * ID_LEN
 
 NAME = 'name'
-
+PASSWORD = 0
 USER_NAME = "User"
 USER_ID = "_id"
 
@@ -38,7 +38,7 @@ def exists(user_id: int) -> bool:
     return dbc.fetch_one(USER_ID, {USER_ID: user_id})
 
 
-def add_user(name: str, id: int) -> bool:
+def add_user(id: int, name: str, pw: int) -> bool:
     users = {}
     if id in users:
         raise ValueError(f'Duplicate user id: {id=}')
@@ -46,6 +46,7 @@ def add_user(name: str, id: int) -> bool:
         raise ValueError('Users are not allowed to be entered without ids')
     users[USER_ID] = _gen_id()
     users[USER_NAME] = name
+    users[PASSWORD] = pw
     dbc.connect_db()
     _id = dbc.insert_one(usrs.USERS_COLLECT, users)
     return _id is not None

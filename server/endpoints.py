@@ -131,7 +131,7 @@ class UserMenu(Resource):
 
 
 users_fields = api.model('NewUser', {
-    db.NAME: fields.String,
+    usrs.NAME: fields.String,
 })
 
 

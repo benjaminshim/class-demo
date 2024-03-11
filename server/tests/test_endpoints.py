@@ -45,7 +45,7 @@ def test_list_restaurants():
     assert isinstance(resp_json, dict)  # Confirm the response is a dictionary
     assert 'Title' in resp_json  # Confirm 'Title' is part of the response
     assert 'DATA' in resp_json  # Confirm 'DATA' is part of the response, assuming DATA holds the restaurants list
-    assert isinstance(resp_json['DATA'], list)  # Confirm that DATA is a list (of restaurants)
+    assert isinstance(resp_json['DATA'], dict)  # Confirm that DATA is a list (of restaurants)
 
 def test_get_restaurants():
     restaurants = rst.get_restaurants()

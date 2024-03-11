@@ -226,7 +226,6 @@ class Restaurants(Resource):
         except Exception as e:
             return {"message": str(e)}, HTTPStatus.INTERNAL_SERVER_ERROR
 
-    # WHAT IS THIS??
     @api.expect(restaurant_fields)
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
@@ -246,6 +245,35 @@ class Restaurants(Resource):
             return {RESTAURANT_ID: new_id}
         except ValueError as e:
             raise wz.NotAcceptable(f'{str(e)}')
+
+    # @api.expect(restaurant_fields)
+    # @api.response(HTTPStatus.OK, 'Success')
+    # @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Input data validation failed')
+    # @api.response(HTTPStatus.SERVICE_UNAVAILABLE, 'Service unavailable due to a technical problem')
+    # def post(self):
+    #     """
+    #     Add a new restaurant.
+    #     """
+    #     data = request.json
+    #     name = data['name']
+    #     description = data['description']
+    #     owner_id = data['owner_id']
+    #     state = data['state']
+    #     city = data['city']
+    #     address = data['address']
+    #     zip_code = data['zip_code']
+
+    #     try:
+    #         success = restaurants.add_restaurant(name, description, owner_id, state, city, address, zip_code)
+    #         if not success:
+    #             raise wz.ServiceUnavailable('We have a technical problem.')
+
+    #         return {"message": "Restaurant added successfully"}, HTTPStatus.OK
+    #     except ValueError as e:
+    #         api.abort(HTTPStatus.NOT_ACCEPTABLE, str(e))
+    #     except Exception as e:
+    #         api.abort(HTTPStatus.SERVICE_UNAVAILABLE, str(e))
+
 
 
 review_fields = api.model('NewReview', {

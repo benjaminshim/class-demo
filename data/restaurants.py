@@ -7,6 +7,7 @@ import random
 
 import data.db_connect as dbc
 import data.users as usrs
+import data.restaurants as restaurants
 
 
 BIG_NUM = 10000000000000
@@ -88,6 +89,7 @@ def _gen_id() -> str:
 
 
 def add_restaurant(name: str, rating: int) -> bool:
+# def add_restaurant(name: str, description: str, owner_id: str, state: str, city: str, address: str, zip_code: str) -> bool:
     restaurants = {}
     if exists(name):
         raise ValueError(f'Duplicate restaurant name: {name=}')
@@ -99,6 +101,28 @@ def add_restaurant(name: str, rating: int) -> bool:
     _id = dbc.insert_one(RESTAURANT_COLLECT, restaurants)
     # restaurants[name] = {RATING: rating}
     return _id is not None
+    # if exists(name):  # This function needs to be adapted to check using both name and owner or just owner
+    #     raise ValueError(f'Duplicate restaurant name: {name}')
+    # if not name:
+    #     raise ValueError('Restaurant name may not be blank')
+
+    # search_id = _gen_id()  # Assuming _gen_id generates a sufficiently unique identifier for public use
+    
+    # restaurant_document = {
+    #     "search_id": search_id,
+    #     "name": name,
+    #     "description": description,
+    #     "owner_id": owner_id,
+    #     "state": state,
+    #     "city": city,
+    #     "address": address,
+    #     "zip_code": zip_code,
+    #     # "rating": rating, # this can be done through reviews
+    # }
+    
+    # dbc.connect_db()
+    # _id = dbc.insert_one(RESTAURANT_COLLECT, restaurant_document)
+    # return _id is not None
 
 
 def add_user(name: str, id: int) -> bool:

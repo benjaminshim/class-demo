@@ -131,7 +131,8 @@ class UserMenu(Resource):
 
 
 users_fields = api.model('NewUser', {
-    db.NAME: fields.String,
+    usrs.NAME: fields.String,
+    usrs.PASSWORD: fields.Integer,
 })
 
 
@@ -159,8 +160,9 @@ class Users(Resource):
         Add a user.
         """
         username = request.json[db.NAME]
+        pw = request.json[usrs.PASSWORD]
         try:
-            new_id = db.add_user(username, id)
+            new_id = usrs.add_user(id, username, pw)
             if new_id is None:
                 raise wz.ServiceUnavailable('We have a technical problem.')
             return {USER_ID: new_id}
@@ -171,7 +173,7 @@ class Users(Resource):
 @api.route(f'{DEL_USER_EP}/<name>')
 class DelUser(Resource):
     """
-    Deletes a restaurant by name.
+    Deletes a User by name.
     """
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
@@ -253,6 +255,7 @@ class Restaurants(Resource):
 
 
 review_fields = api.model('NewReview', {
+    rvws.RESTAURANT_NAME: fields.String,
     rvws.REVIEW_SENTENCE: fields.String,
 })
 
@@ -280,9 +283,10 @@ class Reviews(Resource):
         """
         Add a review.
         """
+        name = request.json[rvws.RESTAURANT_NAME]
         review = request.json[rvws.REVIEW_SENTENCE]
         try:
-            new_id = rvws.add_review(review)
+            new_id = rvws.add_review(name, review)
             if new_id is None:
                 raise wz.ServiceUnavailable('We have a technical problem.')
             return {REVIEWS_ID: new_id}

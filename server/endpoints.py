@@ -212,7 +212,7 @@ class Restaurants(Resource):
         """
         return {TYPE: DATA,
                 TITLE: 'Current Restaurants',
-                DATA: restaurants.get_restuarants(),
+                DATA: restaurants.get_restaurants(),
                 RETURN: MAIN_MENU_EP,
                 }
 

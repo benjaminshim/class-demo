@@ -46,18 +46,18 @@ def test_list_restaurants():
     resp_json = resp.get_json()
     assert isinstance(resp_json, dict)
 
-def test_get_restuarants():
-    restaurants = rst.get_restuarants()
+def test_get_restaurants():
+    restaurants = rst.get_restaurants()
     assert isinstance(restaurants, dict)
 
 
-@patch('data.db.add_restaurant', return_value=rst.MOCK_ID, autospec=True)
+@patch('data.restaurants.add_restaurant', return_value=rst.MOCK_ID, autospec=True)
 def test_restaurant_add(mock_add):
     resp = TEST_CLIENT.post(ep.RESTAURANTS_EP, json=rst.get_test_restaurant())
     assert resp.status_code == OK
 
 
-@patch('data.db.add_restaurant', side_effect=ValueError(), autospec=True)
+@patch('data.restaurants.add_restaurant', side_effect=ValueError(), autospec=True)
 def test_restaurant_bad_add(mock_add):
     """
     Testing we do the right thing with a value error from add_restaurant.
@@ -66,7 +66,7 @@ def test_restaurant_bad_add(mock_add):
     assert resp.status_code == NOT_ACCEPTABLE
 
 
-@patch('data.db.add_restaurant', return_value=None)
+@patch('data.restaurants.add_restaurant', return_value=None)
 def test_restaurant_add_db_failure(mock_add):
     """
     Testing we do the right thing with a null ID return from add_restaurant.
@@ -84,7 +84,7 @@ def test_del_restaurant(mock_add):
     assert resp.status_code == OK
 
 
-@patch('data.db.del_restaurant', side_effect=ValueError(), autospec=True)
+@patch('data.restaurants.del_restaurant', side_effect=ValueError(), autospec=True)
 def test_del_restaurant_not_there(mock_add):
     """
     Testing we do the right thing with a value error from del_restaurant.
@@ -93,7 +93,7 @@ def test_del_restaurant_not_there(mock_add):
     assert resp.status_code == NOT_FOUND
 
 
-@patch('data.db.update_rating', side_effect=ValueError(), autospec=True)
+@patch('data.restaurants.update_rating', side_effect=ValueError(), autospec=True)
 def test_bad_update_rating(mock_update):
     """
     Testing we do the right thing with a call to update_rating that fails.
@@ -102,7 +102,7 @@ def test_bad_update_rating(mock_update):
     assert resp.status_code == NOT_FOUND
 
 
-@patch('data.db.update_rating', autospec=True)
+@patch('data.restaurants.update_rating', autospec=True)
 def test_update_rating(mock_update):
     """
     Testing we do the right thing with a call to update_rating that succeeds.

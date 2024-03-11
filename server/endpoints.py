@@ -294,15 +294,17 @@ class Restaurants(Resource):
         except Exception as e:
             api.abort(HTTPStatus.SERVICE_UNAVAILABLE, str(e))
 
+
+@api.route(f'{RESTAURANTS_EP}/<string:search_id>')
+class Restaurant(Resource):
+    # UPDATE RESTAURANT
     @api.expect(restaurant_fields)
-    @api.route(f'{RESTAURANTS_EP}/<string:search_id>')
     @api.response(HTTPStatus.OK, 'Restaurant updated successfully')
     @api.response(HTTPStatus.NOT_FOUND, 'Restaurant not found')
     @api.response(HTTPStatus.NOT_ACCEPTABLE,
                   'Input data validation failed')
     @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
                   'Service unavailable due to a technical problem')
-    # UPDATE RESTAURANT
     def put(self, search_id):
         """
         Update an existing restaurant's details.

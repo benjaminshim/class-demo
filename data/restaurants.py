@@ -7,7 +7,6 @@ import random
 
 import data.db_connect as dbc
 import data.users as usrs
-import data.restaurants as restaurants
 
 
 BIG_NUM = 10000000000000
@@ -29,7 +28,7 @@ TEST_RESTAURANT_FLDS = {
 }
 
 
-restaurants = {
+test_restaurants = {
     'Papa Johns': {
         RATING: 5,
     },
@@ -76,9 +75,9 @@ def get_restaurants() -> dict:
     try:
         restaurants_dict = dbc.fetch_all_as_dict(NAME, RESTAURANT_COLLECT)
         return restaurants_dict
-    except Exception as e:  # Consider a more specific exception based on your db_connect module
+    except Exception as e:
         print(f"Error fetching restaurants: {e}")
-        return {}  # Or handle the error as appropriate
+        return {}
 
 
 def _gen_id() -> str:
@@ -89,7 +88,8 @@ def _gen_id() -> str:
 
 
 def add_restaurant(name: str, rating: int) -> bool:
-# def add_restaurant(name: str, description: str, owner_id: str, state: str, city: str, address: str, zip_code: str) -> bool:
+    # def add_restaurant(name: str, description: str, owner_id: str,
+    # state: str, city: str, address: str, zip_code: str) -> bool:
     restaurants = {}
     if exists(name):
         raise ValueError(f'Duplicate restaurant name: {name=}')
@@ -101,13 +101,14 @@ def add_restaurant(name: str, rating: int) -> bool:
     _id = dbc.insert_one(RESTAURANT_COLLECT, restaurants)
     # restaurants[name] = {RATING: rating}
     return _id is not None
-    # if exists(name):  # This function needs to be adapted to check using both name and owner or just owner
+    # Check using both name and owner or just owner
+    # if exists(name):
     #     raise ValueError(f'Duplicate restaurant name: {name}')
     # if not name:
     #     raise ValueError('Restaurant name may not be blank')
 
-    # search_id = _gen_id()  # Assuming _gen_id generates a sufficiently unique identifier for public use
-    
+    # search_id = _gen_id()
+
     # restaurant_document = {
     #     "search_id": search_id,
     #     "name": name,
@@ -119,7 +120,7 @@ def add_restaurant(name: str, rating: int) -> bool:
     #     "zip_code": zip_code,
     #     # "rating": rating, # this can be done through reviews
     # }
-    
+
     # dbc.connect_db()
     # _id = dbc.insert_one(RESTAURANT_COLLECT, restaurant_document)
     # return _id is not None

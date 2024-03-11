@@ -1,11 +1,7 @@
 import server.endpoints as ep
-import pytest
 import data.reviews as rvws
 from http.client import (
-    BAD_REQUEST,
-    FORBIDDEN,
     NOT_ACCEPTABLE,
-    NOT_FOUND,
     OK,
     SERVICE_UNAVAILABLE,
 )

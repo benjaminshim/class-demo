@@ -1,13 +1,11 @@
 import server.endpoints as ep
 import data.restaurants as rst
-from data.restaurants import TEST_RESTAURANT_FLDS
-import data.db_connect as dbc
 import pytest
-import unittest
+# import unittest
+# from data.restaurants import TEST_RESTAURANT_FLDS
+# import data.db_connect as dbc
 
 from http.client import (
-    BAD_REQUEST,
-    FORBIDDEN,
     NOT_ACCEPTABLE,
     NOT_FOUND,
     OK,
@@ -23,7 +21,7 @@ TEST_CLIENT = ep.app.test_client()
 @pytest.fixture(scope='function')
 def temp_restaurant():
     name = rst._get_test_name()
-    ret = rst.add_restaurant(name, 0)
+    # ret = rst.add_restaurant(name, 0)
     yield name
     if rst.exists(name):
         rst.del_restaurant(name)
@@ -42,10 +40,11 @@ def test_list_restaurants():
     resp = TEST_CLIENT.get(ep.RESTAURANTS_EP)
     assert resp.status_code == OK
     resp_json = resp.get_json()
-    assert isinstance(resp_json, dict)  # Confirm the response is a dictionary
-    assert 'Title' in resp_json  # Confirm 'Title' is part of the response
-    assert 'DATA' in resp_json  # Confirm 'DATA' is part of the response, assuming DATA holds the restaurants list
-    assert isinstance(resp_json['DATA'], dict)  # Confirm that DATA is a list (of restaurants)
+    assert isinstance(resp_json, dict)
+    assert 'Title' in resp_json
+    assert 'DATA' in resp_json
+    assert isinstance(resp_json['DATA'], dict)
+
 
 def test_get_restaurants():
     restaurants = rst.get_restaurants()
@@ -53,13 +52,15 @@ def test_get_restaurants():
 
 
 # PATCHES
-@patch('data.restaurants.add_restaurant', return_value=rst.MOCK_ID, autospec=True)
+@patch('data.restaurants.add_restaurant',
+       return_value=rst.MOCK_ID, autospec=True)
 def test_restaurant_add(mock_add):
     resp = TEST_CLIENT.post(ep.RESTAURANTS_EP, json=rst.get_test_restaurant())
     assert resp.status_code == OK
 
 
-@patch('data.restaurants.add_restaurant', side_effect=ValueError(), autospec=True)
+@patch('data.restaurants.add_restaurant',
+       side_effect=ValueError(), autospec=True)
 def test_restaurant_bad_add(mock_add):
     """
     Testing we do the right thing with a value error from add_restaurant.
@@ -86,7 +87,8 @@ def test_del_restaurant(mock_add):
     assert resp.status_code == OK
 
 
-@patch('data.restaurants.del_restaurant', side_effect=ValueError(), autospec=True)
+@patch('data.restaurants.del_restaurant',
+       side_effect=ValueError(), autospec=True)
 def test_del_restaurant_not_there(mock_add):
     """
     Testing we do the right thing with a value error from del_restaurant.
@@ -95,7 +97,8 @@ def test_del_restaurant_not_there(mock_add):
     assert resp.status_code == NOT_FOUND
 
 
-@patch('data.restaurants.update_rating', side_effect=ValueError(), autospec=True)
+@patch('data.restaurants.update_rating',
+       side_effect=ValueError(), autospec=True)
 def test_bad_update_rating(mock_update):
     """
     Testing we do the right thing with a call to update_rating that fails.

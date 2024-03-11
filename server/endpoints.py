@@ -31,7 +31,7 @@ USERS_EP = '/users'
 USERS_MENU_NM = "User Menu"
 USERS_MENU_EP = '/user_menu'
 USER_ID = "_id"
-RESTAURANTS_EP = '/restaurants'
+RESTAURANTS_EP = '/db'
 RESTAURANTS = 'restaurants'
 RESTAURANTS_MENU_NM = 'Restaurant Menu'
 RESTAURANT_ID = "ID"
@@ -184,24 +184,6 @@ class DelUser(Resource):
         try:
             usrs.del_user(name)
             return {name: 'Deleted'}
-        except ValueError as e:
-            raise wz.NotFound(f'{str(e)}')
-
-
-@api.route(f'{USERS_EP}/<user_id>/<new_username>')
-class Update_Username(Resource):
-    """
-    Updates the rating of a restaurant.
-    """
-    @api.response(HTTPStatus.OK, 'Success')
-    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
-    def put(self, user_id, new_username):
-        """
-        Update the username of an account.
-        """
-        try:
-            usrs.update_username(user_id, new_username)
-            return {user_id: 'Updated'}
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')
 

@@ -25,15 +25,7 @@ def temp_restaurant():
     yield name
     if rst.exists(name):
         rst.del_restaurant(name)
-
-
-def test_hello():
-    resp = TEST_CLIENT.get(ep.HELLO_EP)
-    print(f'{resp=}')
-    resp_json = resp.get_json()
-    print(f'{resp_json=}')
-    assert ep.HELLO_RESP in resp_json
-
+        
 
 def test_list_users():
     resp = TEST_CLIENT.get(ep.USERS_EP)

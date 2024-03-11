@@ -1,6 +1,6 @@
 import server.endpoints as ep
-import data.db as rst
-from data.db import TEST_RESTAURANT_FLDS
+import data.restaurants as rst
+from data.restaurants import TEST_RESTAURANT_FLDS
 import data.db_connect as dbc
 import pytest
 

@@ -271,6 +271,7 @@ class Restaurants(Resource):
 
 
 review_fields = api.model('NewReview', {
+    rvws.RESTAURANT_NAME: fields.String,
     rvws.REVIEW_SENTENCE: fields.String,
 })
 
@@ -298,9 +299,10 @@ class Reviews(Resource):
         """
         Add a review.
         """
+        name = request.json[rvws.RESTAURANT_NAME]
         review = request.json[rvws.REVIEW_SENTENCE]
         try:
-            new_id = rvws.add_review(review)
+            new_id = rvws.add_review(name, review)
             if new_id is None:
                 raise wz.ServiceUnavailable('We have a technical problem.')
             return {REVIEWS_ID: new_id}

@@ -61,13 +61,6 @@ def get_test_restaurant():
     return test_rest
 
 
-def fetch_pets():
-    """
-    A function to return all pets in the data store.
-    """
-    return {"tigers": 2, "lions": 3, "zebras": 1}
-
-
 def get_restaurants() -> dict:
     # dbc.connect_db()
     # return dbc.fetch_all_as_dict(NAME, RESTAURANT_COLLECT)
@@ -126,6 +119,53 @@ def add_restaurant(name: str, description: str,
     dbc.connect_db()
     _id = dbc.insert_one(RESTAURANT_COLLECT, restaurant_document)
     return _id is not None
+
+
+# UPDATE RESTAURANT
+def get_restaurant_by_search_id(search_id: str) -> dict:
+    """
+    Fetch a single restaurant by its search_id.
+
+    :param search_id: The unique search identifier for the restaurant.
+    :return: The restaurant information as a dictionary if found,
+             otherwise None.
+    """
+    dbc.connect_db()
+    try:
+        restaurant = dbc.fetch_one(
+            RESTAURANT_COLLECT,
+            {"search_id": search_id}
+        )
+        return restaurant
+    except Exception as e:
+        print(f"Error fetching restaurant by search_id {search_id}: {e}")
+        return None
+
+
+def update_restaurant(search_id: str, update_data: dict) -> bool:
+    """
+    Update a restaurant's information based on its search_id.
+
+    :param search_id: The unique search identifier for the restaurant.
+    :param update_data: A dictionary containing the fields to be updated.
+    :return: True if the update was successful, False otherwise.
+    """
+    dbc.connect_db()
+    try:
+        existing_restaurant = get_restaurant_by_search_id(search_id)
+        if not existing_restaurant:
+            return False
+
+        update_result = dbc.update_one(
+            RESTAURANT_COLLECT,
+            {"search_id": search_id},
+            update_data
+        )
+
+        return update_result
+    except Exception as e:
+        print(f"Error updating restaurant with search_id {search_id}: {e}")
+        return False
 
 
 def add_user(name: str, id: int) -> bool:

@@ -51,6 +51,16 @@ BAR_ID = '_ID'
 DEL_RESAURANT_EP = f'{RESTAURANTS_EP}/{DELETE}'
 DEL_USER_EP = f'{USERS_EP}/{DELETE}'
 
+restaurant_fields = api.model('Restaurant', {
+    'name': fields.String(required=True),
+    'description': fields.String(required=True),
+    'owner_id': fields.Integer(required=True),
+    'state': fields.String(required=True),
+    'city': fields.String(required=True),
+    'address': fields.String(required=True),
+    'zip_code': fields.String(required=True)
+})
+
 
 @api.route('/endpoints')
 class Endpoints(Resource):
@@ -246,6 +256,7 @@ class Restaurants(Resource):
     #     except ValueError as e:
     #         raise wz.NotAcceptable(f'{str(e)}')
 
+    # GET RESTAURANT
     @api.expect(restaurant_fields)
     @api.response(HTTPStatus.CREATED, 'Restaurant added successfully')
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Input data validation failed')
@@ -283,15 +294,44 @@ class Restaurants(Resource):
         except Exception as e:
             api.abort(HTTPStatus.SERVICE_UNAVAILABLE, str(e))
 
-    restaurant_fields = api.model('Restaurant', {
-        'name': fields.String(required=True),
-        'description': fields.String(required=True),
-        'owner_id': fields.Integer(required=True),
-        'state': fields.String(required=True),
-        'city': fields.String(required=True),
-        'address': fields.String(required=True),
-        'zip_code': fields.String(required=True)
-    })
+    @api.expect(restaurant_fields)
+    @api.route(f'{RESTAURANTS_EP}/<string:search_id>')
+    @api.response(HTTPStatus.OK, 'Restaurant updated successfully')
+    @api.response(HTTPStatus.NOT_FOUND, 'Restaurant not found')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE,
+                  'Input data validation failed')
+    @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
+                  'Service unavailable due to a technical problem')
+    # UPDATE RESTAURANT
+    def put(self, search_id):
+        """
+        Update an existing restaurant's details.
+        """
+        data = request.json
+
+        try:
+            updated = restaurants.update_restaurant(
+                search_id=search_id,
+                name=data.get('name'),
+                description=data.get('description'),
+                owner_id=data.get('owner_id'),
+                state=data.get('state'),
+                city=data.get('city'),
+                address=data.get('address'),
+                zip_code=data.get('zip_code')
+            )
+            if not updated:
+                api.abort(HTTPStatus.NOT_FOUND, "Restaurant not found")
+
+            return (
+                {"message": "Restaurant updated successfully"},
+                HTTPStatus.OK
+            )
+
+        except ValueError as e:
+            api.abort(HTTPStatus.NOT_ACCEPTABLE, str(e))
+        except Exception as e:
+            api.abort(HTTPStatus.SERVICE_UNAVAILABLE, str(e))
 
 
 review_fields = api.model('NewReview', {

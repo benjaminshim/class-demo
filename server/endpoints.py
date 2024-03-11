@@ -132,6 +132,7 @@ class UserMenu(Resource):
 
 users_fields = api.model('NewUser', {
     usrs.NAME: fields.String,
+    usrs.PASSWORD: fields.Integer,
 })
 
 
@@ -159,8 +160,9 @@ class Users(Resource):
         Add a user.
         """
         username = request.json[db.NAME]
+        pw = request.json[usrs.PASSWORD]
         try:
-            new_id = db.add_user(username, id)
+            new_id = usrs.add_user(id, username, pw)
             if new_id is None:
                 raise wz.ServiceUnavailable('We have a technical problem.')
             return {USER_ID: new_id}
@@ -171,7 +173,7 @@ class Users(Resource):
 @api.route(f'{DEL_USER_EP}/<name>')
 class DelUser(Resource):
     """
-    Deletes a restaurant by name.
+    Deletes a User by name.
     """
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')

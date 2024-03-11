@@ -215,7 +215,6 @@ class Restaurants(Resource):
         #         DATA: restaurants.get_restaurants(),
         #         RETURN: MAIN_MENU_EP,
         #         }
-    
         try:
             restaurants_list = restaurants.get_restaurants()
             return {

@@ -10,7 +10,7 @@ from flask_cors import CORS
 
 import werkzeug.exceptions as wz
 
-import data.db as db
+import data.restaurants as restaurants
 import data.users as usrs
 import data.reviews as rvws
 import data.accounts as accs
@@ -25,13 +25,11 @@ MAIN_MENU = 'MainMenu'
 MAIN_MENU_NM = "Welcome to YumYard!"
 MAIN_MENU_EP = '/MainMenu'
 MENU = 'menu'
-HELLO_EP = '/hello'
-HELLO_RESP = 'hello'
 USERS_EP = '/users'
 USERS_MENU_NM = "User Menu"
 USERS_MENU_EP = '/user_menu'
 USER_ID = "_id"
-RESTAURANTS_EP = '/db'
+RESTAURANTS_EP = '/restaurants'
 RESTAURANTS = 'restaurants'
 RESTAURANTS_MENU_NM = 'Restaurant Menu'
 RESTAURANT_ID = "ID"
@@ -52,20 +50,6 @@ BARS_MENU_NM = 'Bar Menu'
 BAR_ID = '_ID'
 DEL_RESAURANT_EP = f'{RESTAURANTS_EP}/{DELETE}'
 DEL_USER_EP = f'{USERS_EP}/{DELETE}'
-
-
-@api.route(HELLO_EP)
-class HelloWorld(Resource):
-    """
-    The purpose of the HelloWorld class is to have a simple test to see if the
-    app is working at all.
-    """
-    def get(self):
-        """
-        A trivial endpoint to see if the server is running.
-        It just answers with "hello world."
-        """
-        return {HELLO_RESP: 'world'}
 
 
 @api.route('/endpoints')
@@ -159,7 +143,7 @@ class Users(Resource):
         """
         Add a user.
         """
-        username = request.json[db.NAME]
+        username = request.json[restaurants.NAME]
         pw = request.json[usrs.PASSWORD]
         try:
             new_id = usrs.add_user(id, username, pw)
@@ -191,8 +175,8 @@ class DelUser(Resource):
 
 
 restaurant_fields = api.model('NewRestaurant', {
-    db.TEST_RESTAURANT_NAME: fields.String,
-    db.RATING: fields.Integer,
+    restaurants.TEST_RESTAURANT_NAME: fields.String,
+    restaurants.RATING: fields.Integer,
 })
 
 
@@ -210,7 +194,7 @@ class DelRestaurant(Resource):
         Deletes a restaurant by name.
         """
         try:
-            db.del_restaurant(name)
+            restaurants.del_restaurant(name)
             return {name: 'Deleted'}
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')
@@ -228,8 +212,7 @@ class Restaurants(Resource):
         """
         return {TYPE: DATA,
                 TITLE: 'Current Restaurants',
-                DATA: db.get_restuarants(),
-                MENU: RESTAURANTS_MENU_NM,
+                DATA: restaurants.get_restuarants(),
                 RETURN: MAIN_MENU_EP,
                 }
 
@@ -243,10 +226,10 @@ class Restaurants(Resource):
         Add a restaurant.
         """
         # doing requests here, field names should be changed
-        name = request.json[db.TEST_RESTAURANT_NAME]
-        rating = request.json[db.RATING]
+        name = request.json[restaurants.TEST_RESTAURANT_NAME]
+        rating = request.json[restaurants.RATING]
         try:
-            new_id = db.add_restaurant(name, rating)
+            new_id = restaurants.add_restaurant(name, rating)
             if new_id is None:
                 raise wz.ServiceUnavailable('We have a technical problem.')
             return {RESTAURANT_ID: new_id}
@@ -406,7 +389,7 @@ class Rating(Resource):
         Update the rating of a restaurant.
         """
         try:
-            db.update_rating(name, rating)
+            restaurants.update_rating(name, rating)
             return {name: 'Updated'}
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')

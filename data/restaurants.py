@@ -68,7 +68,7 @@ def fetch_pets():
     return {"tigers": 2, "lions": 3, "zebras": 1}
 
 
-def get_restuarants() -> dict:
+def get_restaurants() -> dict:
     # return restaurants
     dbc.connect_db()
     return dbc.fetch_all_as_dict(NAME, RESTAURANT_COLLECT)

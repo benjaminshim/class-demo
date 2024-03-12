@@ -6,7 +6,6 @@ Gradually, we will fill in actual calls to our datastore.
 import random
 
 import data.db_connect as dbc
-import data.users as usrs
 
 
 BIG_NUM = 10000000000000
@@ -18,47 +17,6 @@ TEST_RESTAURANT_NAME = 'Restaurant'
 
 NAME = 'name'
 RESTAURANT_COLLECT = 'restaurants'
-
-USER_NAME = "User"
-USER_ID = "_id"
-
-TEST_RESTAURANT_FLDS = {
-    TEST_RESTAURANT_NAME: 'Test name',
-    RATING: 0,
-}
-
-
-test_restaurants = {
-    'Papa Johns': {
-        RATING: 5,
-    },
-    TEST_RESTAURANT_NAME: {
-        RATING: 5,
-    },
-}
-
-
-users = {
-    10000: {
-        NAME: "James"
-    },
-    10001: {
-        NAME: "Jessie"
-    },
-}
-
-
-def _get_test_name():
-    name = 'test'
-    rand_part = random.randint(0, BIG_NUM)
-    return name + str(rand_part)
-
-
-def get_test_restaurant():
-    test_rest = {}
-    test_rest[TEST_RESTAURANT_NAME] = _get_test_name()
-    test_rest[RATING] = 0
-    return test_rest
 
 
 def get_restaurants() -> dict:
@@ -113,18 +71,17 @@ def add_restaurant(name: str, description: str,
         "city": city,
         "address": address,
         "zip_code": zip_code,
-        # "rating": rating, # this can be done through reviews
+        # rating
     }
 
     dbc.connect_db()
     _id = dbc.insert_one(RESTAURANT_COLLECT, restaurant_document)
     if _id is not None:
-        return search_id  # Return the search_id upon successful creation
+        return search_id
     else:
         return None
 
 
-# UPDATE RESTAURANT
 def get_restaurant_by_search_id(search_id: str) -> dict:
     """
     Fetch a single restaurant by its search_id.
@@ -171,31 +128,11 @@ def update_restaurant(search_id: str, update_data: dict) -> bool:
         return False
 
 
-def add_user(name: str, id: int) -> bool:
-    users = {}
-    if id in users:
-        raise ValueError(f'Duplicate user id: {id=}')
-    if not id:
-        raise ValueError('Users are not allowed to be entered without ids')
-    users[USER_ID] = _gen_id()
-    users[USER_NAME] = name
-    dbc.connect_db()
-    _id = dbc.insert_one(usrs.USERS_COLLECT, users)
-    return _id is not None
-
-
 def del_restaurant(name: str):
     if exists(name):
         return dbc.del_one(RESTAURANT_COLLECT, {NAME: name})
     else:
         raise ValueError(f'Delete failure: {name} not in database.')
-
-
-def del_user(id: int):
-    if exists(id):
-        del users[id]
-    else:
-        raise ValueError(f'Delete failure: {id} is not in users.')
 
 
 def exists(name: str) -> bool:

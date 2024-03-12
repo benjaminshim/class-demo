@@ -51,16 +51,6 @@ BAR_ID = '_ID'
 DEL_RESAURANT_EP = f'{RESTAURANTS_EP}/{DELETE}'
 DEL_USER_EP = f'{USERS_EP}/{DELETE}'
 
-restaurant_fields = api.model('Restaurant', {
-    'name': fields.String(required=True),
-    'description': fields.String(required=True),
-    'owner_id': fields.Integer(required=True),
-    'state': fields.String(required=True),
-    'city': fields.String(required=True),
-    'address': fields.String(required=True),
-    'zip_code': fields.String(required=True)
-})
-
 
 @api.route('/endpoints')
 class Endpoints(Resource):
@@ -124,74 +114,8 @@ class UserMenu(Resource):
                }
 
 
-users_fields = api.model('NewUser', {
-    usrs.NAME: fields.String,
-    usrs.PASSWORD: fields.Integer,
-})
-
-
-@api.route(f'{USERS_EP}')
-class Users(Resource):
-    def get(self):
-        """
-        Get list of all users
-        """
-        return {
-            TYPE: DATA,
-            TITLE: 'Current Users',
-            DATA: usrs.get_users(),
-            MENU: USERS_MENU_NM,
-            RETURN: MAIN_MENU_EP,
-        }
-
-    @api.expect(users_fields)
-    @api.response(HTTPStatus.OK, 'Success')
-    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
-    @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
-                  'We have a technical problem.')
-    def post(self):
-        """
-        Add a user.
-        """
-        username = request.json[restaurants.NAME]
-        pw = request.json[usrs.PASSWORD]
-        try:
-            new_id = usrs.add_user(id, username, pw)
-            if new_id is None:
-                raise wz.ServiceUnavailable('We have a technical problem.')
-            return {USER_ID: new_id}
-        except ValueError as e:
-            raise wz.NotAcceptable(f'{str(e)}')
-
-
-@api.route(f'{DEL_USER_EP}/<name>')
-class DelUser(Resource):
-    """
-    Deletes a User by name.
-    """
-    @api.response(HTTPStatus.OK, 'Success')
-    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
-    @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
-                  'We have a technical problem.')
-    def delete(self, name):
-        """
-        Deletes a user.
-        """
-        try:
-            usrs.del_user(name)
-            return {name: 'Deleted'}
-        except ValueError as e:
-            raise wz.NotFound(f'{str(e)}')
-
-
-# restaurant_fields = api.model('NewRestaurant', {
-#     restaurants.TEST_RESTAURANT_NAME: fields.String,
-#     restaurants.RATING: fields.Integer,
-# })
-
 restaurant_fields = api.model('Restaurant', {
     'name': fields.String(required=True),
-    'restaurant_type': fields.String(required=True),
     'description': fields.String(required=True),
     'owner_id': fields.Integer(required=True),
     'state': fields.String(required=True),
@@ -199,26 +123,6 @@ restaurant_fields = api.model('Restaurant', {
     'address': fields.String(required=True),
     'zip_code': fields.String(required=True)
 })
-
-
-@api.route(f'{DEL_RESAURANT_EP}/<name>')
-class DelRestaurant(Resource):
-    """
-    Deletes a restaurant by name.
-    """
-    @api.response(HTTPStatus.OK, 'Success')
-    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
-    @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
-                  'We have a technical problem.')
-    def delete(self, name):
-        """
-        Deletes a restaurant by name.
-        """
-        try:
-            restaurants.del_restaurant(name)
-            return {name: 'Deleted'}
-        except ValueError as e:
-            raise wz.NotFound(f'{str(e)}')
 
 
 @api.route(f'{RESTAURANTS_EP}')
@@ -348,6 +252,103 @@ class Restaurant(Resource):
             api.abort(HTTPStatus.NOT_ACCEPTABLE, str(e))
         except Exception as e:
             api.abort(HTTPStatus.SERVICE_UNAVAILABLE, str(e))
+
+
+users_fields = api.model('NewUser', {
+    usrs.NAME: fields.String,
+    usrs.PASSWORD: fields.Integer,
+})
+
+
+@api.route(f'{USERS_EP}')
+class Users(Resource):
+    def get(self):
+        """
+        Get list of all users
+        """
+        return {
+            TYPE: DATA,
+            TITLE: 'Current Users',
+            DATA: usrs.get_users(),
+            MENU: USERS_MENU_NM,
+            RETURN: MAIN_MENU_EP,
+        }
+
+    @api.expect(users_fields)
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
+                  'We have a technical problem.')
+    def post(self):
+        """
+        Add a user.
+        """
+        username = request.json[restaurants.NAME]
+        pw = request.json[usrs.PASSWORD]
+        try:
+            new_id = usrs.add_user(id, username, pw)
+            if new_id is None:
+                raise wz.ServiceUnavailable('We have a technical problem.')
+            return {USER_ID: new_id}
+        except ValueError as e:
+            raise wz.NotAcceptable(f'{str(e)}')
+
+
+@api.route(f'{DEL_USER_EP}/<name>')
+class DelUser(Resource):
+    """
+    Deletes a User by name.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
+    @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
+                  'We have a technical problem.')
+    def delete(self, name):
+        """
+        Deletes a user.
+        """
+        try:
+            usrs.del_user(name)
+            return {name: 'Deleted'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
+
+
+# restaurant_fields = api.model('NewRestaurant', {
+#     restaurants.TEST_RESTAURANT_NAME: fields.String,
+#     restaurants.RATING: fields.Integer,
+# })
+
+restaurant_fields = api.model('Restaurant', {
+    'name': fields.String(required=True),
+    'restaurant_type': fields.String(required=True),
+    'description': fields.String(required=True),
+    'owner_id': fields.Integer(required=True),
+    'state': fields.String(required=True),
+    'city': fields.String(required=True),
+    'address': fields.String(required=True),
+    'zip_code': fields.String(required=True)
+})
+
+
+@api.route(f'{DEL_RESAURANT_EP}/<name>')
+class DelRestaurant(Resource):
+    """
+    Deletes a restaurant by name.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
+    @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
+                  'We have a technical problem.')
+    def delete(self, name):
+        """
+        Deletes a restaurant by name.
+        """
+        try:
+            restaurants.del_restaurant(name)
+            return {name: 'Deleted'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
 
 
 review_fields = api.model('NewReview', {

@@ -59,11 +59,6 @@ def test_list_restaurants():
     assert isinstance(resp_json['DATA'], dict)
 
 
-def test_get_restaurants():
-    restaurants = rst.get_restaurants()
-    assert isinstance(restaurants, dict)
-
-
 # PATCHES
 # @patch('data.restaurants.add_restaurant',
 #        return_value=rst.MOCK_ID, autospec=True)
@@ -77,8 +72,9 @@ def test_restaurant_add(mock_add):
     resp = TEST_CLIENT.post(ep.RESTAURANTS_EP, json=test_restaurant_data)
     print(mock_add.call_args)
     assert resp.status_code == HTTPStatus.CREATED
-    mock_add.assert_called_once_with("Test Restaurant", "Test Type", "A place for testing",
-                                     "test_owner", "test_state", "test_city",
+    mock_add.assert_called_once_with("Test Restaurant", "Test Type",
+                                     "A place for testing", "test_owner",
+                                     "test_state", "test_city",
                                      "123 Test St", "12345")
 
 
@@ -130,6 +126,11 @@ def test_bad_update_rating(mock_update):
     """
     resp = TEST_CLIENT.put(f'{ep.RESTAURANTS_EP}/AnyName/100')
     assert resp.status_code == NOT_FOUND
+
+
+def test_get_restaurants():
+    restaurants = rst.get_restaurants()
+    assert isinstance(restaurants, dict)
 
 
 # REVISIT

@@ -81,7 +81,7 @@ def _gen_id() -> str:
 
 
 # def add_restaurant(name: str, rating: int) -> bool:
-def add_restaurant(name: str, description: str,
+def add_restaurant(name: str, restaurant_type: str, description: str,
                    owner_id: str, state: str, city: str,
                    address: str, zip_code: str) -> bool:
     # restaurants = {}
@@ -107,6 +107,7 @@ def add_restaurant(name: str, description: str,
     restaurant_document = {
         "search_id": search_id,
         "name": name,
+        "restaurant_type": restaurant_type,
         "description": description,
         "owner_id": owner_id,
         "state": state,

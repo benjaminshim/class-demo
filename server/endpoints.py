@@ -191,6 +191,7 @@ class DelUser(Resource):
 
 restaurant_fields = api.model('Restaurant', {
     'name': fields.String(required=True),
+    'restaurant_type': fields.String(required=True),
     'description': fields.String(required=True),
     'owner_id': fields.Integer(required=True),
     'state': fields.String(required=True),
@@ -279,6 +280,7 @@ class Restaurants(Resource):
         data = request.json
 
         name = data.get('name')
+        restaurant_type = data.get('restaurant_type')
         description = data.get('description')
         owner_id = data.get('owner_id')
         state = data.get('state')
@@ -287,7 +289,8 @@ class Restaurants(Resource):
         zip_code = data.get('zip_code')
 
         try:
-            success = restaurants.add_restaurant(name, description,
+            success = restaurants.add_restaurant(name, restaurant_type,
+                                                 description,
                                                  owner_id, state,
                                                  city, address, zip_code)
             if not success:
@@ -325,6 +328,7 @@ class Restaurant(Resource):
             updated = restaurants.update_restaurant(
                 search_id=search_id,
                 name=data.get('name'),
+                restaurant_type = data.get('restaurant_type'),
                 description=data.get('description'),
                 owner_id=data.get('owner_id'),
                 state=data.get('state'),

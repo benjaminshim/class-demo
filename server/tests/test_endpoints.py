@@ -30,6 +30,7 @@ def temp_restaurant():
 
 test_restaurant_data = {
     "name": "Test Restaurant",
+    "restaurant_type": "Test Type",
     "description": "A place for testing",
     "owner_id": "test_owner",
     "state": "test_state",
@@ -76,7 +77,7 @@ def test_restaurant_add(mock_add):
     resp = TEST_CLIENT.post(ep.RESTAURANTS_EP, json=test_restaurant_data)
     print(mock_add.call_args)
     assert resp.status_code == HTTPStatus.CREATED
-    mock_add.assert_called_once_with("Test Restaurant", "A place for testing",
+    mock_add.assert_called_once_with("Test Restaurant", "Test Type", "A place for testing",
                                      "test_owner", "test_state", "test_city",
                                      "123 Test St", "12345")
 

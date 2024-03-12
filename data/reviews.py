@@ -12,6 +12,7 @@ ID_LEN = 24
 MOCK_ID = '0' * ID_LEN
 
 RESTAURANT_NAME = 'Restaurant Name'
+RATING = 'rating'
 REVIEW_SENTENCE = 'Review'
 
 MIN_CUST_NAME_LEN = 1
@@ -24,6 +25,12 @@ def _get_test_name():
     return name + str(rand_part)
 
 
+def _get_test_rating():
+    rating = 'rating'
+    rand_part = random.randint(0, BIG_NUM)
+    return rating + str(rand_part)
+
+
 def _get_test_rvw():
     rvw = 'test'
     rand_part = random.randint(0, BIG_NUM)
@@ -33,6 +40,7 @@ def _get_test_rvw():
 def get_test_review():
     test_rvw = {}
     test_rvw[RESTAURANT_NAME] = _get_test_name()
+    test_rvw[RATING] = _get_test_rating()
     test_rvw[REVIEW_SENTENCE] = _get_test_rvw()
     return test_rvw
 
@@ -42,13 +50,14 @@ def get_reviews() -> dict:
     return dbc.fetch_all_as_dict(REVIEW_SENTENCE, REVIEW_COLLECT)
 
 
-def add_review(name: str, review_str: str) -> bool:
+def add_review(name: str, rating: str, review_str: str) -> bool:
     reviews_in = {}
     if id in reviews_in:
         raise ValueError(f'Duplicate user id: {id=}')
     if not id:
         raise ValueError('Users are not allowed to be entered without ids')
     reviews_in[RESTAURANT_NAME] = name
+    reviews_in[RATING] = rating
     reviews_in[REVIEW_SENTENCE] = review_str
     dbc.connect_db()
     _id = dbc.insert_one(rvws.REVIEW_COLLECT, reviews_in)

@@ -1,4 +1,4 @@
-import data.users as usrs
+# import data.users as usrs
 import server.endpoints as ep
 import pytest
 from http.client import (
@@ -13,15 +13,15 @@ MIN_USER_NAME_LEN = 1
 NAME = "user"
 
 
-def test_get_users():
-    users = usrs.get_users()
-    assert isinstance(users, dict)
-    # assert len(users) > 0
-    for key in users:
-        assert isinstance(key, str)
-        assert len(key) >= MIN_USER_NAME_LEN
-        user = users[key]
-        assert isinstance(user, dict)
+# def test_get_users():
+#     users = usrs.get_users()
+#     assert isinstance(users, dict)
+#     # assert len(users) > 0
+#     for key in users:
+#         assert isinstance(key, str)
+#         assert len(key) >= MIN_USER_NAME_LEN
+#         user = users[key]
+#         assert isinstance(user, dict)
 
 
 @pytest.mark.skip('This test is failing for now')

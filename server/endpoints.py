@@ -84,7 +84,7 @@ class MainMenu(Resource):
     """
     def get(self):
         """
-        Gets the main YumYard menu.
+        Gets the main menu.
         """
         return {TITLE: MAIN_MENU_NM,
                 'Default': 2,
@@ -184,9 +184,19 @@ class DelUser(Resource):
             raise wz.NotFound(f'{str(e)}')
 
 
-restaurant_fields = api.model('NewRestaurant', {
-    restaurants.TEST_RESTAURANT_NAME: fields.String,
-    restaurants.RATING: fields.Integer,
+# restaurant_fields = api.model('NewRestaurant', {
+#     restaurants.TEST_RESTAURANT_NAME: fields.String,
+#     restaurants.RATING: fields.Integer,
+# })
+
+restaurant_fields = api.model('Restaurant', {
+    'name': fields.String(required=True),
+    'description': fields.String(required=True),
+    'owner_id': fields.Integer(required=True),
+    'state': fields.String(required=True),
+    'city': fields.String(required=True),
+    'address': fields.String(required=True),
+    'zip_code': fields.String(required=True)
 })
 
 
@@ -458,37 +468,37 @@ class Bars(Resource):
             raise wz.NotAcceptable(f'{str(e)}')
 
 
-@api.route(f'{BAR_EP}/<name>/<rating>')
-class Bar_Rating(Resource):
-    """
-    Updates the rating of a bar.
-    """
-    @api.response(HTTPStatus.OK, 'Success')
-    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
-    def put(self, name, rating):
-        """
-        Update the rating of a bar.
-        """
-        try:
-            brs.update_bar_rating(name, rating)
-            return {name: 'Updated'}
-        except ValueError as e:
-            raise wz.NotFound(f'{str(e)}')
+# @api.route(f'{BAR_EP}/<name>/<rating>')
+# class Bar_Rating(Resource):
+#     """
+#     Updates the rating of a bar.
+#     """
+#     @api.response(HTTPStatus.OK, 'Success')
+#     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+#     def put(self, name, rating):
+#         """
+#         Update the rating of a bar.
+#         """
+#         try:
+#             brs.update_bar_rating(name, rating)
+#             return {name: 'Updated'}
+#         except ValueError as e:
+#             raise wz.NotFound(f'{str(e)}')
 
 
-@api.route(f'{RESTAURANTS_EP}/<name>/<rating>')
-class Rating(Resource):
-    """
-    Updates the rating of a restaurant.
-    """
-    @api.response(HTTPStatus.OK, 'Success')
-    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
-    def put(self, name, rating):
-        """
-        Update the rating of a restaurant.
-        """
-        try:
-            restaurants.update_rating(name, rating)
-            return {name: 'Updated'}
-        except ValueError as e:
-            raise wz.NotFound(f'{str(e)}')
+# @api.route(f'{RESTAURANTS_EP}/<name>/<rating>')
+# class Rating(Resource):
+#     """
+#     Updates the rating of a restaurant.
+#     """
+#     @api.response(HTTPStatus.OK, 'Success')
+#     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+#     def put(self, name, rating):
+#         """
+#         Update the rating of a restaurant.
+#         """
+#         try:
+#             restaurants.update_rating(name, rating)
+#             return {name: 'Updated'}
+#         except ValueError as e:
+#             raise wz.NotFound(f'{str(e)}')

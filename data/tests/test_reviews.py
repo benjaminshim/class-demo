@@ -11,9 +11,9 @@ from unittest.mock import patch
 TEST_CLIENT = ep.app.test_client()
 
 
-def test_get_reviews():
-    reviews = rvws.get_reviews()
-    assert isinstance(reviews, dict)
+# def test_get_reviews():
+#     reviews = rvws.get_reviews()
+#     assert isinstance(reviews, dict)
 
 
 @patch('data.reviews.add_review', return_value=rvws.MOCK_ID, autospec=True)

@@ -118,7 +118,10 @@ def add_restaurant(name: str, description: str,
 
     dbc.connect_db()
     _id = dbc.insert_one(RESTAURANT_COLLECT, restaurant_document)
-    return _id is not None
+    if _id is not None:
+        return search_id  # Return the search_id upon successful creation
+    else:
+        return None
 
 
 # UPDATE RESTAURANT

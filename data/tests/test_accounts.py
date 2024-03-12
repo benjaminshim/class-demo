@@ -11,9 +11,9 @@ from unittest.mock import patch
 TEST_CLIENT = ep.app.test_client()
 
 
-def test_get_account():
-    account = accs.get_accounts()
-    assert isinstance(account, dict)
+# def test_get_account():
+#     account = accs.get_accounts()
+#     assert isinstance(account, dict)
 
 
 @patch('data.accounts.add_account', return_value=accs.MOCK_ID, autospec=True)

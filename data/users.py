@@ -7,7 +7,7 @@ import data.db_connect as dbc
 import data.users as usrs
 
 
-BIG_NUM = 10000000000000
+BIG_NUM = 1_000_000_000_000_000_000_000_000
 ID_LEN = 24
 MOCK_ID = '0' * ID_LEN
 

@@ -210,7 +210,7 @@ class Update_Username(Resource):
 
 restaurant_fields = api.model('NewRestaurant', {
     restaurants.TEST_RESTAURANT_NAME: fields.String,
-    restaurants.RATING: fields.Integer,
+    restaurants.TEST_RESTAURANT_DESCRIPTION: fields.Integer,
 })
 
 

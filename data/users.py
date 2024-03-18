@@ -56,7 +56,7 @@ def del_user(id: int):
     if exists(id):
         return dbc.del_one(USERS_COLLECT, {USER_ID: id})
     else:
-        raise ValueError(f'Delete failure: {name} is not in users.')
+        raise ValueError(f'Delete failure: {NAME} is not in users.')
 
 
 def update_username(user_id: int, new_username: str) -> bool:

@@ -13,15 +13,15 @@ BIG_NUM = 1_000_000_000_000_000_000_000_000
 ID_LEN = 24
 MOCK_ID = '0' * ID_LEN
 
+RATING = 'rating'
+DESCRIPTION = 'description'
 TEST_RESTAURANT_NAME = 'Test Restaurant'
 TEST_RESTAURANT_DESCRIPTION = "A wonderful place for testing."
 TEST_OWNER_ID = 100000000000000000000000
 
 NAME = 'name'
-DESCRIPTION = 'description'
-OWNER_ID = 'owner_id'
-
 RESTAURANT_COLLECT = 'restaurants'
+
 
 TEST_RESTAURANT_FLDS = {
     TEST_RESTAURANT_NAME: 'Test Name',
@@ -32,8 +32,10 @@ TEST_RESTAURANT_FLDS = {
 
 restaurants = {
     'Test_Restaurant': {
-        DESCRIPTION: TEST_RESTAURANT_DESCRIPTION,
-        OWNER_ID: TEST_OWNER_ID,
+        RATING: 5,
+    },
+    TEST_RESTAURANT_NAME: {
+        RATING: 5,
     },
 }
 
@@ -50,14 +52,14 @@ def _gen_id() -> str:
     return _id
 
 
-def add_restaurant(name: str, rating: int) -> bool:
+def add_restaurant(name: str, description: str) -> bool:
     restaurants = {}
     if exists(name):
         raise ValueError(f'Duplicate restaurant name: {name=}')
     if not name:
         raise ValueError('Restaurant name may not be blank')
     restaurants[NAME] = name
-    restaurants[RATING] = rating
+    restaurants[DESCRIPTION] = description
     dbc.connect_db()
     _id = dbc.insert_one(RESTAURANT_COLLECT, restaurants)
     # restaurants[name] = {RATING: rating}
@@ -76,10 +78,10 @@ def exists(name: str) -> bool:
     return dbc.fetch_one(RESTAURANT_COLLECT, {NAME: name})
 
 
-# def update_rating(name: str, rating: int) -> bool:
-#     if not exists(name):
-#         raise ValueError(f'Update failure: {name} not in database.')
-#     else:
-#         dbc.connect_db()
-#         return dbc.update_doc(RESTAURANT_COLLECT, {NAME: name},
-#                               {RATING: rating})
+def update_rating(name: str, rating: int) -> bool:
+    if not exists(name):
+        raise ValueError(f'Update failure: {name} not in database.')
+    else:
+        dbc.connect_db()
+        return dbc.update_doc(RESTAURANT_COLLECT, {NAME: name},
+                              {RATING: rating})

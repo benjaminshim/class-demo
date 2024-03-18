@@ -209,8 +209,8 @@ class Update_Username(Resource):
 
 
 restaurant_fields = api.model('NewRestaurant', {
-    restaurants.TEST_RESTAURANT_NAME: fields.String,
-    restaurants.TEST_RESTAURANT_DESCRIPTION: fields.Integer,
+    restaurants.NAME: fields.String,
+    restaurants.DESCRIPTION: fields.String,
 })
 
 
@@ -261,10 +261,10 @@ class Restaurants(Resource):
         Add a restaurant.
         """
         # doing requests here, field names should be changed
-        name = request.json[restaurants.TEST_RESTAURANT_NAME]
-        rating = request.json[restaurants.RATING]
+        name = request.json[restaurants.NAME]
+        description = request.json[restaurants.DESCRIPTION]
         try:
-            new_id = restaurants.add_restaurant(name, rating)
+            new_id = restaurants.add_restaurant(name, description)
             if new_id is None:
                 raise wz.ServiceUnavailable('We have a technical problem.')
             return {RESTAURANT_ID: new_id}

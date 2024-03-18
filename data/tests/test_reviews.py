@@ -1,7 +1,11 @@
 import server.endpoints as ep
+import pytest
 import data.reviews as rvws
 from http.client import (
+    BAD_REQUEST,
+    FORBIDDEN,
     NOT_ACCEPTABLE,
+    NOT_FOUND,
     OK,
     SERVICE_UNAVAILABLE,
 )
@@ -11,9 +15,9 @@ from unittest.mock import patch
 TEST_CLIENT = ep.app.test_client()
 
 
-# def test_get_reviews():
-#     reviews = rvws.get_reviews()
-#     assert isinstance(reviews, dict)
+def test_get_reviews():
+    reviews = rvws.get_reviews()
+    assert isinstance(reviews, dict)
 
 
 @patch('data.reviews.add_review', return_value=rvws.MOCK_ID, autospec=True)

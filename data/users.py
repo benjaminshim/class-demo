@@ -52,9 +52,9 @@ def add_user(id: int, name: str, pw: int) -> bool:
     return _id is not None
 
 
-def del_user(name: str):
-    if exists(name):
-        dbc.del_one(USERS_COLLECT, {NAME: name})
+def del_user(id: int):
+    if exists(id):
+        return dbc.del_one(USERS_COLLECT, {USER_ID: id})
     else:
         raise ValueError(f'Delete failure: {name} is not in users.')
 

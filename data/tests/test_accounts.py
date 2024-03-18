@@ -1,7 +1,11 @@
 import server.endpoints as ep
+import pytest
 import data.accounts as accs
 from http.client import (
+    BAD_REQUEST,
+    FORBIDDEN,
     NOT_ACCEPTABLE,
+    NOT_FOUND,
     OK,
     SERVICE_UNAVAILABLE,
 )
@@ -11,9 +15,9 @@ from unittest.mock import patch
 TEST_CLIENT = ep.app.test_client()
 
 
-# def test_get_account():
-#     account = accs.get_accounts()
-#     assert isinstance(account, dict)
+def test_get_account():
+    account = accs.get_accounts()
+    assert isinstance(account, dict)
 
 
 @patch('data.accounts.add_account', return_value=accs.MOCK_ID, autospec=True)

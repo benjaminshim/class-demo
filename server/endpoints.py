@@ -10,7 +10,7 @@ from flask_cors import CORS
 
 import werkzeug.exceptions as wz
 
-import data.restaurants as restaurants
+import data.db as db
 import data.users as usrs
 import data.reviews as rvws
 import data.accounts as accs
@@ -25,6 +25,8 @@ MAIN_MENU = 'MainMenu'
 MAIN_MENU_NM = "Welcome to YumYard!"
 MAIN_MENU_EP = '/MainMenu'
 MENU = 'menu'
+HELLO_EP = '/hello'
+HELLO_RESP = 'hello'
 USERS_EP = '/users'
 USERS_MENU_NM = "User Menu"
 USERS_MENU_EP = '/user_menu'
@@ -52,6 +54,20 @@ DEL_RESAURANT_EP = f'{RESTAURANTS_EP}/{DELETE}'
 DEL_USER_EP = f'{USERS_EP}/{DELETE}'
 
 
+@api.route(HELLO_EP)
+class HelloWorld(Resource):
+    """
+    The purpose of the HelloWorld class is to have a simple test to see if the
+    app is working at all.
+    """
+    def get(self):
+        """
+        A trivial endpoint to see if the server is running.
+        It just answers with "hello world."
+        """
+        return {HELLO_RESP: 'world'}
+
+
 @api.route('/endpoints')
 class Endpoints(Resource):
     """
@@ -74,7 +90,7 @@ class MainMenu(Resource):
     """
     def get(self):
         """
-        Gets the main menu.
+        Gets the main YumYard menu.
         """
         return {TITLE: MAIN_MENU_NM,
                 'Default': 2,
@@ -114,146 +130,6 @@ class UserMenu(Resource):
                }
 
 
-restaurant_fields = api.model('Restaurant', {
-    'name': fields.String(required=True),
-    'description': fields.String(required=True),
-    'owner_id': fields.Integer(required=True),
-    'state': fields.String(required=True),
-    'city': fields.String(required=True),
-    'address': fields.String(required=True),
-    'zip_code': fields.String(required=True)
-})
-
-
-@api.route(f'{RESTAURANTS_EP}')
-class Restaurants(Resource):
-    """
-    This class supports various operations on restaurants, such as
-    listing them, adding a restaurant, and deleting a restaurant
-    """
-    def get(self):
-        """
-        Get list of restaurants and their ratings
-        """
-        # return {TYPE: DATA,
-        #         TITLE: 'Current Restaurants',
-        #         DATA: restaurants.get_restaurants(),
-        #         RETURN: MAIN_MENU_EP,
-        #         }
-        try:
-            restaurants_list = restaurants.get_restaurants()
-            return {
-                TYPE: DATA,
-                TITLE: 'Current Restaurants',
-                DATA: restaurants_list,
-                RETURN: MAIN_MENU_EP,
-            }, HTTPStatus.OK
-        except Exception as e:
-            return {"message": str(e)}, HTTPStatus.INTERNAL_SERVER_ERROR
-
-    # @api.expect(restaurant_fields)
-    # @api.response(HTTPStatus.OK, 'Success')
-    # @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
-    # @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
-    #               'We have a technical problem.')
-    # def post(self):
-    #     """
-    #     Add a restaurant.
-    #     """
-    #     # doing requests here, field names should be changed
-    #     name = request.json[restaurants.TEST_RESTAURANT_NAME]
-    #     rating = request.json[restaurants.RATING]
-    #     try:
-    #         new_id = restaurants.add_restaurant(name, rating)
-    #         if new_id is None:
-    #             raise wz.ServiceUnavailable('We have a technical problem.')
-    #         return {RESTAURANT_ID: new_id}
-    #     except ValueError as e:
-    #         raise wz.NotAcceptable(f'{str(e)}')
-
-    # GET RESTAURANT
-    @api.expect(restaurant_fields)
-    @api.response(HTTPStatus.CREATED, 'Restaurant added successfully')
-    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Input data validation failed')
-    @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
-                  'Service unavailable due to a technical problem')
-    def post(self):
-        """
-        Add a new restaurant.
-        """
-        data = request.json
-
-        name = data.get('name')
-        restaurant_type = data.get('restaurant_type')
-        description = data.get('description')
-        owner_id = data.get('owner_id')
-        state = data.get('state')
-        city = data.get('city')
-        address = data.get('address')
-        zip_code = data.get('zip_code')
-
-        try:
-            success = restaurants.add_restaurant(name, restaurant_type,
-                                                 description,
-                                                 owner_id, state,
-                                                 city, address, zip_code)
-            if not success:
-                api.abort(
-                    HTTPStatus.NOT_ACCEPTABLE,
-                    "Failed to add the restaurant due to validation errors."
-                    )
-
-            return {"message":
-                    "Restaurant added successfully"}, HTTPStatus.CREATED
-
-        except ValueError as e:
-            api.abort(HTTPStatus.NOT_ACCEPTABLE, str(e))
-        except Exception as e:
-            api.abort(HTTPStatus.SERVICE_UNAVAILABLE, str(e))
-
-
-@api.route(f'{RESTAURANTS_EP}/<string:search_id>')
-class Restaurant(Resource):
-    # UPDATE RESTAURANT
-    @api.expect(restaurant_fields)
-    @api.response(HTTPStatus.OK, 'Restaurant updated successfully')
-    @api.response(HTTPStatus.NOT_FOUND, 'Restaurant not found')
-    @api.response(HTTPStatus.NOT_ACCEPTABLE,
-                  'Input data validation failed')
-    @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
-                  'Service unavailable due to a technical problem')
-    def put(self, search_id):
-        """
-        Update an existing restaurant's details.
-        """
-        data = request.json
-
-        try:
-            updated = restaurants.update_restaurant(
-                search_id=search_id,
-                name=data.get('name'),
-                restaurant_type=data.get('restaurant_type'),
-                description=data.get('description'),
-                owner_id=data.get('owner_id'),
-                state=data.get('state'),
-                city=data.get('city'),
-                address=data.get('address'),
-                zip_code=data.get('zip_code')
-            )
-            if not updated:
-                api.abort(HTTPStatus.NOT_FOUND, "Restaurant not found")
-
-            return (
-                {"message": "Restaurant updated successfully"},
-                HTTPStatus.OK
-            )
-
-        except ValueError as e:
-            api.abort(HTTPStatus.NOT_ACCEPTABLE, str(e))
-        except Exception as e:
-            api.abort(HTTPStatus.SERVICE_UNAVAILABLE, str(e))
-
-
 users_fields = api.model('NewUser', {
     usrs.NAME: fields.String,
     usrs.PASSWORD: fields.Integer,
@@ -283,7 +159,7 @@ class Users(Resource):
         """
         Add a user.
         """
-        username = request.json[restaurants.NAME]
+        username = request.json[db.NAME]
         pw = request.json[usrs.PASSWORD]
         try:
             new_id = usrs.add_user(id, username, pw)
@@ -303,31 +179,38 @@ class DelUser(Resource):
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
     @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
                   'We have a technical problem.')
-    def delete(self, name):
+    def delete(self, id):
         """
         Deletes a user.
         """
         try:
-            usrs.del_user(name)
-            return {name: 'Deleted'}
+            usrs.del_user(id)
+            return {id: 'Deleted'}
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')
 
 
-# restaurant_fields = api.model('NewRestaurant', {
-#     restaurants.TEST_RESTAURANT_NAME: fields.String,
-#     restaurants.RATING: fields.Integer,
-# })
+@api.route(f'{USERS_EP}/<user_id>/<new_username>')
+class Update_Username(Resource):
+    """
+    Updates the rating of a restaurant.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    def put(self, user_id, new_username):
+        """
+        Update the username of an account.
+        """
+        try:
+            usrs.update_username(user_id, new_username)
+            return {user_id: 'Updated'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
 
-restaurant_fields = api.model('Restaurant', {
-    'name': fields.String(required=True),
-    'restaurant_type': fields.String(required=True),
-    'description': fields.String(required=True),
-    'owner_id': fields.Integer(required=True),
-    'state': fields.String(required=True),
-    'city': fields.String(required=True),
-    'address': fields.String(required=True),
-    'zip_code': fields.String(required=True)
+
+restaurant_fields = api.model('NewRestaurant', {
+    db.TEST_RESTAURANT_NAME: fields.String,
+    db.RATING: fields.Integer,
 })
 
 
@@ -345,15 +228,51 @@ class DelRestaurant(Resource):
         Deletes a restaurant by name.
         """
         try:
-            restaurants.del_restaurant(name)
+            db.del_restaurant(name)
             return {name: 'Deleted'}
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')
 
 
+@api.route(f'{RESTAURANTS_EP}')
+class Restaurants(Resource):
+    """
+    This class supports various operations on restaurants, such as
+    listing them, adding a restaurant, and deleting a restaurant
+    """
+    def get(self):
+        """
+        Get list of restaurants and their ratings
+        """
+        return {TYPE: DATA,
+                TITLE: 'Current Restaurants',
+                DATA: db.get_restuarants(),
+                MENU: RESTAURANTS_MENU_NM,
+                RETURN: MAIN_MENU_EP,
+                }
+
+    @api.expect(restaurant_fields)
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
+                  'We have a technical problem.')
+    def post(self):
+        """
+        Add a restaurant.
+        """
+        # doing requests here, field names should be changed
+        name = request.json[db.TEST_RESTAURANT_NAME]
+        rating = request.json[db.RATING]
+        try:
+            new_id = db.add_restaurant(name, rating)
+            if new_id is None:
+                raise wz.ServiceUnavailable('We have a technical problem.')
+            return {RESTAURANT_ID: new_id}
+        except ValueError as e:
+            raise wz.NotAcceptable(f'{str(e)}')
+
+
 review_fields = api.model('NewReview', {
-    rvws.RESTAURANT_NAME: fields.String,
-    rvws.RATING: fields.String,
     rvws.REVIEW_SENTENCE: fields.String,
 })
 
@@ -381,11 +300,9 @@ class Reviews(Resource):
         """
         Add a review.
         """
-        name = request.json[rvws.RESTAURANT_NAME]
-        rating = request.json[rvws.RATING]
         review = request.json[rvws.REVIEW_SENTENCE]
         try:
-            new_id = rvws.add_review(name, rating, review)
+            new_id = rvws.add_review(review)
             if new_id is None:
                 raise wz.ServiceUnavailable('We have a technical problem.')
             return {REVIEWS_ID: new_id}
@@ -475,37 +392,37 @@ class Bars(Resource):
             raise wz.NotAcceptable(f'{str(e)}')
 
 
-# @api.route(f'{BAR_EP}/<name>/<rating>')
-# class Bar_Rating(Resource):
-#     """
-#     Updates the rating of a bar.
-#     """
-#     @api.response(HTTPStatus.OK, 'Success')
-#     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
-#     def put(self, name, rating):
-#         """
-#         Update the rating of a bar.
-#         """
-#         try:
-#             brs.update_bar_rating(name, rating)
-#             return {name: 'Updated'}
-#         except ValueError as e:
-#             raise wz.NotFound(f'{str(e)}')
+@api.route(f'{BAR_EP}/<name>/<rating>')
+class Bar_Rating(Resource):
+    """
+    Updates the rating of a bar.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    def put(self, name, rating):
+        """
+        Update the rating of a bar.
+        """
+        try:
+            brs.update_bar_rating(name, rating)
+            return {name: 'Updated'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
 
 
-# @api.route(f'{RESTAURANTS_EP}/<name>/<rating>')
-# class Rating(Resource):
-#     """
-#     Updates the rating of a restaurant.
-#     """
-#     @api.response(HTTPStatus.OK, 'Success')
-#     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
-#     def put(self, name, rating):
-#         """
-#         Update the rating of a restaurant.
-#         """
-#         try:
-#             restaurants.update_rating(name, rating)
-#             return {name: 'Updated'}
-#         except ValueError as e:
-#             raise wz.NotFound(f'{str(e)}')
+@api.route(f'{RESTAURANTS_EP}/<name>/<rating>')
+class Rating(Resource):
+    """
+    Updates the rating of a restaurant.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    def put(self, name, rating):
+        """
+        Update the rating of a restaurant.
+        """
+        try:
+            db.update_rating(name, rating)
+            return {name: 'Updated'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')

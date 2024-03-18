@@ -1,7 +1,11 @@
 import server.endpoints as ep
 import data.bars as brs
+import data.db_connect as dbc
+import pytest
 
 from http.client import (
+    BAD_REQUEST,
+    FORBIDDEN,
     NOT_ACCEPTABLE,
     NOT_FOUND,
     OK,
@@ -46,11 +50,10 @@ def test_bad_update_bar_rating(mock_update):
     assert resp.status_code == NOT_FOUND
 
 
-# @patch('data.bars.update_bar_rating', autospec=True)
-# def test_update_rating(mock_update):
-#     """
-#     Testing we do the right thing with a call to update_bar_rating that
-#     succeeds.
-#     """
-#     resp = TEST_CLIENT.put(f'{ep.BAR_EP}/AnyName/100')
-#     assert resp.status_code == OK
+@patch('data.bars.update_bar_rating', autospec=True)
+def test_update_rating(mock_update):
+    """
+    Testing we do the right thing with a call to update_bar_rating that succeeds.
+    """
+    resp = TEST_CLIENT.put(f'{ep.BAR_EP}/AnyName/100')
+    assert resp.status_code == OK

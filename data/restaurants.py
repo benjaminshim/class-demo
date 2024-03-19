@@ -4,6 +4,7 @@ At first, it will just contain stubs that return fake data.
 Gradually, we will fill in actual calls to our datastore.
 """
 import random
+import re
 
 import data.db_connect as dbc
 import data.users as usrs
@@ -13,8 +14,13 @@ BIG_NUM = 1_000_000_000_000_000_000_000_000
 ID_LEN = 24
 MOCK_ID = '0' * ID_LEN
 
-RATING = 'rating'
 DESCRIPTION = 'description'
+ADDRESS = 'address'
+CITY = 'city'
+STATE = 'state'
+ZIP_CODE = 'zip_code'
+
+
 TEST_RESTAURANT_NAME = 'Test Restaurant'
 TEST_RESTAURANT_DESCRIPTION = "A wonderful place for testing."
 TEST_OWNER_ID = 100000000000000000000000
@@ -26,19 +32,15 @@ RESTAURANT_COLLECT = 'restaurants'
 TEST_RESTAURANT_FLDS = {
     TEST_RESTAURANT_NAME: 'Test Name',
     TEST_RESTAURANT_DESCRIPTION: 0,
-    TEST_OWNER_ID: 0
+    TEST_OWNER_ID: 0,
 }
 
 
-restaurants = {
-    'Test_Restaurant': {
-        RATING: 5,
-    },
-    TEST_RESTAURANT_NAME: {
-        RATING: 5,
-    },
-}
-
+def extract_id(s):
+    match = re.search(r"ObjectId\('([a-f0-9]{24})'\)", s)
+    if match:
+        return match.group(1)
+    return None
 
 def get_restuarants() -> dict:
     dbc.connect_db()
@@ -52,30 +54,33 @@ def _gen_id() -> str:
     return _id
 
 
-def add_restaurant(name: str, description: str) -> bool:
+def add_restaurant(name: str, description: str, address: str, city: str, state: str, zip_code: str) -> str:
     restaurants = {}
-    if exists(name):
-        raise ValueError(f'Duplicate restaurant name: {name=}')
-    if not name:
-        raise ValueError('Restaurant name may not be blank')
+    if exists(address, city, state, zip_code):
+        raise ValueError(f'A restaurant with this address already exists.')
+    
+    fields = {
+        'name': name,
+        'address': address,
+        'city': city,
+        'state': state,
+        'zip code': zip_code,
+    }
+
+    for field, value in fields.items():
+        if not value:
+            raise ValueError(f'Restaurant {field} may not be blank.')
+    
     restaurants[NAME] = name
     restaurants[DESCRIPTION] = description
+    restaurants[ADDRESS] = address
+    restaurants[CITY] = city
+    restaurants[STATE] = state
+    restaurants[ZIP_CODE]= zip_code
+
     dbc.connect_db()
     _id = dbc.insert_one(RESTAURANT_COLLECT, restaurants)
-    # restaurants[name] = {RATING: rating}
-    return _id is not None
-
-
-def del_restaurant(name: str):
-    if exists(name):
-        return dbc.del_one(RESTAURANT_COLLECT, {NAME: name})
-    else:
-        raise ValueError(f'Delete failure: {name} not in database.')
-
-
-def exists(name: str) -> bool:
-    dbc.connect_db()
-    return dbc.fetch_one(RESTAURANT_COLLECT, {NAME: name})
+    return extract_id(str(_id))
 
 
 def update_rating(name: str, rating: int) -> bool:
@@ -85,3 +90,15 @@ def update_rating(name: str, rating: int) -> bool:
         dbc.connect_db()
         return dbc.update_doc(RESTAURANT_COLLECT, {NAME: name},
                               {RATING: rating})
+
+
+def del_restaurant(name: str):
+    if exists(name):
+        return dbc.del_one(RESTAURANT_COLLECT, {NAME: name})
+    else:
+        raise ValueError(f'Delete failure: {name} not in database.')
+
+
+def exists(address: str, city: str, state: str, zip_code: str) -> bool:
+    dbc.connect_db()
+    return dbc.fetch_one(RESTAURANT_COLLECT, {ADDRESS: address, CITY: city, STATE: state, ZIP_CODE: zip_code})

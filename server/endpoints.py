@@ -209,8 +209,12 @@ class Update_Username(Resource):
 
 
 restaurant_fields = api.model('NewRestaurant', {
-    restaurants.NAME: fields.String,
-    restaurants.DESCRIPTION: fields.String,
+    restaurants.NAME: fields.String(default = "Restaurant Name"),
+    restaurants.DESCRIPTION: fields.String(default="Example Description"),
+    restaurants.ADDRESS: fields.String(default = "123 Main St"),
+    restaurants.CITY: fields.String(default = "Central City"),
+    restaurants.STATE: fields.String(default = "PA"),
+    restaurants.ZIP_CODE: fields.String(default = "12345"),
 })
 
 
@@ -263,13 +267,35 @@ class Restaurants(Resource):
         # doing requests here, field names should be changed
         name = request.json[restaurants.NAME]
         description = request.json[restaurants.DESCRIPTION]
+        address = request.json[restaurants.ADDRESS]
+        city = request.json[restaurants.CITY]
+        state = request.json[restaurants.STATE]
+        zip_code = request.json[restaurants.ZIP_CODE]
         try:
-            new_id = restaurants.add_restaurant(name, description)
+            new_id = restaurants.add_restaurant(name, description, address, city, state, zip_code)
             if new_id is None:
                 raise wz.ServiceUnavailable('We have a technical problem.')
             return {RESTAURANT_ID: new_id}
         except ValueError as e:
             raise wz.NotAcceptable(f'{str(e)}')
+
+
+@api.route(f'{RESTAURANTS_EP}/<name>/<rating>')
+class Rating(Resource):
+    """
+    Updates the rating of a restaurant.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    def put(self, name, rating):
+        """
+        Update the rating of a restaurant.
+        """
+        try:
+            restaurants.update_rating(name, rating)
+            return {name: 'Updated'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
 
 
 review_fields = api.model('NewReview', {
@@ -409,20 +435,3 @@ class Bar_Rating(Resource):
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')
 
-
-@api.route(f'{RESTAURANTS_EP}/<name>/<rating>')
-class Rating(Resource):
-    """
-    Updates the rating of a restaurant.
-    """
-    @api.response(HTTPStatus.OK, 'Success')
-    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
-    def put(self, name, rating):
-        """
-        Update the rating of a restaurant.
-        """
-        try:
-            restaurants.update_rating(name, rating)
-            return {name: 'Updated'}
-        except ValueError as e:
-            raise wz.NotFound(f'{str(e)}')

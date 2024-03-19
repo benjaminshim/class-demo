@@ -77,3 +77,11 @@ def update_review(user_id: int, rest_id: int,
         return dbc.update_doc(REVIEW_COLLECT,
                               {USER_ID: user_id, RESTAURANT_ID: rest_id},
                               {RATING: rating, REVIEW_SENTENCE: review_str})
+
+
+def del_review(user_id: int, rest_id: int) -> bool:
+    if not exists(user_id, rest_id):
+        raise ValueError('Update failure: review not in database.')
+    else:
+        dbc.connect_db()
+        return dbc.del_one(REVIEW_COLLECT, {USER_ID: user_id, RESTAURANT_ID:rest_id})

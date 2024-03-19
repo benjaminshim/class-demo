@@ -61,8 +61,19 @@ def add_review(user_id: int, rest_id: int, review_str: str,
     reviews_in[RATING] = rating
 
     dbc.connect_db()
-    if not exists(user_id,rest_id):
+    if not exists(user_id, rest_id):
         _id = dbc.insert_one(REVIEW_COLLECT, reviews_in)
     else:
         raise ValueError('User has already reviewed this restaurant')
     return _id is not None
+
+
+def update_review(user_id: int, rest_id: int,
+                  review_str: str, rating: int) -> bool:
+    if not exists(user_id, rest_id):
+        raise ValueError('Update failure: review not in database.')
+    else:
+        dbc.connect_db()
+        return dbc.update_doc(REVIEW_COLLECT,
+                              {USER_ID: user_id, RESTAURANT_ID: rest_id},
+                              {RATING: rating, REVIEW_SENTENCE: review_str})

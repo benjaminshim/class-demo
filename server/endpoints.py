@@ -348,6 +348,24 @@ account_fields = api.model('NewAccount', {
 })
 
 
+@api.route(f'{REVIEWS_EP}/<user_id>/<restaurant_id>/<review>/<rating>')
+class UpdateReview(Resource):
+    """
+    Updates the review of a restaurant.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    def put(self, user_id, restaurant_id, review, rating):
+        """
+        Update the username of an account.
+        """
+        try:
+            rvws.update_review(int(user_id), int(restaurant_id), review, int(rating))
+            return {review: 'Updated'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
+
+
 @api.route(f'{ACCOUNTS_EP}')
 class Accounts(Resource):
     def get(self):

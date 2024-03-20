@@ -52,6 +52,7 @@ BARS_MENU_NM = 'Bar Menu'
 BAR_ID = '_ID'
 DEL_RESAURANT_EP = f'{RESTAURANTS_EP}/{DELETE}'
 DEL_USER_EP = f'{USERS_EP}/{DELETE}'
+DEL_REVIEW_EP = f'{REVIEWS_EP}/{DELETE}'
 
 
 @api.route(HELLO_EP)
@@ -282,7 +283,10 @@ class Restaurants(Resource):
 
 
 review_fields = api.model('NewReview', {
+    rvws.USER_ID: fields.Integer,
+    rvws.RESTAURANT_ID: fields.Integer,
     rvws.REVIEW_SENTENCE: fields.String,
+    rvws.RATING: fields.Integer
 })
 
 
@@ -310,8 +314,12 @@ class Reviews(Resource):
         Add a review.
         """
         review = request.json[rvws.REVIEW_SENTENCE]
+        rating = request.json[rvws.RATING]
+        user = request.json[rvws.USER_ID]
+        restaurant = request.json[rvws.RESTAURANT_ID]
+
         try:
-            new_id = rvws.add_review(review)
+            new_id = rvws.add_review(user, restaurant, review, rating)
             if new_id is None:
                 raise wz.ServiceUnavailable('We have a technical problem.')
             return {REVIEWS_ID: new_id}
@@ -322,6 +330,44 @@ class Reviews(Resource):
 account_fields = api.model('NewAccount', {
     accs.ACCOUNT_SENTENCE: fields.String,
 })
+
+
+@api.route(f'{REVIEWS_EP}/<user_id>/<restaurant_id>/<review>/<rating>')
+class UpdateReview(Resource):
+    """
+    Updates the review of a restaurant.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    def put(self, user_id, restaurant_id, review, rating):
+        """
+        Update the username of an account.
+        """
+        try:
+            rvws.update_review(int(user_id), int(restaurant_id), review, int(rating))
+            return {review: 'Updated'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
+
+
+@api.route(f'{DEL_REVIEW_EP}/<user_id>/<restaurant_id>')
+class DelUser(Resource):
+    """
+    Deletes a Review.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
+    @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
+                  'We have a technical problem.')
+    def delete(self, user_id, restaurant_id):
+        """
+        Deletes a review.
+        """
+        try:
+            rvws.del_review(int(user_id),int(restaurant_id))
+            return 'Review Deleted'
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
 
 
 @api.route(f'{ACCOUNTS_EP}')

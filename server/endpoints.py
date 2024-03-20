@@ -9,6 +9,7 @@ from flask_restx import Resource, Api, fields
 from flask_cors import CORS
 
 import werkzeug.exceptions as wz
+import sys
 
 import data.restaurants as restaurants
 import data.users as usrs
@@ -209,6 +210,7 @@ class Update_Username(Resource):
             raise wz.NotFound(f'{str(e)}')
 
 
+# Restaurants
 restaurant_fields = api.model('NewRestaurant', {
     restaurants.NAME: fields.String(default = "Test Restaurant Name"),
     restaurants.RESTAURANT_TYPE: fields.String(default = "Restaurant"),
@@ -268,18 +270,36 @@ class Restaurants(Resource):
         """
         # doing requests here, field names should be changed
         name = request.json[restaurants.NAME]
+        restaurant_type = request.json[restaurants.RESTAURANT_TYPE]
         description = request.json[restaurants.DESCRIPTION]
         address = request.json[restaurants.ADDRESS]
         city = request.json[restaurants.CITY]
         state = request.json[restaurants.STATE]
         zip_code = request.json[restaurants.ZIP_CODE]
         try:
-            new_id = restaurants.add_restaurant(name, description, address, city, state, zip_code)
+            new_id = restaurants.add_restaurant(name, restaurant_type, description, address, city, state, zip_code)
             if new_id is None:
                 raise wz.ServiceUnavailable('We have a technical problem.')
             return {RESTAURANT_ID: new_id}
         except ValueError as e:
             raise wz.NotAcceptable(f'{str(e)}')
+
+@api.route(f'{RESTAURANTS_EP}/<object_id>/<name>/<restaurant_type>/<description>/<address>/<city>/<state>/<zip_code>')
+class UpdateRestaurant(Resource):
+    """
+    Updates a restaurant using its unique 24 character ID.
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    def put(self, object_id, name, restaurant_type, description, address, city, state, zip_code):
+        """
+        Update the fields of a restaurant.
+        """
+        try:
+            restaurants.update_restaurant(object_id, name, restaurant_type, description, address, city, state, zip_code)
+            return {name: 'Updated'}
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
 
 
 review_fields = api.model('NewReview', {

@@ -62,11 +62,12 @@ def add_restaurant(name: str, restaurant_type: str, description: str, address: s
     
     fields = {
         'name': name,
-        'type': restaurant_type,
+        'restaurant_type': restaurant_type,
+        'description': description,
         'address': address,
         'city': city,
         'state': state,
-        'zip code': zip_code,
+        'zip_code': zip_code,
     }
 
     for field, value in fields.items():
@@ -111,3 +112,15 @@ def exists(address: str, city: str, state: str, zip_code: str) -> bool:
 def id_exists(object_id: str) -> bool:
     dbc.connect_db()
     return dbc.fetch_one(RESTAURANT_COLLECT, {"_id": ObjectId(object_id)})
+
+
+def get_restaurant_by_id(object_id: str):
+    """
+    Fetches a restaurant from the database using its unique Object ID.
+    
+    :param object_id: The unique identifier for the restaurant.
+    :return: The restaurant document if found, else None.
+    """
+    dbc.connect_db()
+    restaurant = dbc.fetch_one(RESTAURANT_COLLECT, {"_id": ObjectId(object_id)})
+    return restaurant

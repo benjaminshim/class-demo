@@ -7,13 +7,14 @@ import random
 import re
 
 import data.db_connect as dbc
-import data.users as usrs
+from bson import ObjectId
 
 
 BIG_NUM = 1_000_000_000_000_000_000_000_000
 ID_LEN = 24
 MOCK_ID = '0' * ID_LEN
 
+RESTAURANT_TYPE = 'restaurant_type'
 DESCRIPTION = 'description'
 ADDRESS = 'address'
 CITY = 'city'
@@ -54,13 +55,14 @@ def _gen_id() -> str:
     return _id
 
 
-def add_restaurant(name: str, description: str, address: str, city: str, state: str, zip_code: str) -> str:
+def add_restaurant(name: str, restaurant_type: str, description: str, address: str, city: str, state: str, zip_code: str) -> str:
     restaurants = {}
     if exists(address, city, state, zip_code):
         raise ValueError(f'A restaurant with this address already exists.')
     
     fields = {
         'name': name,
+        'type': restaurant_type,
         'address': address,
         'city': city,
         'state': state,
@@ -72,6 +74,7 @@ def add_restaurant(name: str, description: str, address: str, city: str, state: 
             raise ValueError(f'Restaurant {field} may not be blank.')
     
     restaurants[NAME] = name
+    restaurants[RESTAURANT_TYPE] = restaurant_type
     restaurants[DESCRIPTION] = description
     restaurants[ADDRESS] = address
     restaurants[CITY] = city
@@ -83,22 +86,28 @@ def add_restaurant(name: str, description: str, address: str, city: str, state: 
     return extract_id(str(_id))
 
 
-def update_rating(name: str, rating: int) -> bool:
-    if not exists(name):
-        raise ValueError(f'Update failure: {name} not in database.')
+def update_restaurant(object_id: str, name: str, restaurant_type: str, description: str, address: str, city: str, state: str, zip_code: str) -> bool:
+    if not id_exists(object_id):
+        raise ValueError(f'This ID does not belong to a valid restaurant.')
     else:
         dbc.connect_db()
-        return dbc.update_doc(RESTAURANT_COLLECT, {NAME: name},
-                              {RATING: rating})
+        return dbc.update_doc(RESTAURANT_COLLECT, {"_id": ObjectId(object_id)},
+                              {NAME: name, RESTAURANT_TYPE: restaurant_type, DESCRIPTION: description, ADDRESS: address, CITY: city, STATE: state, ZIP_CODE: zip_code})
 
 
-def del_restaurant(name: str):
-    if exists(name):
-        return dbc.del_one(RESTAURANT_COLLECT, {NAME: name})
+def del_restaurant(object_id: str):
+    if not id_exists(object_id):
+        raise ValueError(f'This ID does not belong to a valid restaurant.')
     else:
-        raise ValueError(f'Delete failure: {name} not in database.')
+        dbc.connect_db()
+        return dbc.del_one(RESTAURANT_COLLECT, {"_id": ObjectId(object_id)})
 
 
 def exists(address: str, city: str, state: str, zip_code: str) -> bool:
     dbc.connect_db()
     return dbc.fetch_one(RESTAURANT_COLLECT, {ADDRESS: address, CITY: city, STATE: state, ZIP_CODE: zip_code})
+
+
+def id_exists(object_id: str) -> bool:
+    dbc.connect_db()
+    return dbc.fetch_one(RESTAURANT_COLLECT, {"_id": ObjectId(object_id)})

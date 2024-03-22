@@ -1,5 +1,5 @@
 # common make vars and targets:
-export LINTER = flake8
+export LINTER = flake8 --extend-ignore=F401
 export PYLINTFLAGS = --exclude=__main__.py
 export CLOUD_MONGO = 0
 

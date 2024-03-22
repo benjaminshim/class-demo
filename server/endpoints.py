@@ -201,7 +201,7 @@ class UpdateEmail(Resource):
             if not usrs.update_email(user_id, new_email):
                 raise wz.NotFound(f'User with ID'
                                   f'{user_id} not found')
-            return {'Updated email with User ID':f'{user_id}'}
+            return {'Updated email with User ID': f'{user_id}'}
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')
 

@@ -43,23 +43,18 @@ def extract_id(s):
         return match.group(1)
     return None
 
+
 def get_restuarants() -> dict:
     dbc.connect_db()
     return dbc.fetch_all_as_dict(NAME, RESTAURANT_COLLECT)
 
 
-def _gen_id() -> str:
-    _id = random.randint(0, BIG_NUM)
-    _id = str(_id)
-    _id = _id.rjust(ID_LEN, '0')
-    return _id
-
-
-def add_restaurant(name: str, restaurant_type: str, description: str, address: str, city: str, state: str, zip_code: str) -> str:
+def add_restaurant(name: str, restaurant_type: str, description: str,
+                   address: str, city: str, state: str, zip_code: str) -> str:
     restaurants = {}
     if exists(address, city, state, zip_code):
-        raise ValueError(f'A restaurant with this address already exists.')
-    
+        raise ValueError('A restaurant with this address already exists.')
+
     fields = {
         'name': name,
         'restaurant_type': restaurant_type,
@@ -73,54 +68,68 @@ def add_restaurant(name: str, restaurant_type: str, description: str, address: s
     for field, value in fields.items():
         if not value:
             raise ValueError(f'Restaurant {field} may not be blank.')
-    
+
     restaurants[NAME] = name
     restaurants[RESTAURANT_TYPE] = restaurant_type
     restaurants[DESCRIPTION] = description
     restaurants[ADDRESS] = address
     restaurants[CITY] = city
     restaurants[STATE] = state
-    restaurants[ZIP_CODE]= zip_code
+    restaurants[ZIP_CODE] = zip_code
 
     dbc.connect_db()
     _id = dbc.insert_one(RESTAURANT_COLLECT, restaurants)
     return extract_id(str(_id))
 
 
-def update_restaurant(object_id: str, name: str, restaurant_type: str, description: str, address: str, city: str, state: str, zip_code: str) -> bool:
-    if not id_exists(object_id):
-        raise ValueError(f'This ID does not belong to a valid restaurant.')
-    else:
-        dbc.connect_db()
-        return dbc.update_doc(RESTAURANT_COLLECT, {"_id": ObjectId(object_id)},
-                              {NAME: name, RESTAURANT_TYPE: restaurant_type, DESCRIPTION: description, ADDRESS: address, CITY: city, STATE: state, ZIP_CODE: zip_code})
+def update_restaurant(restaurant_id: str, restaurant_data: dict) -> bool:
+    if not id_exists(restaurant_id):
+        raise ValueError('This ID does not belong to a valid restaurant.')
+
+    if not restaurant_data:
+        raise ValueError('There are no valid fields to update.')
+
+    update_data = {}
+    for key in [NAME, RESTAURANT_TYPE, DESCRIPTION,
+                ADDRESS, CITY, STATE, ZIP_CODE]:
+        if key in restaurant_data:
+            update_data[key] = restaurant_data[key]
+
+    dbc.connect_db()
+    return dbc.update_doc(RESTAURANT_COLLECT,
+                          {"_id": ObjectId(restaurant_id)}, update_data)
 
 
 def del_restaurant(object_id: str):
     if not id_exists(object_id):
-        raise ValueError(f'This ID does not belong to a valid restaurant.')
+        raise ValueError('This ID does not belong to a valid restaurant.')
     else:
         dbc.connect_db()
-        return dbc.del_one(RESTAURANT_COLLECT, {"_id": ObjectId(object_id)})
+        return dbc.del_one(RESTAURANT_COLLECT,
+                           {"_id": ObjectId(object_id)})
 
 
 def exists(address: str, city: str, state: str, zip_code: str) -> bool:
     dbc.connect_db()
-    return dbc.fetch_one(RESTAURANT_COLLECT, {ADDRESS: address, CITY: city, STATE: state, ZIP_CODE: zip_code})
+    return dbc.fetch_one(RESTAURANT_COLLECT,
+                         {ADDRESS: address, CITY: city,
+                          STATE: state, ZIP_CODE: zip_code})
 
 
 def id_exists(object_id: str) -> bool:
     dbc.connect_db()
-    return dbc.fetch_one(RESTAURANT_COLLECT, {"_id": ObjectId(object_id)})
+    return dbc.fetch_one(RESTAURANT_COLLECT,
+                         {"_id": ObjectId(object_id)})
 
 
 def get_restaurant_by_id(object_id: str):
-    """
-    Fetches a restaurant from the database using its unique Object ID.
-    
-    :param object_id: The unique identifier for the restaurant.
-    :return: The restaurant document if found, else None.
-    """
     dbc.connect_db()
-    restaurant = dbc.fetch_one(RESTAURANT_COLLECT, {"_id": ObjectId(object_id)})
+    restaurant = dbc.fetch_one(RESTAURANT_COLLECT,
+                               {"_id": ObjectId(object_id)})
     return restaurant
+
+
+def get_restaurants_filt(state: str, city: str) -> list:
+    dbc.connect_db()
+    return dbc.fetch_all_filtered(RESTAURANT_COLLECT,
+                                  filt={STATE: state, CITY: city})

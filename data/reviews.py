@@ -84,4 +84,5 @@ def del_review(user_id: int, rest_id: int) -> bool:
         raise ValueError('Update failure: review not in database.')
     else:
         dbc.connect_db()
-        return dbc.del_one(REVIEW_COLLECT, {USER_ID: user_id, RESTAURANT_ID:rest_id})
+        return dbc.del_one(REVIEW_COLLECT,
+                           {USER_ID: user_id, RESTAURANT_ID: rest_id})

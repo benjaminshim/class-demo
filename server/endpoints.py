@@ -15,7 +15,6 @@ import data.restaurants as restaurants
 import data.users as usrs
 import data.reviews as rvws
 import data.accounts as accs
-import data.bars as brs
 
 app = Flask(__name__)
 CORS(app)
@@ -23,7 +22,7 @@ api = Api(app)
 
 DELETE = 'delete'
 MAIN_MENU = 'MainMenu'
-MAIN_MENU_NM = "Welcome to YumYard!"
+MAIN_MENU_NM = "Welcome!"
 MAIN_MENU_EP = '/MainMenu'
 MENU = 'menu'
 HELLO_EP = '/hello'
@@ -48,9 +47,6 @@ TYPE = 'Type'
 DATA = 'DATA'
 TITLE = 'Title'
 RETURN = 'Return'
-BAR_EP = '/bars'
-BARS_MENU_NM = 'Bar Menu'
-BAR_ID = '_ID'
 DEL_RESAURANT_EP = f'{RESTAURANTS_EP}/{DELETE}'
 DEL_USER_EP = f'{USERS_EP}/{DELETE}'
 DEL_REVIEW_EP = f'{REVIEWS_EP}/{DELETE}'
@@ -92,7 +88,7 @@ class MainMenu(Resource):
     """
     def get(self):
         """
-        Gets the main YumYard menu.
+        Gets the main menu.
         """
         return {TITLE: MAIN_MENU_NM,
                 'Default': 2,
@@ -133,8 +129,10 @@ class UserMenu(Resource):
 
 
 users_fields = api.model('NewUser', {
-    usrs.NAME: fields.String,
-    usrs.PASSWORD: fields.Integer,
+    usrs.FIRST_NAME: fields.String,
+    usrs.LAST_NAME: fields.String,
+    usrs.EMAIL: fields.String,
+    usrs.PASSWORD: fields.String,
 })
 
 
@@ -148,8 +146,6 @@ class Users(Resource):
             TYPE: DATA,
             TITLE: 'Current Users',
             DATA: usrs.get_users(),
-            MENU: USERS_MENU_NM,
-            RETURN: MAIN_MENU_EP,
         }
 
     @api.expect(users_fields)
@@ -161,10 +157,13 @@ class Users(Resource):
         """
         Add a user.
         """
-        username = request.json[restaurants.NAME]
-        pw = request.json[usrs.PASSWORD]
+        first_name = request.json[usrs.FIRST_NAME]
+        last_name = request.json[usrs.LAST_NAME]
+        email = request.json[usrs.EMAIL]
+        password = request.json[usrs.PASSWORD]
+
         try:
-            new_id = usrs.add_user(id, username, pw)
+            new_id = usrs.add_user(first_name, last_name, email, password)
             if new_id is None:
                 raise wz.ServiceUnavailable('We have a technical problem.')
             return {USER_ID: new_id}
@@ -172,72 +171,88 @@ class Users(Resource):
             raise wz.NotAcceptable(f'{str(e)}')
 
 
-@api.route(f'{DEL_USER_EP}/<name>')
+@api.route(f'{DEL_USER_EP}/<user_id>')
 class DelUser(Resource):
-    """
-    Deletes a User by name.
-    """
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
     @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
                   'We have a technical problem.')
-    def delete(self, id):
+    def delete(self, user_id):
         """
         Deletes a user.
         """
         try:
-            usrs.del_user(id)
-            return {id: 'Deleted'}
+            usrs.del_user(user_id)
+            return {'Deleted user with User ID':
+                    f'{user_id}'}
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')
 
 
-@api.route(f'{USERS_EP}/<user_id>/<new_username>')
-class Update_Username(Resource):
-    """
-    Updates the rating of a restaurant.
-    """
+@api.route(f'{USERS_EP}/<user_id>/<new_email>')
+class UpdateEmail(Resource):
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
-    def put(self, user_id, new_username):
+    def put(self, user_id, new_email):
         """
         Update the username of an account.
         """
         try:
-            usrs.update_username(user_id, new_username)
-            return {user_id: 'Updated'}
+            if not usrs.update_email(user_id, new_email):
+                raise wz.NotFound(f'User with ID'
+                                  f'{user_id} not found')
+            return {'Updated email with User ID':f'{user_id}'}
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')
 
 
 # Restaurants
 restaurant_fields = api.model('NewRestaurant', {
-    restaurants.NAME: fields.String(default = "Test Restaurant Name"),
-    restaurants.RESTAURANT_TYPE: fields.String(default = "Restaurant"),
-    restaurants.DESCRIPTION: fields.String(default="Test Description"),
-    restaurants.ADDRESS: fields.String(default = "123 Test St"),
-    restaurants.CITY: fields.String(default = "Test City"),
-    restaurants.STATE: fields.String(default = "NY"),
-    restaurants.ZIP_CODE: fields.String(default = "12345"),
+    restaurants.NAME: fields.String,
+    restaurants.RESTAURANT_TYPE: fields.String,
+    restaurants.DESCRIPTION: fields.String,
+    restaurants.ADDRESS: fields.String,
+    restaurants.CITY: fields.String,
+    restaurants.STATE: fields.String,
+    restaurants.ZIP_CODE: fields.String,
 })
 
 
-@api.route(f'{DEL_RESAURANT_EP}/<object_id>')
+@api.route(f'{RESTAURANTS_EP}/<restaurant_id>')
+class UpdateRestaurant(Resource):
+    @api.doc(params={'restaurant_id': 'The unique ID of the restaurant'})
+    @api.expect(restaurant_fields)
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    def put(self, restaurant_id):
+        """
+        Update a restaurant using its unique 24 character ID.
+        """
+        updated_data = request.json
+        try:
+            if not restaurants.update_restaurant(restaurant_id, updated_data):
+                raise wz.NotFound(f'Restaurant with ID'
+                                  f'{restaurant_id} not found')
+            return {'Updated restaurant with Restaurant ID':
+                    f'{restaurant_id}'}
+        except ValueError as e:
+            raise wz.BadRequest(f'{str(e)}')
+
+
+@api.route(f'{DEL_RESAURANT_EP}/<restaurant_id>')
 class DelRestaurant(Resource):
-    """
-    Deletes a restaurant using its unique 24 character ID.
-    """
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
     @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
                   'We have a technical problem.')
-    def delete(self, object_id):
+    def delete(self, restaurant_id):
         """
-        Deletes a restaurant by name.
+        Delete a restaurant using its unique 24 character ID.
         """
         try:
-            restaurants.del_restaurant(object_id)
-            return {'message': "Successfully Deleted!"}
+            restaurants.del_restaurant(restaurant_id)
+            return {'Deleted restaurant with Restaurant ID':
+                    f'{restaurant_id}'}
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')
 
@@ -250,14 +265,13 @@ class Restaurants(Resource):
     """
     def get(self):
         """
-        Get list of restaurants and their ratings
+        Get a list of all restaurants.
         """
-        return {TYPE: DATA,
-                TITLE: 'Current Restaurants',
-                DATA: restaurants.get_restuarants(),
-                MENU: RESTAURANTS_MENU_NM,
-                RETURN: MAIN_MENU_EP,
-                }
+        return {
+            TYPE: DATA,
+            TITLE: 'Current Restaurants',
+            DATA: restaurants.get_restuarants(),
+        }
 
     @api.expect(restaurant_fields)
     @api.response(HTTPStatus.OK, 'Success')
@@ -268,7 +282,6 @@ class Restaurants(Resource):
         """
         Add a restaurant.
         """
-        # doing requests here, field names should be changed
         name = request.json[restaurants.NAME]
         restaurant_type = request.json[restaurants.RESTAURANT_TYPE]
         description = request.json[restaurants.DESCRIPTION]
@@ -277,29 +290,44 @@ class Restaurants(Resource):
         state = request.json[restaurants.STATE]
         zip_code = request.json[restaurants.ZIP_CODE]
         try:
-            new_id = restaurants.add_restaurant(name, restaurant_type, description, address, city, state, zip_code)
+            new_id = restaurants.add_restaurant(name, restaurant_type,
+                                                description, address,
+                                                city, state, zip_code)
             if new_id is None:
                 raise wz.ServiceUnavailable('We have a technical problem.')
             return {RESTAURANT_ID: new_id}
         except ValueError as e:
             raise wz.NotAcceptable(f'{str(e)}')
 
-@api.route(f'{RESTAURANTS_EP}/<object_id>/<name>/<restaurant_type>/<description>/<address>/<city>/<state>/<zip_code>')
-class UpdateRestaurant(Resource):
-    """
-    Updates a restaurant using its unique 24 character ID.
-    """
+
+@api.route(f'{RESTAURANTS_EP}/search')
+class RestaurantSearch(Resource):
+    @api.doc(params={
+        'state': 'A state to filter the restaurants by',
+        'city': 'A city to filter the restaurants by',
+    })
     @api.response(HTTPStatus.OK, 'Success')
-    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
-    def put(self, object_id, name, restaurant_type, description, address, city, state, zip_code):
+    @api.response(HTTPStatus.BAD_REQUEST, 'Invalid Parameters')
+    def get(self):
         """
-        Update the fields of a restaurant.
+        Get a list of all restaurants filtered by state and city.
         """
+        state = str(request.args.get('state'))
+        city = str(request.args.get('city'))
+
+        if not state or not city:
+            raise HTTPStatus.BAD_REQUEST('Both city and zip'
+                                         'code parameters are required')
+
         try:
-            restaurants.update_restaurant(object_id, name, restaurant_type, description, address, city, state, zip_code)
-            return {name: 'Updated'}
+            restaurants_list = restaurants.get_restaurants_filt(state, city)
+            return {
+                TYPE: DATA,
+                TITLE: 'Restaurants in the Area',
+                DATA: restaurants_list,
+            }
         except ValueError as e:
-            raise wz.NotFound(f'{str(e)}')
+            raise wz.NotAcceptable(f'{str(e)}')
 
 
 review_fields = api.model('NewReview', {
@@ -364,14 +392,15 @@ class UpdateReview(Resource):
         Update the username of an account.
         """
         try:
-            rvws.update_review(int(user_id), int(restaurant_id), review, int(rating))
+            rvws.update_review(int(user_id), int(restaurant_id),
+                               review, int(rating))
             return {review: 'Updated'}
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')
 
 
 @api.route(f'{DEL_REVIEW_EP}/<user_id>/<restaurant_id>')
-class DelUser(Resource):
+class DelReview(Resource):
     """
     Deletes a Review.
     """
@@ -384,7 +413,7 @@ class DelUser(Resource):
         Deletes a review.
         """
         try:
-            rvws.del_review(int(user_id),int(restaurant_id))
+            rvws.del_review(int(user_id), int(restaurant_id))
             return 'Review Deleted'
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')
@@ -421,66 +450,3 @@ class Accounts(Resource):
             return {ACCOUNTS_ID: new_id}
         except ValueError as e:
             raise wz.NotAcceptable(f'{str(e)}')
-
-
-bar_fields = api.model('NewBar', {
-    brs.BAR: fields.String,
-    brs.BAR_RATING: fields.Integer,
-})
-
-
-@api.route(f'{BAR_EP}')
-class Bars(Resource):
-    """
-    This class supports various operations on bar, such as
-    listing them, adding a bar, and deleting a bar
-    """
-    def get(self):
-        """
-        Get list of bars and their ratings
-        """
-        return {TYPE: DATA,
-                TITLE: 'Current Bars',
-                DATA: brs.get_bars(),
-                MENU: BARS_MENU_NM,
-                RETURN: MAIN_MENU_EP,
-                }
-
-    @api.expect(bar_fields)
-    @api.response(HTTPStatus.OK, 'Success')
-    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
-    @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
-                  'We have a technical problem.')
-    def post(self):
-        """
-        Add a bar.
-        """
-        # doing requests here, field names should be changed
-        name = request.json[brs.BAR]
-        rating = request.json[brs.BAR_RATING]
-        try:
-            new_id = brs.add_bar(name, rating)
-            if new_id is None:
-                raise wz.ServiceUnavailable('We have a technical problem.')
-            return {BAR_ID: new_id}
-        except ValueError as e:
-            raise wz.NotAcceptable(f'{str(e)}')
-
-
-@api.route(f'{BAR_EP}/<name>/<rating>')
-class Bar_Rating(Resource):
-    """
-    Updates the rating of a bar.
-    """
-    @api.response(HTTPStatus.OK, 'Success')
-    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
-    def put(self, name, rating):
-        """
-        Update the rating of a bar.
-        """
-        try:
-            brs.update_bar_rating(name, rating)
-            return {name: 'Updated'}
-        except ValueError as e:
-            raise wz.NotFound(f'{str(e)}')
-

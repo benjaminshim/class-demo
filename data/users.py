@@ -4,27 +4,47 @@ This module interfaces to our user data
 """
 
 import data.db_connect as dbc
-import data.users as usrs
+import re
 
+from bson import ObjectId
 
 BIG_NUM = 1_000_000_000_000_000_000_000_000
 ID_LEN = 24
 MOCK_ID = '0' * ID_LEN
 
-NAME = 'name'
-PASSWORD = 0
-USER_NAME = "User"
-USER_ID = "_id"
 
-USERNAME = 'User'
-MIN_CUST_NAME_LEN = 1
+# NAME = 'name'
+# PASSWORD = 0
+# USER_NAME = "User"
+# USER_ID = "_id"
+# USERNAME = 'User'
+
+USER_ID = '_id'
+FIRST_NAME = 'first name'
+LAST_NAME = 'last name'
+EMAIL = 'email'
+PASSWORD = 'password'
+RESTAURANT_IDS = 'restaurant ids'
+
+MIN_USER_NAME_LEN = 1
 USERS_COLLECT = 'users'
 
+NAME = 'not'
+USER_NAME = 'not'
+
+# def get_users() -> dict:
+#     dbc.connect_db()
+#     return dbc.fetch_all_as_dict(USERNAME, USERS_COLLECT)
 
 def get_users() -> dict:
     dbc.connect_db()
-    return dbc.fetch_all_as_dict(USERNAME, USERS_COLLECT)
+    return dbc.fetch_all_as_dict(EMAIL, USERS_COLLECT)
 
+def extract_id(s):
+    match = re.search(r"ObjectId\('([a-f0-9]{24})'\)", s)
+    if match:
+        return match.group(1)
+    return None
 
 def _gen_id() -> str:
     _id = random.randint(0, BIG_NUM)
@@ -33,36 +53,54 @@ def _gen_id() -> str:
     return _id
 
 
-def exists(user_id: int) -> bool:
+def exists(email: str) -> bool:
     dbc.connect_db()
-    return dbc.fetch_one(USER_ID, {USER_ID: user_id})
+    return dbc.fetch_one(USERS_COLLECT, {EMAIL: email})
 
 
-def add_user(id: int, name: str, pw: int) -> bool:
+def id_exists(user_id: str) -> bool:
+    dbc.connect_db()
+    return dbc.fetch_one(USERS_COLLECT, {USER_ID: ObjectId(user_id)})
+
+
+def add_user(first_name: str, last_name: str, email: str, password: str) -> str:
     users = {}
-    if id in users:
-        raise ValueError(f'Duplicate user id: {id=}')
-    if not id:
-        raise ValueError('Users are not allowed to be entered without ids')
-    users[USER_ID] = _gen_id()
-    users[USER_NAME] = name
-    users[PASSWORD] = pw
+    # if exists(email):
+    #     pass
+    
+    fields = {
+        'first_name': first_name,
+        'last_name': last_name, 
+        'email': email,
+        'password': password,
+    }
+
+    for field, value in fields.items():
+        if not value: 
+            raise ValueError(f'Restaurant {field} may not be blank')
+
+    users[FIRST_NAME] = first_name
+    users[LAST_NAME] = last_name
+    users[EMAIL] = email
+    users[PASSWORD] = password
+    users[RESTAURANT_IDS] = []
+
     dbc.connect_db()
-    _id = dbc.insert_one(usrs.USERS_COLLECT, users)
-    return _id is not None
+    _id = dbc.insert_one(USERS_COLLECT, users)
+    return extract_id(str(_id))
 
 
-def del_user(id: int):
-    if exists(id):
-        return dbc.del_one(USERS_COLLECT, {USER_ID: id})
-    else:
-        raise ValueError(f'Delete failure: {NAME} is not in users.')
-
-
-def update_username(user_id: int, new_username: str) -> bool:
-    if not exists(id):
-        raise ValueError(f'Update failure: {user_id} not in database.')
+def del_user(user_id: str):
+    if not id_exists(user_id):
+        raise ValueError(f'Delete failure: {user_id} not in database.')
     else:
         dbc.connect_db()
-        return dbc.update_doc(USERS_COLLECT, {USER_ID: user_id},
-                              {USER_NAME: new_username})
+        return dbc.del_one(USERS_COLLECT, {USER_ID: ObjectId(user_id)})
+
+
+def update_email(user_id: str, new_email: str) -> bool:
+    if not id_exists(user_id):
+        raise ValueError(f'Update failure: {user_id} not in database.')
+    dbc.connect_db()
+    return dbc.update_doc(USERS_COLLECT, {"_id": ObjectId(user_id)},
+                            {EMAIL: new_email})

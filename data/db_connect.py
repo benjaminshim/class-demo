@@ -73,6 +73,14 @@ def fetch_all(collection, db=USERS_DB):
     return ret
 
 
+def fetch_all_filtered(collection, filt={}, db=USERS_DB):
+    ret = []
+    for doc in client[db][collection].find(filt):
+        doc.pop(MONGO_ID, None)
+        ret.append(doc)
+    return ret
+
+
 def fetch_all_as_dict(key, collection, db=USERS_DB):
     ret = {}
     for doc in client[db][collection].find():

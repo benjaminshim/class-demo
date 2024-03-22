@@ -2,6 +2,8 @@ import os
 
 import pymongo as pm
 
+import certifi
+
 LOCAL = "0"
 CLOUD = "1"
 
@@ -29,12 +31,13 @@ def connect_db():
                 raise ValueError('You must set your password '
                                  + 'to use Mongo in the cloud.')
             print("Connecting to Mongo in the cloud.")
+            ca = certifi.where()
             client = pm.MongoClient(f'mongodb+srv://cm5685:{password}'
                                     + '@databasesplusone.zrimlpx.mongodb.net'
                                     + '/?retryWrites=true&w='
                                     + 'majority', connectTimeoutMS=30000,
                                     socketTimeoutMS=None, connect=False,
-                                    maxPoolsize=1)
+                                    maxPoolsize=1, tlsCAFile=ca)
         else:
             print("Connecting to Mongo locally.")
             client = pm.MongoClient()

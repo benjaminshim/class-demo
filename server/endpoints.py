@@ -374,11 +374,6 @@ class Reviews(Resource):
             raise wz.NotAcceptable(f'{str(e)}')
 
 
-account_fields = api.model('NewAccount', {
-    accs.ACCOUNT_SENTENCE: fields.String,
-})
-
-
 @api.route(f'{REVIEWS_EP}/<user_id>/<restaurant_id>/<review>/<rating>')
 class UpdateReview(Resource):
     """

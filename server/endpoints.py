@@ -417,36 +417,3 @@ class DelReview(Resource):
             return 'Review Deleted'
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')
-
-
-@api.route(f'{ACCOUNTS_EP}')
-class Accounts(Resource):
-    def get(self):
-        """
-        Get list of all accounts
-        """
-        return {
-            TYPE: DATA,
-            TITLE: 'All accounts',
-            DATA: accs.get_accounts(),
-            MENU: REVIEWS_MENU_NM,
-            RETURN: MAIN_MENU_EP,
-        }
-
-    @api.expect(account_fields)
-    @api.response(HTTPStatus.OK, 'Success')
-    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
-    @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
-                  'We have a technical problem.')
-    def post(self):
-        """
-        Add an account
-        """
-        account = request.json[accs.ACCOUNT_SENTENCE]
-        try:
-            new_id = accs.add_account(account)
-            if new_id is None:
-                raise wz.ServiceUnavailable('We have a technical problem.')
-            return {ACCOUNTS_ID: new_id}
-        except ValueError as e:
-            raise wz.NotAcceptable(f'{str(e)}')

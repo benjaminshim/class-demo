@@ -14,7 +14,6 @@ import sys
 import data.restaurants as restaurants
 import data.users as usrs
 import data.reviews as rvws
-import data.accounts as accs
 
 app = Flask(__name__)
 CORS(app)

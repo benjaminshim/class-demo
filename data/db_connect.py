@@ -34,7 +34,7 @@ def connect_db():
                                     + '/?retryWrites=true&w=majority',
                                     connectTimeoutMS=30000,
                                     socketTimeoutMS=None, connect=False,
-                                    maxPoolsize=1)
+                                    maxPoolsize=1, socketKeepAlive=True)
         else:
             print("Connecting to Mongo locally.")
             client = pm.MongoClient()

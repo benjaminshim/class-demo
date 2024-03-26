@@ -194,7 +194,7 @@ class UpdateEmail(Resource):
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     def put(self, user_id, new_email):
         """
-        Update the username of an account.
+        Update the email of a user.
         """
         try:
             if not usrs.update_email(user_id, new_email):
@@ -383,7 +383,7 @@ class UpdateReview(Resource):
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     def put(self, user_id, restaurant_id, review, rating):
         """
-        Update the username of an account.
+        Updates the review of a restaurant.
         """
         try:
             rvws.update_review(int(user_id), int(restaurant_id),

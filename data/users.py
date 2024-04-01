@@ -45,11 +45,11 @@ def _get_test_user():
 
 def get_test_user():
     test_user = {}
-    test_users[FIRST_NAME] = _get_test_user
-    test_users[LAST_NAME] = _get_test_user
-    test_users[EMAIL] = _get_test_user
-    test_users[PASSWORD] = _get_test_user
-    test_users[RESTAURANT_IDS] = []
+    test_user[FIRST_NAME] = _get_test_user()
+    test_user[LAST_NAME] = _get_test_user()
+    test_user[EMAIL] = _get_test_user()
+    test_user[PASSWORD] = _get_test_user()
+    test_user[RESTAURANT_IDS] = []
     return test_user
 
 

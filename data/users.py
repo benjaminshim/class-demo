@@ -37,6 +37,22 @@ USER_NAME = 'not'
 #     return dbc.fetch_all_as_dict(USERNAME, USERS_COLLECT)
 
 
+def _get_test_user():
+    rvw = 'test'
+    rand_part = random.randint(0, BIG_NUM)
+    return rvw + str(rand_part)
+
+
+def get_test_user():
+    test_user = {}
+    test_users[FIRST_NAME] = _get_test_user
+    test_users[LAST_NAME] = _get_test_user
+    test_users[EMAIL] = _get_test_user
+    test_users[PASSWORD] = _get_test_user
+    test_users[RESTAURANT_IDS] = []
+    return test_user
+
+
 def get_users() -> dict:
     dbc.connect_db()
     return dbc.fetch_all_as_dict(EMAIL, USERS_COLLECT)

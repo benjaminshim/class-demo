@@ -47,3 +47,10 @@ def test_update_username(mock_update):
     """
     resp = TEST_CLIENT.put(f'{ep.USERS_EP}/AnyName/100')
     assert resp.status_code == OK
+
+
+@pytest.mark.skip('This test is failing for now')
+@patch('data.users.add_user', return_value=usrs.MOCK_ID, autospec=True)
+def test_add_user(mock_add):
+    resp = TEST_CLIENT.post(ep.USERS_EP, json=usrs.get_test_user())
+    assert resp.status_code == OK

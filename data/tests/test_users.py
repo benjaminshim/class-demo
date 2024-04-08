@@ -53,3 +53,12 @@ def test_update_username(mock_update):
 def test_add_user(mock_add):
     resp = TEST_CLIENT.post(ep.USERS_EP, json=usrs.get_test_user())
     assert resp.status_code == OK
+
+
+@patch('data.users.add_user', side_effect=ValueError(), autospec=True)
+def test_user_bad_add(mock_add):
+    """
+    Testing we do the right thing with a value error from add_user.
+    """
+    resp = TEST_CLIENT.post(ep.USERS_EP, json=usrs.get_test_user())
+    assert resp.status_code == NOT_ACCEPTABLE

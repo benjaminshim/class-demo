@@ -14,6 +14,7 @@ import sys
 import data.restaurants as restaurants
 import data.users as usrs
 import data.reviews as rvws
+import forms.login_form as lgn
 
 app = Flask(__name__)
 CORS(app)
@@ -42,6 +43,9 @@ ACCOUNTS_EP = '/accounts'
 ACCOUNTS = 'accounts'
 ACCOUNTS_MENU_NM = 'Accounts Menu'
 ACCOUNTS_ID = '_ID'
+# Have to check this later not sure if correct
+LOGIN_FORM_EP = '/login'
+LOGIN_FORM = 'Login form'
 TYPE = 'Type'
 DATA = 'DATA'
 TITLE = 'Title'
@@ -411,3 +415,15 @@ class DelReview(Resource):
             return 'Review Deleted'
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')
+
+
+@api.route(f'{LOGIN_FORM_EP}')
+class LoginForm(Resource):
+    """
+    Get the form for loging in
+    """
+    def get(self):
+        """
+        Get the form for loging in
+        """
+        return {LOGIN_FORM: lgn.get_form()}

@@ -63,6 +63,7 @@ def test_user_bad_add(mock_add):
     resp = TEST_CLIENT.post(ep.USERS_EP, json=usrs.get_test_user())
     assert resp.status_code == NOT_ACCEPTABLE
 
+
 @patch('data.users.add_user', return_value=None)
 def test_user_add_failure(mock_add):
     """

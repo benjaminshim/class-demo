@@ -88,6 +88,12 @@ def fetch_all_as_dict(key, collection, db=USERS_DB):
         ret[doc[key]] = doc
     return ret
 
+def fetch_all_as_dict_with_ids(key, collection, db=USERS_DB):
+    ret = {}
+    for doc in client[db][collection].find():
+        doc[MONGO_ID] = str(doc[MONGO_ID])
+        ret[doc[key]] = doc
+    return ret
 
 def update_doc(collection, filters, update_dict, db=USERS_DB):
     return client[db][collection].update_one(filters, {'$set': update_dict})

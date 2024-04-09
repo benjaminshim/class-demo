@@ -46,6 +46,9 @@ ACCOUNTS_ID = '_ID'
 # Have to check this later not sure if correct the logins
 LOGIN_FORM = 'login'
 LOGIN_FORM_EP = f'{USERS_EP}/{LOGIN_FORM}'
+# Instead maybe have a form so we can choose state of restaurants
+RESTAURANT_FORM = 'state'
+RESTAURANT_FORM_EP = f'{RESTAURANTS_EP}/{RESTAURANT_FORM}'
 TYPE = 'Type'
 DATA = 'DATA'
 TITLE = 'Title'
@@ -417,13 +420,14 @@ class DelReview(Resource):
             raise wz.NotFound(f'{str(e)}')
 
 
-@api.route(f'{LOGIN_FORM_EP}')
-class LoginForm(Resource):
+@api.route(f'{RESTAURANT_FORM_EP}')
+class RestaurantForm(Resource):
     """
-    Get the form for loging in
+    Get the form to find restaurant by state
     """
     def get(self):
         """
-        Get the form for loging in
+        Get the form to find restaurant by state
         """
-        return {LOGIN_FORM: lgn.get_form()}
+        # Change name of login form to restaurant state
+        return {RESTAURANT_FORM: lgn.get_form()}

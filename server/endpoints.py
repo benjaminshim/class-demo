@@ -43,9 +43,9 @@ ACCOUNTS_EP = '/accounts'
 ACCOUNTS = 'accounts'
 ACCOUNTS_MENU_NM = 'Accounts Menu'
 ACCOUNTS_ID = '_ID'
-# Have to check this later not sure if correct
-LOGIN_FORM_EP = '/login'
-LOGIN_FORM = 'Login form'
+# Have to check this later not sure if correct the logins
+LOGIN_FORM = 'login'
+LOGIN_FORM_EP = f'{USERS_EP}/{LOGIN_FORM}'
 TYPE = 'Type'
 DATA = 'DATA'
 TITLE = 'Title'

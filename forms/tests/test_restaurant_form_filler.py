@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-import forms.login_form_filler as ff
+import forms.restaurant_form_filler as ff
 
 
 def test_get_fld_names():

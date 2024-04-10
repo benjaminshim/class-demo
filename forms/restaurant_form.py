@@ -2,9 +2,9 @@
 This module provides the glossary query form
 """
 
-import forms.login_form_filler as ff
+import forms.restaurant_form_filler as ff
 
-from forms.login_form_filler import FLD_NM  # for tests
+from forms.restaurant_form_filler import FLD_NM  # for tests
 
 STATE = 'state'
 
@@ -13,7 +13,6 @@ RESTAURANR_FORM_FLDS = [
         FLD_NM: 'Choose State',
         ff.QSTN: 'State',
         ff.PARAM_TYPE: ff.QUERY_STR,
-        ff.DEFAULT: ff.ALL,
     },
 ]
 

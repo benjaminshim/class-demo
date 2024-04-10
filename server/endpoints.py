@@ -14,7 +14,7 @@ import sys
 import data.restaurants as restaurants
 import data.users as usrs
 import data.reviews as rvws
-import forms.login_form as lgn
+import forms.restaurant_form as rst
 
 app = Flask(__name__)
 CORS(app)
@@ -430,4 +430,4 @@ class RestaurantForm(Resource):
         Get the form to find restaurant by state
         """
         # Change name of login form to restaurant state
-        return {RESTAURANT_FORM: lgn.get_form()}
+        return {RESTAURANT_FORM: rst.get_form()}

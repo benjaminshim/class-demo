@@ -1,7 +1,7 @@
 """
-Tests for forms/login_form.py.
+Tests for forms/restaurant_form.py.
 """
-import forms.login_form as fm
+import forms.restaurant_form as fm
 
 
 def test_get_form():

@@ -57,11 +57,12 @@ def get_restaurants_by_state(state: str) -> list:
         state (str): The state to filter the restaurants by.
 
     Returns:
-        list: A list of dictionaries representing the restaurants in the specified state.
+        list: List of dictionaries representing the restaurants in given state.
     """
     dbc.connect_db()  # Ensure the database connection is established
     # Fetch all restaurants filtered by the state parameter
-    filtered_restaurants = dbc.fetch_all_filtered(RESTAURANT_COLLECT, filt={STATE: state})
+    filtered_restaurants = dbc.fetch_all_filtered(
+        RESTAURANT_COLLECT, filt={STATE: state})
     return filtered_restaurants
 
 

@@ -277,9 +277,8 @@ class Restaurants(Resource):
         """
         # Get the state from the query parameters
         state = request.args.get('state')
-        
         if state:
-            # If a state is provided in the query, filter the restaurants by the state
+            # If state is provided in query, filter restaurants by the state
             filtered_restaurants = restaurants.get_restaurants_by_state(state)
             return {
                 TYPE: DATA,
@@ -294,19 +293,12 @@ class Restaurants(Resource):
                 TITLE: 'Current Restaurants',
                 DATA: all_restaurants,
             }
-    #     return {
-    #         TYPE: DATA,
-    #         TITLE: 'Current Restaurants',
-    #         DATA: restaurants.get_restuarants(),
-    #     }
-              
 
     @api.expect(restaurant_fields)
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
                   'We have a technical problem.')
-    
     def post(self):
         """
         Add a restaurant.
@@ -453,5 +445,5 @@ class RestaurantForm(Resource):
         Get the form to find restaurant by state
         """
         # Change name of login form to restaurant state
-        form_data = rst.get_form() 
+        form_data = rst.get_form()
         return form_data, 200  # Return as JSON response

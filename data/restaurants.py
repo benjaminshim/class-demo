@@ -49,6 +49,22 @@ def get_restuarants() -> dict:
     return dbc.fetch_all_as_dict(NAME, RESTAURANT_COLLECT)
 
 
+def get_restaurants_by_state(state: str) -> list:
+    """
+    Fetches a list of restaurants filtered by the specified state.
+
+    Args:
+        state (str): The state to filter the restaurants by.
+
+    Returns:
+        list: A list of dictionaries representing the restaurants in the specified state.
+    """
+    dbc.connect_db()  # Ensure the database connection is established
+    # Fetch all restaurants filtered by the state parameter
+    filtered_restaurants = dbc.fetch_all_filtered(RESTAURANT_COLLECT, filt={STATE: state})
+    return filtered_restaurants
+
+
 def add_restaurant(name: str, restaurant_type: str, description: str,
                    address: str, city: str, state: str, zip_code: str) -> str:
     restaurants = {}

@@ -8,28 +8,27 @@ from forms.restaurant_form_filler import FLD_NM  # for tests
 
 STATE = 'state'
 
-RESTAURANR_FORM_FLDS = [
-    {
-        FLD_NM: 'Choose State',
-        ff.QSTN: 'State',
-        ff.PARAM_TYPE: ff.QUERY_STR,
+RESTAURANT_FORM_FLDS = [
+    { 
+        FLD_NM: 'state',
+        ff.QSTN: 'state',
     },
 ]
 
 
 def get_form() -> list:
-    return RESTAURANR_FORM_FLDS
+    return RESTAURANT_FORM_FLDS
 
 
 def get_form_descr() -> dict:
     """
     For Swagger!
     """
-    return ff.get_form_descr(RESTAURANR_FORM_FLDS)
+    return ff.get_form_descr(RESTAURANT_FORM_FLDS)
 
 
 def get_fld_names() -> list:
-    return ff.get_fld_names(RESTAURANR_FORM_FLDS)
+    return ff.get_fld_names(RESTAURANT_FORM_FLDS)
 
 
 def main():

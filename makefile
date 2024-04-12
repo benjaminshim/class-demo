@@ -24,3 +24,5 @@ dev_env: FORCE
 
 docs: FORCE
 	cd $(API_DIR); make docs
+
+web: gunicorn databases_plus_one:app

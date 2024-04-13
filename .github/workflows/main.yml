@@ -49,7 +49,21 @@ jobs:
       - name: Run Python tests.
         run: make all_tests
 
-      - name: Deploy to PythonAnywhere
-        run: ./deploy.sh
+      # - name: Deploy to PythonAnywhere
+      #   run: ./deploy.sh
+      #   env:
+      #     PA_PWD: ${{secrets.PA_PWD}}
+
+      - name: Install Heroku CLI
+        run: curl https://cli-assets.heroku.com/install.sh | sh
+
+      - name: Login to Heroku
+        run: echo "$HEROKU_API_KEY" | heroku auth:token
         env:
-          PA_PWD: ${{secrets.PA_PWD}}
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+
+      - name: Deploy to Heroku
+        run: git push heroku main
+
+      - name: Scale Heroku Dynos
+        run: heroku ps:scale web=1

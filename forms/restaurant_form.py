@@ -10,6 +10,7 @@ STATE = 'state'
 
 RESTAURANT_FORM_FLDS = [
     { 
+        ff.DESCR: 'Choose State',
         FLD_NM: 'state',
         ff.QSTN: 'state',
     },

@@ -17,8 +17,17 @@ MIN_USER_NAME_LEN = 1
 NAME = "user"
 
 
+@pytest.fixture(scope='function')
+def temp_user():
+    name = usrs._get_test_user()
+    ret = usrs.add_user(name,name,name,name)
+    yield name
+    if usrs.exists(ret):
+        usrs.del_user(ret)
+
+
 @pytest.mark.skip('This test is failing for now')
-def test_get_users():
+def test_get_users(temp_user):
     users = usrs.get_users()
     assert isinstance(users, dict)
 

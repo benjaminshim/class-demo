@@ -25,8 +25,6 @@ MAIN_MENU = 'MainMenu'
 MAIN_MENU_NM = "Welcome!"
 MAIN_MENU_EP = '/MainMenu'
 MENU = 'menu'
-HELLO_EP = '/hello'
-HELLO_RESP = 'hello'
 USERS_EP = '/users'
 USERS_MENU_NM = "User Menu"
 USERS_MENU_EP = '/user_menu'
@@ -58,20 +56,6 @@ RESTAURANT_SEARCH_STATE_EP = f'{RESTAURANTS_EP}/{RESTAURANT_SEARCH_STATE}'
 DEL_RESAURANT_EP = f'{RESTAURANTS_EP}/{DELETE}'
 DEL_USER_EP = f'{USERS_EP}/{DELETE}'
 DEL_REVIEW_EP = f'{REVIEWS_EP}/{DELETE}'
-
-
-@api.route(HELLO_EP)
-class HelloWorld(Resource):
-    """
-    The purpose of the HelloWorld class is to have a simple test to see if the
-    app is working at all.
-    """
-    def get(self):
-        """
-        A trivial endpoint to see if the server is running.
-        It just answers with "hello world."
-        """
-        return {HELLO_RESP: 'world'}
 
 
 @api.route('/endpoints')

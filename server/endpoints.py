@@ -305,36 +305,6 @@ class Restaurants(Resource):
             raise wz.NotAcceptable(f'{str(e)}')
 
 
-@api.route(f'{RESTAURANTS_EP}/search')
-class RestaurantSearch(Resource):
-    @api.doc(params={
-        'state': 'A state to filter the restaurants by',
-        'city': 'A city to filter the restaurants by',
-    })
-    @api.response(HTTPStatus.OK, 'Success')
-    @api.response(HTTPStatus.BAD_REQUEST, 'Invalid Parameters')
-    def get(self):
-        """
-        Get a list of all restaurants filtered by state and city.
-        """
-        state = str(request.args.get('state'))
-        city = str(request.args.get('city'))
-
-        if not state or not city:
-            raise HTTPStatus.BAD_REQUEST('Both city and zip'
-                                         'code parameters are required')
-
-        try:
-            restaurants_list = restaurants.get_restaurants_filt(state, city)
-            return {
-                TYPE: DATA,
-                TITLE: 'Restaurants in the Area',
-                DATA: restaurants_list,
-            }
-        except ValueError as e:
-            raise wz.NotAcceptable(f'{str(e)}')
-
-
 review_fields = api.model('NewReview', {
     rvws.USER_ID: fields.Integer,
     rvws.RESTAURANT_ID: fields.Integer,

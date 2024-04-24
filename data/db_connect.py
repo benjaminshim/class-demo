@@ -84,7 +84,7 @@ def fetch_all_filtered(collection, filt={}, db=USERS_DB):
 def fetch_all_as_dict(key, collection, db=USERS_DB):
     ret = {}
     for doc in client[db][collection].find():
-        del doc[MONGO_ID]
+        doc[MONGO_ID] = str(doc[MONGO_ID])
         ret[doc[key]] = doc
     return ret
 

@@ -321,8 +321,8 @@ class Restaurants(Resource):
 
 
 review_fields = api.model('NewReview', {
-    rvws.USER_ID: fields.Integer,
-    rvws.RESTAURANT_ID: fields.Integer,
+    rvws.USER_ID: fields.String,
+    rvws.RESTAURANT_ID: fields.String,
     rvws.REVIEW_SENTENCE: fields.String,
     rvws.RATING: fields.Integer
 })

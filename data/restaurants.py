@@ -124,7 +124,7 @@ def del_restaurant(object_id: str):
         dbc.connect_db()
         return dbc.del_one(RESTAURANT_COLLECT,
                            {"_id": ObjectId(object_id)})
-    
+
 
 def delete_all():
     dbc.connect_db()

@@ -70,8 +70,8 @@ def delete_all(collection, db=USERS_DB):
     """
     Delete all documents in the specified collection.
     """
-    result = client[db][collection].delete_many({})  # Empty filter to match all documents
-    return result.deleted_count  # Returns the number of documents deleted
+    result = client[db][collection].delete_many({})
+    return result.deleted_count
 
 
 def fetch_all(collection, db=USERS_DB):

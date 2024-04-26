@@ -262,7 +262,7 @@ class DelAllRestaurants(Resource):
             return f'All {count} restaurants have been deleted.'
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')
-        
+
 
 @api.route(f'{RESTAURANTS_EP}')
 class Restaurants(Resource):
@@ -377,7 +377,7 @@ class UpdateReview(Resource):
         Updates the review of a restaurant.
         """
         try:
-            rvws.update_review(int(user_id), int(restaurant_id),
+            rvws.update_review(user_id, restaurant_id,
                                review, int(rating))
             return {review: 'Updated'}
         except ValueError as e:

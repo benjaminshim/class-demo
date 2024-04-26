@@ -44,7 +44,7 @@ def extract_id(s):
     return None
 
 
-def get_restuarants() -> dict:
+def get_restaurants() -> dict:
     dbc.connect_db()
     return dbc.fetch_all_as_dict(NAME, RESTAURANT_COLLECT)
 
@@ -124,6 +124,11 @@ def del_restaurant(object_id: str):
         dbc.connect_db()
         return dbc.del_one(RESTAURANT_COLLECT,
                            {"_id": ObjectId(object_id)})
+    
+
+def delete_all():
+    dbc.connect_db()
+    return dbc.delete_all(RESTAURANT_COLLECT)
 
 
 def exists(address: str, city: str, state: str, zip_code: str) -> bool:

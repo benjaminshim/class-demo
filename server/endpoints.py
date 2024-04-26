@@ -4,7 +4,7 @@ The endpoint called `endpoints` will return all available endpoints.
 """
 from http import HTTPStatus
 
-from flask import Flask, request
+from flask import Flask, jsonify, request
 from flask_restx import Resource, Api, fields
 from flask_cors import CORS
 
@@ -51,7 +51,7 @@ TYPE = 'Type'
 DATA = 'DATA'
 TITLE = 'Title'
 RETURN = 'Return'
-DEL_RESAURANT_EP = f'{RESTAURANTS_EP}/{DELETE}'
+DEL_RESTAURANT_EP = f'{RESTAURANTS_EP}/{DELETE}'
 DEL_USER_EP = f'{USERS_EP}/{DELETE}'
 DEL_REVIEW_EP = f'{REVIEWS_EP}/{DELETE}'
 
@@ -229,7 +229,7 @@ class UpdateRestaurant(Resource):
             raise wz.BadRequest(f'{str(e)}')
 
 
-@api.route(f'{DEL_RESAURANT_EP}/<restaurant_id>')
+@api.route(f'{DEL_RESTAURANT_EP}/<restaurant_id>')
 class DelRestaurant(Resource):
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
@@ -246,6 +246,23 @@ class DelRestaurant(Resource):
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')
 
+
+@api.route(f'{DEL_RESTAURANT_EP}')
+class DelAllRestaurants(Resource):
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_FOUND, 'Not Found')
+    @api.response(HTTPStatus.SERVICE_UNAVAILABLE,
+                  'We have a technical problem.')
+    def delete(self):
+        """
+        Delete all restaurants.
+        """
+        try:
+            count = restaurants.delete_all()
+            return f'All {count} restaurants have been deleted.'
+        except ValueError as e:
+            raise wz.NotFound(f'{str(e)}')
+        
 
 @api.route(f'{RESTAURANTS_EP}')
 class Restaurants(Resource):
@@ -269,7 +286,7 @@ class Restaurants(Resource):
             }
         else:
             # If no state is provided, return all restaurants
-            all_restaurants = restaurants.get_restuarants()
+            all_restaurants = restaurants.get_restaurants()
             return {
                 TYPE: DATA,
                 TITLE: 'Current Restaurants',

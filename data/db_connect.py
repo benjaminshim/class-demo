@@ -66,6 +66,14 @@ def del_one(collection, filt, db=USERS_DB):
     client[db][collection].delete_one(filt)
 
 
+def delete_all(collection, db=USERS_DB):
+    """
+    Delete all documents in the specified collection.
+    """
+    result = client[db][collection].delete_many({})  # Empty filter to match all documents
+    return result.deleted_count  # Returns the number of documents deleted
+
+
 def fetch_all(collection, db=USERS_DB):
     ret = []
     for doc in client[db][collection].find():

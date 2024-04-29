@@ -227,7 +227,7 @@ class UpdateRestaurant(Resource):
                     f'{restaurant_id}'}
         except ValueError as e:
             raise wz.BadRequest(f'{str(e)}')
-        
+
 
 @api.route(f'{RESTAURANTS_EP}/search')
 class RestaurantSearch(Resource):
@@ -247,7 +247,9 @@ class RestaurantSearch(Resource):
                                          'parameter is required')
 
         try:
-            restaurants_list = restaurants.get_restaurants_type(restaurant_type)
+            restaurants_list = restaurants.get_restaurants_type(
+                restaurant_type
+                )
             return {
                 TYPE: DATA,
                 TITLE: 'Restaurants of that {restaurant_type}',

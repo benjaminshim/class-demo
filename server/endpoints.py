@@ -398,7 +398,7 @@ class DelReview(Resource):
         Deletes a review.
         """
         try:
-            rvws.del_review(int(user_id), int(restaurant_id))
+            rvws.del_review(user_id,restaurant_id)
             return 'Review Deleted'
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')

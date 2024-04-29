@@ -227,6 +227,34 @@ class UpdateRestaurant(Resource):
                     f'{restaurant_id}'}
         except ValueError as e:
             raise wz.BadRequest(f'{str(e)}')
+        
+
+@api.route(f'{RESTAURANTS_EP}/search')
+class RestaurantSearch(Resource):
+    @api.doc(params={
+        'restaurant_type': 'A type to filter the restaurants by'
+    })
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.BAD_REQUEST, 'Invalid Parameters')
+    def get(self):
+        """
+        Get a list of all restaurants filtered by type.
+        """
+        restaurant_type = str(request.args.get('restaurant_type'))
+
+        if not restaurant_type:
+            raise HTTPStatus.BAD_REQUEST('A restaurant type '
+                                         'parameter is required')
+
+        try:
+            restaurants_list = restaurants.get_restaurants_type(restaurant_type)
+            return {
+                TYPE: DATA,
+                TITLE: 'Restaurants of that {restaurant_type}',
+                DATA: restaurants_list,
+            }
+        except ValueError as e:
+            raise wz.NotAcceptable(f'{str(e)}')
 
 
 @api.route(f'{DEL_RESTAURANT_EP}/<restaurant_id>')

@@ -12,32 +12,44 @@ client = None
 MONGO_ID = '_id'
 
 
+# def connect_db():
+#     """
+#     This provides a uniform way to connect to the DB across all uses.
+#     Returns a mongo client object... maybe we shouldn't?
+#     Also set global client variable.
+#     We should probably either return a client OR set a
+#     client global.
+#     """
+#     global client
+#     if client is None:  # not connected yet!
+#         print("Setting client because it is None.")
+#         if os.environ.get("CLOUD_MONGO", LOCAL) == CLOUD:
+#             password = os.environ.get("MONGODB_PASSWORD")
+#             if not password:
+#                 raise ValueError('You must set your password '
+#                                  + 'to use Mongo in the cloud.')
+#             print("Connecting to Mongo in the cloud.")
+#             client = pm.MongoClient(f'mongodb+srv://cm5685:{password}'
+#                                     + '@databasesplusone.zrimlpx.mongodb.net'
+#                                     + '/?retryWrites=true&w=majority',
+#                                     connectTimeoutMS=30000,
+#                                     socketTimeoutMS=None, connect=False,
+#                                     maxPoolsize=1)
+#         else:
+#             print("Connecting to Mongo locally.")
+#             client = pm.MongoClient()
+
+
 def connect_db():
-    """
-    This provides a uniform way to connect to the DB across all uses.
-    Returns a mongo client object... maybe we shouldn't?
-    Also set global client variable.
-    We should probably either return a client OR set a
-    client global.
-    """
     global client
-    if client is None:  # not connected yet!
+    if client is None:
         print("Setting client because it is None.")
-        if os.environ.get("CLOUD_MONGO", LOCAL) == CLOUD:
-            password = os.environ.get("MONGODB_PASSWORD")
-            if not password:
-                raise ValueError('You must set your password '
-                                 + 'to use Mongo in the cloud.')
-            print("Connecting to Mongo in the cloud.")
-            client = pm.MongoClient(f'mongodb+srv://cm5685:{password}'
-                                    + '@databasesplusone.zrimlpx.mongodb.net'
-                                    + '/?retryWrites=true&w=majority',
-                                    connectTimeoutMS=30000,
-                                    socketTimeoutMS=None, connect=False,
-                                    maxPoolsize=1)
+        mongodb_uri = os.environ.get("MONGODB_URI")
+        if mongodb_uri:
+            print("Connecting to MongoDB.")
+            client = pm.MongoClient(mongodb_uri)
         else:
-            print("Connecting to Mongo locally.")
-            client = pm.MongoClient()
+            raise ValueError("MONGODB_URI environment variable is not set.")
 
 
 def insert_one(collection, doc, db=USERS_DB):

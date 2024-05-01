@@ -40,6 +40,7 @@ MONGO_ID = '_id'
 #             client = pm.MongoClient()
 
 
+# connect to MongoDB
 def connect_db():
     global client
     if client is None:

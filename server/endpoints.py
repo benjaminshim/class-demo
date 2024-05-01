@@ -229,6 +229,36 @@ class UpdateRestaurant(Resource):
             raise wz.BadRequest(f'{str(e)}')
 
 
+@api.route(f'{RESTAURANTS_EP}/search')
+class RestaurantSearch(Resource):
+    @api.doc(params={
+        'restaurant_type': 'A type to filter the restaurants by'
+    })
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.BAD_REQUEST, 'Invalid Parameters')
+    def get(self):
+        """
+        Get a list of all restaurants filtered by type.
+        """
+        restaurant_type = str(request.args.get('restaurant_type'))
+
+        if not restaurant_type:
+            raise HTTPStatus.BAD_REQUEST('A restaurant type '
+                                         'parameter is required')
+
+        try:
+            restaurants_list = restaurants.get_restaurants_type(
+                restaurant_type
+                )
+            return {
+                TYPE: DATA,
+                TITLE: 'Restaurants of that {restaurant_type}',
+                DATA: restaurants_list,
+            }
+        except ValueError as e:
+            raise wz.NotAcceptable(f'{str(e)}')
+
+
 @api.route(f'{DEL_RESTAURANT_EP}/<restaurant_id>')
 class DelRestaurant(Resource):
     @api.response(HTTPStatus.OK, 'Success')
@@ -262,7 +292,7 @@ class DelAllRestaurants(Resource):
             return f'All {count} restaurants have been deleted.'
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')
-        
+
 
 @api.route(f'{RESTAURANTS_EP}')
 class Restaurants(Resource):
@@ -321,8 +351,8 @@ class Restaurants(Resource):
 
 
 review_fields = api.model('NewReview', {
-    rvws.USER_ID: fields.Integer,
-    rvws.RESTAURANT_ID: fields.Integer,
+    rvws.USER_ID: fields.String,
+    rvws.RESTAURANT_ID: fields.String,
     rvws.REVIEW_SENTENCE: fields.String,
     rvws.RATING: fields.Integer
 })
@@ -377,7 +407,7 @@ class UpdateReview(Resource):
         Updates the review of a restaurant.
         """
         try:
-            rvws.update_review(int(user_id), int(restaurant_id),
+            rvws.update_review(user_id, restaurant_id,
                                review, int(rating))
             return {review: 'Updated'}
         except ValueError as e:
@@ -398,7 +428,7 @@ class DelReview(Resource):
         Deletes a review.
         """
         try:
-            rvws.del_review(int(user_id), int(restaurant_id))
+            rvws.del_review(user_id, restaurant_id)
             return 'Review Deleted'
         except ValueError as e:
             raise wz.NotFound(f'{str(e)}')

@@ -59,7 +59,7 @@ def get_restaurants_by_state(state: str) -> list:
     Returns:
         list: List of dictionaries representing the restaurants in given state.
     """
-    dbc.connect_db()  # Ensure the database connection is established
+    dbc.connect_db()
     # Fetch all restaurants filtered by the state parameter
     filtered_restaurants = dbc.fetch_all_filtered(
         RESTAURANT_COLLECT, filt={STATE: state})
@@ -124,7 +124,7 @@ def del_restaurant(object_id: str):
         dbc.connect_db()
         return dbc.del_one(RESTAURANT_COLLECT,
                            {"_id": ObjectId(object_id)})
-    
+
 
 def delete_all():
     dbc.connect_db()
@@ -151,7 +151,7 @@ def get_restaurant_by_id(object_id: str):
     return restaurant
 
 
-def get_restaurants_filt(state: str, city: str) -> list:
+def get_restaurants_type(restaurant_type: str) -> list:
     dbc.connect_db()
     return dbc.fetch_all_filtered(RESTAURANT_COLLECT,
-                                  filt={STATE: state, CITY: city})
+                                  filt={RESTAURANT_TYPE: restaurant_type})

@@ -456,19 +456,42 @@ class SampleData(Resource):
         """
         sample_data = {
             'users': [
-                {'first_name': 'John', 'last_name': 'Doe', 'email': 'john.doe@example.com', 'password': 'password123'},
-                {'first_name': 'Alice', 'last_name': 'Smith', 'email': 'alice.smith@example.com', 'password': 'password456'},
-                {'first_name': 'Bob', 'last_name': 'Johnson', 'email': 'bob.johnson@example.com', 'password': 'password789'}
+                {'first_name': 'John', 'last_name': 'Doe',
+                 'email': 'john.doe@example.com', 'password': 'password123'},
+                {'first_name': 'Alice', 'last_name': 'Smith',
+                 'email': 'alice.smith@example.com',
+                 'password': 'password456'},
+                {'first_name': 'Bob', 'last_name': 'Johnson',
+                 'email': 'bob.johnson@example.com', 'password': 'password789'}
             ],
             'restaurants': [
-                {'name': 'Delicious Bites', 'restaurant_type': 'Italian', 'description': 'A cozy Italian restaurant with a wide selection of pasta dishes.', 'address': '123 Main Street', 'city': 'New York', 'state': 'NY', 'zip_code': '10001'},
-                {'name': 'Taco Haven', 'restaurant_type': 'Mexican', 'description': 'Authentic Mexican cuisine with flavorful tacos and burritos.', 'address': '456 Oak Avenue', 'city': 'Los Angeles', 'state': 'CA', 'zip_code': '90001'},
-                {'name': 'Spice Kingdom', 'restaurant_type': 'Indian', 'description': 'Experience the rich flavors of Indian spices in every dish.', 'address': '789 Elm Street', 'city': 'Chicago', 'state': 'IL', 'zip_code': '60001'}
+                {'name': 'Delicious Bites', 'restaurant_type': 'Italian',
+                 'description': '''A cozy Italian restaurant with a
+                  wide selection of pasta dishes.''',
+                 'address': '123 Main Street', 'city': 'New York',
+                 'state': 'NY', 'zip_code': '10001'},
+                {'name': 'Taco Haven', 'restaurant_type': 'Mexican',
+                 'description': '''Authentic Mexican cuisine with flavorful
+                  tacos and burritos.''',
+                 'address': '456 Oak Avenue', 'city': 'Los Angeles',
+                 'state': 'CA', 'zip_code': '90001'},
+                {'name': 'Spice Kingdom', 'restaurant_type': 'Indian',
+                 'description': '''Experience the rich flavors of
+                  Indian spices in every dish.''',
+                 'address': '789 Elm Street', 'city': 'Chicago',
+                 'state': 'IL', 'zip_code': '60001'}
             ],
             'reviews': [
-                {'user_id': '1', 'restaurant_id': '1', 'review_sentence': 'Great food and friendly service!', 'rating': 4},
-                {'user_id': '2', 'restaurant_id': '2', 'review_sentence': 'Delicious tacos and quick service!', 'rating': 5},
-                {'user_id': '3', 'restaurant_id': '3', 'review_sentence': 'Amazing Indian food with excellent ambiance.', 'rating': 3}
+                {'user_id': '1', 'restaurant_id': '1',
+                 'review_sentence': 'Great food and friendly service!',
+                 'rating': 4},
+                {'user_id': '2', 'restaurant_id': '2',
+                 'review_sentence': 'Delicious tacos and quick service!',
+                 'rating': 5},
+                {'user_id': '3', 'restaurant_id': '3',
+                 'review_sentence': '''Amazing Indian food with
+                  excellent ambiance.''',
+                 'rating': 3}
             ]
         }
         return sample_data

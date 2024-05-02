@@ -15,6 +15,7 @@ on:
 env:
   DEMO_HOME: /home/runner/work/databases_plus_one/databases_plus_one
   PYTHONPATH: /home/runner/work/databases_plus_one/databases_plus_one
+  MONGODB_URI: ${{ secrets.MONGODB_URI }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -49,9 +50,9 @@ jobs:
       - name: Run Python tests.
         run: make all_tests
 
-      - name: Set MongoDB URI environment variable
-        env:
-          MONGODB_URI: ${{ secrets.MONGODB_URI }}
-        run: |
-          export MONGODB_URI="${{ secrets.MONGODB_URI }}"
-          pytest
+      # - name: Set MongoDB URI environment variable
+      #   env:
+      #     MONGODB_URI: ${{ secrets.MONGODB_URI }}
+      #   run: |
+      #     export MONGODB_URI="${{ secrets.MONGODB_URI }}"
+      #     pytest
